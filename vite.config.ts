@@ -3,6 +3,10 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 const proxy = {
+  "/api": {
+    target: process.env.AUTH_API_PROXY ?? "http://127.0.0.1:3001",
+    changeOrigin: true,
+  },
   "/grpc": {
     target: process.env.GRPC_WEB_PROXY ?? "http://127.0.0.1:8081",
     changeOrigin: true,

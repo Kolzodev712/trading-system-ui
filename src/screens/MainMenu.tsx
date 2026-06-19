@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { DisconnectButton } from "@/components/layout/ConnectionBanner";
 import { useMonitorActions } from "@/hooks/useMonitorActions";
 import { useMode, useTradingStore } from "@/store/tradingStore";
 
@@ -42,8 +41,6 @@ export function MainMenu() {
             <LayoutDashboard className="h-5 w-5" />
             Open Trading Monitor
           </Button>
-
-          <DisconnectButton />
 
           <div className="text-sm text-muted-foreground border-t border-border pt-4 flex justify-between">
             <span>Exchange: {exchange}</span>
