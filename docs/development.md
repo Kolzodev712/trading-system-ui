@@ -6,7 +6,7 @@
 |------|---------|---------|
 | Node.js | 18+ (20 recommended) | Build and run UI |
 | npm | 9+ | Package manager |
-| Docker + docker-compose | v1 (`docker-compose`) | Envoy gRPC-Web proxy |
+| Docker + docker-compose | v1 (`docker-compose`) | MongoDB + Envoy gRPC-Web proxy |
 | Trading runner | — | gRPC on `:50051` |
 
 ## First-time setup
@@ -25,20 +25,21 @@ Start the backend (in `trading_system`):
 cargo run --release --package runner
 ```
 
-Start the gRPC-Web proxy:
+Start Mongo + gRPC-Web proxy:
 
 ```bash
 docker-compose -f docker/docker-compose.yml up -d
 # or: npm run proxy:up
 ```
 
-Run the UI:
+Run the UI and auth API:
 
 ```bash
-npm run start
+npm run dev:all
+# or in two terminals: npm run dev && npm run server
 ```
 
-Open **http://127.0.0.1:5173** and click **Connect**.
+Open **http://127.0.0.1:5173** → sign in with `admin` / `admin` → **Connect to runner**.
 
 ## Scripts
 
@@ -49,7 +50,9 @@ Open **http://127.0.0.1:5173** and click **Connect**.
 | `npm run build` | Production artifact in `dist/` |
 | `npm run generate` | After editing `proto/trading_cli.proto` |
 | `npm test` | Unit tests |
-| `npm run proxy:up` / `proxy:down` | Manage Envoy container |
+| `npm run dev:all` | UI + auth API during development |
+| `npm run server` | Auth API only (`:3001`, seeds `admin` in Mongo) |
+| `npm run proxy:up` / `proxy:down` | Manage Docker stack (Mongo + Envoy) |
 
 ## Proto sync
 

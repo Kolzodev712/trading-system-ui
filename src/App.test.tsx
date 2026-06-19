@@ -6,10 +6,9 @@ import { describe, expect, it } from "vitest";
 import App from "./App";
 
 describe("App boot", () => {
-  it("renders connect UI when disconnected", () => {
+  it("renders sign-in UI when unauthenticated", () => {
     render(<App />);
-    expect(screen.getByText("Trading System UI")).toBeTruthy();
-    expect(screen.getByText("Connect to Trading Runner")).toBeTruthy();
-    expect(screen.getByRole("button", { name: /connect/i })).toBeTruthy();
+    expect(screen.getByText("Operator sign in")).toBeTruthy();
+    expect(screen.getByRole("button", { name: /sign in/i })).toBeTruthy();
   });
 });

@@ -1,9 +1,19 @@
 version: "3.8"
 
 services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - trading_ui_mongo:/data/db
+
   grpc-web-proxy:
     image: envoyproxy/envoy:v1.31-latest
     network_mode: host
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
     command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml --log-level info
+
+volumes:
+  trading_ui_mongo:
