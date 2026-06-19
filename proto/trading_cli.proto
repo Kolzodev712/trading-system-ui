@@ -1,0 +1,293 @@
+syntax = "proto3";
+
+package trading_cli;
+
+// Trading CLI Service - Main service for TUI communication
+service TradingCliService {
+    // Trading Control
+    rpc SetTradingEnabled(SetTradingEnabledRequest) returns (SetTradingEnabledResponse);
+    rpc GetTradingStatus(GetTradingStatusRequest) returns (GetTradingStatusResponse);
+    rpc ToggleStrategy(ToggleStrategyRequest) returns (ToggleStrategyResponse);
+    
+    // Level Management (Phase 3)
+    rpc GetLevels(GetLevelsRequest) returns (GetLevelsResponse);
+    rpc GetLevel(GetLevelRequest) returns (GetLevelResponse);
+    rpc CreateLevel(CreateLevelRequest) returns (CreateLevelResponse);
+    rpc UpdateLevel(UpdateLevelRequest) returns (UpdateLevelResponse);
+    rpc DeleteLevel(DeleteLevelRequest) returns (DeleteLevelResponse);
+    rpc ToggleLevel(ToggleLevelRequest) returns (ToggleLevelResponse);
+    
+    // Monitoring Data (Phase 2)
+    rpc GetMonitoringData(GetMonitoringDataRequest) returns (GetMonitoringDataResponse);
+    rpc StreamMonitoringData(StreamMonitoringDataRequest) returns (stream MonitoringDataUpdate);
+}
+
+// Trading Control Messages
+message SetTradingEnabledRequest {
+    bool enabled = 1;
+}
+
+message SetTradingEnabledResponse {
+    bool success = 1;
+    string message = 2;
+    repeated string cancelled_orders = 3; // Order IDs that were cancelled
+}
+
+message GetTradingStatusRequest {}
+
+message GetTradingStatusResponse {
+    bool enabled = 1;
+}
+
+message ToggleStrategyRequest {
+    string strategy_name = 1;  // e.g., "BuyLowSellHigh"
+    string symbol = 2;          // e.g., "ETH/USDC"
+    bool enabled = 3;           // true to enable, false to disable
+}
+
+message ToggleStrategyResponse {
+    bool success = 1;
+    string message = 2;
+    repeated string cancelled_orders = 3; // Order IDs that were cancelled
+}
+
+// Level Management Messages (Phase 3 - placeholders for now)
+message GetLevelsRequest {}
+
+message GetLevelsResponse {
+    repeated Level levels = 1;
+}
+
+message GetLevelRequest {
+    string level_id = 1;
+}
+
+message GetLevelResponse {
+    Level level = 1;
+}
+
+message CreateLevelRequest {
+    LevelConfig config = 1;
+}
+
+message CreateLevelResponse {
+    string level_id = 1;
+}
+
+message UpdateLevelRequest {
+    string level_id = 1;
+    LevelConfig config = 2;
+}
+
+message UpdateLevelResponse {
+    bool success = 1;
+}
+
+message DeleteLevelRequest {
+    string level_id = 1;
+}
+
+message DeleteLevelResponse {
+    bool success = 1;
+}
+
+message ToggleLevelRequest {
+    string level_id = 1;
+    bool enabled = 2;
+}
+
+message ToggleLevelResponse {
+    bool success = 1;
+}
+
+// Level Data Structures
+message Level {
+    string id = 1;
+    string status = 2;
+    bool enabled = 3;
+    LevelConfig config = 4;
+    repeated string active_orders = 5;
+    int32 filled_count = 6;
+}
+
+message LevelConfig {
+    string id = 1;
+    Symbol symbol = 2;
+    string side = 3;
+    string order_type = 4;
+    string price = 5; // Decimal as string
+    string quantity = 6; // Decimal as string
+    bool enabled = 7;
+    string risk_limit = 8; // Decimal as string
+    string max_position_size = 9; // Decimal as string
+    bool repost_on_fill = 10;
+    bool repost_on_cancel = 11;
+}
+
+message Symbol {
+    string base = 1;
+    string quote = 2;
+}
+
+// Monitoring Data Messages (Phase 2 - placeholders for now)
+message GetMonitoringDataRequest {}
+
+message GetMonitoringDataResponse {
+    MonitoringData data = 1;
+}
+
+message StreamMonitoringDataRequest {}
+
+message MonitoringDataUpdate {
+    MonitoringData data = 1;
+    int64 timestamp = 2;
+}
+
+message MonitoringData {
+    repeated Order orders = 1;
+    repeated Balance balances = 2;
+    repeated Trade trades = 3;
+    repeated Position positions = 4;
+    repeated IndicatorValue indicators = 5;
+    AggregatedData aggregated = 6;
+    repeated StrategyStatus strategies = 7; // Strategy info (only present in strategies mode, supports multiple)
+    repeated Orderbook orderbooks = 8; // Orderbook data for all pairs
+    string instrument_type = 9; // "Spot" or "Futures" - determines which view to show in TUI
+    string exchange = 10;       // "Binance" or "Bybit" - for display in CLI
+    DexVenueSnapshot dex = 11;  // Present when DEX engine is active
+}
+
+message DexVenueSnapshot {
+    repeated DexBalance balances = 1;
+    repeated DexPendingTransaction pending_transactions = 2;
+    string venue = 3;
+}
+
+message DexBalance {
+    string mint = 1;
+    string amount = 2;
+}
+
+message DexPendingTransaction {
+    string signature = 1;
+    string status = 2;
+}
+
+message Order {
+    string order_id = 1;
+    string symbol = 2;
+    string side = 3;
+    string order_type = 4;
+    string price = 5;
+    string quantity = 6;
+    string status = 7;
+    string level_id = 8;
+    int64 timestamp = 9;
+}
+
+message Balance {
+    string asset = 1;
+    string free = 2;
+    string used = 3;
+    string locked = 4;
+    string total = 5;
+}
+
+message Trade {
+    string trade_id = 1;
+    string order_id = 2;
+    string symbol = 3;
+    string side = 4;
+    string price = 5;
+    string quantity = 6;
+    int64 timestamp = 7;
+}
+
+message Position {
+    string symbol = 1;
+    string quantity = 2; // Positive for long, negative for short
+    string avg_price = 3; // Entry price
+    string side = 4; // "Long" or "Short"
+    string mark_price = 5; // Current mark price
+    string unrealized_pnl = 6; // Unrealized P&L
+    string leverage = 7; // Leverage (e.g., "10x")
+    string margin_used = 8; // Initial margin used
+    string maintenance_margin = 9; // Maintenance margin required
+    string liquidation_price = 10; // Liquidation price (if available)
+    string realized_pnl = 11; // Cumulative realized P&L (if available)
+}
+
+message IndicatorValue {
+    string indicator_id = 1;
+    string indicator_name = 2;
+    string pair = 3;
+    string value = 4;
+    int64 timestamp = 5;
+    int32 period = 6;
+    bool is_composite = 7;
+}
+
+message AggregatedData {
+    OverallStatistics overall = 1;
+    map<string, PairStatistics> per_pair = 2;
+    map<string, LevelStatistics> per_level = 3;
+}
+
+message OverallStatistics {
+    int32 total_orders = 1;
+    int32 total_positions = 2;
+    string total_position_value = 3;
+    string total_pnl = 4;
+    string total_balance = 5;
+    int32 active_pairs = 6;
+    int32 active_levels = 7;
+}
+
+message PairStatistics {
+    string pair = 1;
+    int32 order_count = 2;
+    string pnl = 3;
+    int32 trade_count = 4;
+}
+
+message LevelStatistics {
+    string level_id = 1;
+    int32 order_count = 2;
+    int32 filled_count_today = 3;
+    string filled_quantity_today = 4;
+    string pnl = 5;
+    int64 last_fill_at = 6;
+}
+
+message StrategyStatus {
+    string strategy_id = 1;           // Unique identifier: "strategy_name:symbol" (e.g., "BuyLowSellHigh:ETH/USDC")
+    string strategy_name = 2;         // e.g., "BuyLowSellHigh"
+    string symbol = 3;                // e.g., "BTC/USDC"
+    bool enabled = 4;                 // Whether this strategy is enabled
+    string position_quantity = 5;     // Current position size
+    string position_avg_price = 6;    // Average entry price
+    string unrealized_pnl = 7;       // Unrealized P&L
+    string unrealized_pnl_percent = 8; // Unrealized P&L as percentage
+    int32 active_orders = 9;          // Number of active orders
+    int32 max_active_orders = 10;      // Maximum allowed active orders
+    string last_signal = 11;           // "Buy", "Sell", or "None"
+    string signal_strength = 12;     // Signal strength percentage (if available)
+}
+
+message Orderbook {
+    string pair = 1;                  // Trading pair (e.g., "BTC/USDT")
+    int64 timestamp = 2;               // Last update timestamp
+    repeated OrderbookLevel bids = 3;  // Bid levels (top 10)
+    repeated OrderbookLevel asks = 4;  // Ask levels (top 10)
+    string best_bid = 5;               // Best bid price
+    string best_ask = 6;               // Best ask price
+    string mid_price = 7;              // Mid price (average of best bid/ask)
+    string spread = 8;                 // Spread (best_ask - best_bid)
+}
+
+message OrderbookLevel {
+    string price = 1;                  // Price level
+    string quantity = 2;               // Quantity at this price
+}
+
+
