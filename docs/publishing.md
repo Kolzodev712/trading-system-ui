@@ -19,7 +19,7 @@ git commit -m "Initial release v0.1.0 — trading system web UI"
 ## 3. Create remote and push
 
 ```bash
-git remote add origin git@github.com:Darkeyes712/trading-system-ui.git
+git remote add origin git@github.com:Kolzodev712/trading-system-ui.git
 git push -u origin main
 ```
 

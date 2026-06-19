@@ -1,6 +1,6 @@
 # Trading System UI
 
-Browser dashboard for the [trading_system](https://github.com/Darkeyes712/trading_system) runner. A thin **gRPC-Web client** that replaces the Rust TUI (`trading-cli`) with a modern web interface — same API, no duplicate backend.
+Browser dashboard for the [trading_system](https://github.com/Kolzodev712/trading_system) runner. A thin **gRPC-Web client** that replaces the Rust TUI (`trading-cli`) with a modern web interface — same API, no duplicate backend.
 
 ```
 Browser (:5173)  →  Envoy gRPC-Web (:8081)  →  Trading runner gRPC (:50051)
