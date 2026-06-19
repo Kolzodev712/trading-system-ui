@@ -25,4 +25,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `@connectrpc/connect-web` transport with Vite `/grpc` proxy
 - `npm run start` for reliable local serving via `vite preview`
 
-[0.1.0]: https://github.com/Darkeyes712/trading-system-ui/releases/tag/v0.1.0
+[0.1.0]: https://github.com/Kolzodev712/trading-system-ui/releases/tag/v0.1.0
