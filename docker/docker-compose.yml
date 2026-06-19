@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  grpc-web-proxy:
+    image: envoyproxy/envoy:v1.31-latest
+    network_mode: host
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml --log-level info
