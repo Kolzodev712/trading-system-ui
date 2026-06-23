@@ -9,6 +9,12 @@ export function StatusBar() {
   const endpoint = useTradingStore((s) => s.endpoint);
   const exchange = useTradingStore((s) => s.monitoringData?.exchange ?? "—");
   const mode = useMode();
+  const modeLabel =
+    mode === "dex"
+      ? "DEX"
+      : mode === "strategies"
+        ? "Strategies"
+        : "Levels";
   const screen = useTradingStore((s) => s.screen);
 
   return (
@@ -35,7 +41,7 @@ export function StatusBar() {
       <div className="flex items-center gap-3">
         <span>{exchange}</span>
         <span className="text-border">|</span>
-        <span>{mode === "strategies" ? "Strategies" : "Levels"}</span>
+        <span>{modeLabel}</span>
       </div>
     </footer>
   );

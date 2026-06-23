@@ -11,6 +11,12 @@ export function MainMenu() {
   const enterMonitor = useTradingStore((s) => s.enterMonitor);
   const exchange = useTradingStore((s) => s.monitoringData?.exchange ?? "—");
   const mode = useMode();
+  const modeLabel =
+    mode === "dex"
+      ? "DEX"
+      : mode === "strategies"
+        ? "Strategies"
+        : "Levels";
   const { toggleGlobal, togglingGlobal } = useMonitorActions();
 
   return (
@@ -44,7 +50,7 @@ export function MainMenu() {
 
           <div className="text-sm text-muted-foreground border-t border-border pt-4 flex justify-between">
             <span>Exchange: {exchange}</span>
-            <span>Mode: {mode === "strategies" ? "Strategies" : "Levels"}</span>
+            <span>Mode: {modeLabel}</span>
           </div>
         </CardContent>
       </Card>

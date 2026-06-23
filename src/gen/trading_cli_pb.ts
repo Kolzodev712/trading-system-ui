@@ -723,6 +723,266 @@ export class ToggleLevelResponse extends Message<ToggleLevelResponse> {
 }
 
 /**
+ * @generated from message trading_cli.ToggleDexQuoteRequest
+ */
+export class ToggleDexQuoteRequest extends Message<ToggleDexQuoteRequest> {
+  /**
+   * @generated from field: string quote_id = 1;
+   */
+  quoteId = "";
+
+  /**
+   * @generated from field: bool enabled = 2;
+   */
+  enabled = false;
+
+  constructor(data?: PartialMessage<ToggleDexQuoteRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.ToggleDexQuoteRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "quote_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ToggleDexQuoteRequest {
+    return new ToggleDexQuoteRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ToggleDexQuoteRequest {
+    return new ToggleDexQuoteRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ToggleDexQuoteRequest {
+    return new ToggleDexQuoteRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ToggleDexQuoteRequest | PlainMessage<ToggleDexQuoteRequest> | undefined, b: ToggleDexQuoteRequest | PlainMessage<ToggleDexQuoteRequest> | undefined): boolean {
+    return proto3.util.equals(ToggleDexQuoteRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.ToggleDexQuoteResponse
+ */
+export class ToggleDexQuoteResponse extends Message<ToggleDexQuoteResponse> {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success = false;
+
+  /**
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  constructor(data?: PartialMessage<ToggleDexQuoteResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.ToggleDexQuoteResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ToggleDexQuoteResponse {
+    return new ToggleDexQuoteResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ToggleDexQuoteResponse {
+    return new ToggleDexQuoteResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ToggleDexQuoteResponse {
+    return new ToggleDexQuoteResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ToggleDexQuoteResponse | PlainMessage<ToggleDexQuoteResponse> | undefined, b: ToggleDexQuoteResponse | PlainMessage<ToggleDexQuoteResponse> | undefined): boolean {
+    return proto3.util.equals(ToggleDexQuoteResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.CancelDexPoolOrdersRequest
+ */
+export class CancelDexPoolOrdersRequest extends Message<CancelDexPoolOrdersRequest> {
+  /**
+   * Pool / market id (e.g. SUI_DBUSDC). Empty cancels all configured pools.
+   *
+   * @generated from field: string pool = 1;
+   */
+  pool = "";
+
+  constructor(data?: PartialMessage<CancelDexPoolOrdersRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.CancelDexPoolOrdersRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "pool", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CancelDexPoolOrdersRequest {
+    return new CancelDexPoolOrdersRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CancelDexPoolOrdersRequest {
+    return new CancelDexPoolOrdersRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CancelDexPoolOrdersRequest {
+    return new CancelDexPoolOrdersRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: CancelDexPoolOrdersRequest | PlainMessage<CancelDexPoolOrdersRequest> | undefined, b: CancelDexPoolOrdersRequest | PlainMessage<CancelDexPoolOrdersRequest> | undefined): boolean {
+    return proto3.util.equals(CancelDexPoolOrdersRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.CancelDexPoolOrdersResponse
+ */
+export class CancelDexPoolOrdersResponse extends Message<CancelDexPoolOrdersResponse> {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success = false;
+
+  /**
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  /**
+   * @generated from field: repeated string transaction_signatures = 3;
+   */
+  transactionSignatures: string[] = [];
+
+  constructor(data?: PartialMessage<CancelDexPoolOrdersResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.CancelDexPoolOrdersResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "transaction_signatures", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CancelDexPoolOrdersResponse {
+    return new CancelDexPoolOrdersResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CancelDexPoolOrdersResponse {
+    return new CancelDexPoolOrdersResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CancelDexPoolOrdersResponse {
+    return new CancelDexPoolOrdersResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: CancelDexPoolOrdersResponse | PlainMessage<CancelDexPoolOrdersResponse> | undefined, b: CancelDexPoolOrdersResponse | PlainMessage<CancelDexPoolOrdersResponse> | undefined): boolean {
+    return proto3.util.equals(CancelDexPoolOrdersResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.ToggleDexStrategyRequest
+ */
+export class ToggleDexStrategyRequest extends Message<ToggleDexStrategyRequest> {
+  /**
+   * @generated from field: string strategy_id = 1;
+   */
+  strategyId = "";
+
+  /**
+   * @generated from field: bool enabled = 2;
+   */
+  enabled = false;
+
+  constructor(data?: PartialMessage<ToggleDexStrategyRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.ToggleDexStrategyRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "strategy_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ToggleDexStrategyRequest {
+    return new ToggleDexStrategyRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ToggleDexStrategyRequest {
+    return new ToggleDexStrategyRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ToggleDexStrategyRequest {
+    return new ToggleDexStrategyRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ToggleDexStrategyRequest | PlainMessage<ToggleDexStrategyRequest> | undefined, b: ToggleDexStrategyRequest | PlainMessage<ToggleDexStrategyRequest> | undefined): boolean {
+    return proto3.util.equals(ToggleDexStrategyRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.ToggleDexStrategyResponse
+ */
+export class ToggleDexStrategyResponse extends Message<ToggleDexStrategyResponse> {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success = false;
+
+  /**
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  constructor(data?: PartialMessage<ToggleDexStrategyResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.ToggleDexStrategyResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ToggleDexStrategyResponse {
+    return new ToggleDexStrategyResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ToggleDexStrategyResponse {
+    return new ToggleDexStrategyResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ToggleDexStrategyResponse {
+    return new ToggleDexStrategyResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ToggleDexStrategyResponse | PlainMessage<ToggleDexStrategyResponse> | undefined, b: ToggleDexStrategyResponse | PlainMessage<ToggleDexStrategyResponse> | undefined): boolean {
+    return proto3.util.equals(ToggleDexStrategyResponse, a, b);
+  }
+}
+
+/**
  * Level Data Structures
  *
  * @generated from message trading_cli.Level
@@ -1209,6 +1469,31 @@ export class DexVenueSnapshot extends Message<DexVenueSnapshot> {
    */
   venue = "";
 
+  /**
+   * @generated from field: repeated trading_cli.DexOrder open_orders = 4;
+   */
+  openOrders: DexOrder[] = [];
+
+  /**
+   * @generated from field: repeated trading_cli.DexQuote quotes = 5;
+   */
+  quotes: DexQuote[] = [];
+
+  /**
+   * @generated from field: map<string, string> asset_labels = 6;
+   */
+  assetLabels: { [key: string]: string } = {};
+
+  /**
+   * @generated from field: repeated trading_cli.DexStrategyStatus dex_strategies = 7;
+   */
+  dexStrategies: DexStrategyStatus[] = [];
+
+  /**
+   * @generated from field: repeated trading_cli.DexIndicator dex_indicators = 8;
+   */
+  dexIndicators: DexIndicator[] = [];
+
   constructor(data?: PartialMessage<DexVenueSnapshot>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1220,6 +1505,11 @@ export class DexVenueSnapshot extends Message<DexVenueSnapshot> {
     { no: 1, name: "balances", kind: "message", T: DexBalance, repeated: true },
     { no: 2, name: "pending_transactions", kind: "message", T: DexPendingTransaction, repeated: true },
     { no: 3, name: "venue", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "open_orders", kind: "message", T: DexOrder, repeated: true },
+    { no: 5, name: "quotes", kind: "message", T: DexQuote, repeated: true },
+    { no: 6, name: "asset_labels", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
+    { no: 7, name: "dex_strategies", kind: "message", T: DexStrategyStatus, repeated: true },
+    { no: 8, name: "dex_indicators", kind: "message", T: DexIndicator, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DexVenueSnapshot {
@@ -1236,6 +1526,304 @@ export class DexVenueSnapshot extends Message<DexVenueSnapshot> {
 
   static equals(a: DexVenueSnapshot | PlainMessage<DexVenueSnapshot> | undefined, b: DexVenueSnapshot | PlainMessage<DexVenueSnapshot> | undefined): boolean {
     return proto3.util.equals(DexVenueSnapshot, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.DexIndicator
+ */
+export class DexIndicator extends Message<DexIndicator> {
+  /**
+   * @generated from field: string indicator_id = 1;
+   */
+  indicatorId = "";
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name = "";
+
+  /**
+   * @generated from field: string pool = 3;
+   */
+  pool = "";
+
+  /**
+   * @generated from field: string value = 4;
+   */
+  value = "";
+
+  /**
+   * @generated from field: uint64 timestamp = 5;
+   */
+  timestamp = protoInt64.zero;
+
+  constructor(data?: PartialMessage<DexIndicator>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.DexIndicator";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "indicator_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "pool", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "timestamp", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DexIndicator {
+    return new DexIndicator().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DexIndicator {
+    return new DexIndicator().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DexIndicator {
+    return new DexIndicator().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: DexIndicator | PlainMessage<DexIndicator> | undefined, b: DexIndicator | PlainMessage<DexIndicator> | undefined): boolean {
+    return proto3.util.equals(DexIndicator, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.DexStrategyStatus
+ */
+export class DexStrategyStatus extends Message<DexStrategyStatus> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = "";
+
+  /**
+   * @generated from field: string strategy_type = 2;
+   */
+  strategyType = "";
+
+  /**
+   * @generated from field: string market = 3;
+   */
+  market = "";
+
+  /**
+   * @generated from field: bool enabled = 4;
+   */
+  enabled = false;
+
+  /**
+   * @generated from field: string state = 5;
+   */
+  state = "";
+
+  /**
+   * @generated from field: string last_signal = 6;
+   */
+  lastSignal = "";
+
+  /**
+   * @generated from field: uint64 eval_count = 7;
+   */
+  evalCount = protoInt64.zero;
+
+  constructor(data?: PartialMessage<DexStrategyStatus>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.DexStrategyStatus";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "strategy_type", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "market", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 5, name: "state", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "last_signal", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "eval_count", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DexStrategyStatus {
+    return new DexStrategyStatus().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DexStrategyStatus {
+    return new DexStrategyStatus().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DexStrategyStatus {
+    return new DexStrategyStatus().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: DexStrategyStatus | PlainMessage<DexStrategyStatus> | undefined, b: DexStrategyStatus | PlainMessage<DexStrategyStatus> | undefined): boolean {
+    return proto3.util.equals(DexStrategyStatus, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.DexQuote
+ */
+export class DexQuote extends Message<DexQuote> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = "";
+
+  /**
+   * @generated from field: string pool = 2;
+   */
+  pool = "";
+
+  /**
+   * @generated from field: string side = 3;
+   */
+  side = "";
+
+  /**
+   * @generated from field: string price = 4;
+   */
+  price = "";
+
+  /**
+   * @generated from field: string quantity = 5;
+   */
+  quantity = "";
+
+  /**
+   * @generated from field: bool enabled = 6;
+   */
+  enabled = false;
+
+  /**
+   * @generated from field: bool auto_repost = 7;
+   */
+  autoRepost = false;
+
+  /**
+   * @generated from field: string state = 8;
+   */
+  state = "";
+
+  /**
+   * @generated from field: string order_id = 9;
+   */
+  orderId = "";
+
+  /**
+   * @generated from field: string last_signature = 10;
+   */
+  lastSignature = "";
+
+  /**
+   * @generated from field: string resolved_price = 11;
+   */
+  resolvedPrice = "";
+
+  constructor(data?: PartialMessage<DexQuote>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.DexQuote";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "pool", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "side", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "price", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "quantity", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: "auto_repost", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 8, name: "state", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "order_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "last_signature", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "resolved_price", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DexQuote {
+    return new DexQuote().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DexQuote {
+    return new DexQuote().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DexQuote {
+    return new DexQuote().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: DexQuote | PlainMessage<DexQuote> | undefined, b: DexQuote | PlainMessage<DexQuote> | undefined): boolean {
+    return proto3.util.equals(DexQuote, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.DexOrder
+ */
+export class DexOrder extends Message<DexOrder> {
+  /**
+   * @generated from field: string order_id = 1;
+   */
+  orderId = "";
+
+  /**
+   * @generated from field: string pool = 2;
+   */
+  pool = "";
+
+  /**
+   * @generated from field: string side = 3;
+   */
+  side = "";
+
+  /**
+   * @generated from field: string price = 4;
+   */
+  price = "";
+
+  /**
+   * @generated from field: string quantity = 5;
+   */
+  quantity = "";
+
+  /**
+   * @generated from field: string status = 6;
+   */
+  status = "";
+
+  constructor(data?: PartialMessage<DexOrder>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.DexOrder";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "order_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "pool", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "side", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "price", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "quantity", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "status", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DexOrder {
+    return new DexOrder().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DexOrder {
+    return new DexOrder().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DexOrder {
+    return new DexOrder().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: DexOrder | PlainMessage<DexOrder> | undefined, b: DexOrder | PlainMessage<DexOrder> | undefined): boolean {
+    return proto3.util.equals(DexOrder, a, b);
   }
 }
 

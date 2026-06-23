@@ -14,8 +14,9 @@ Browser (:5173)  →  Auth API (:3001) + MongoDB (:27017)
 - **Spot & Futures layouts** — auto-switch based on `instrument_type`
 - **Levels mode** — list, create, edit, enable/disable, details
 - **Strategies mode** — when the runner reports active strategies
+- **DEX monitor** — full-screen DeepBook/on-chain layout with quote/strategy controls
 - **Global trading toggle** — enable/disable with order cancellation feedback
-- **Aggregated & DEX panels** — data available in proto but not shown in the TUI
+- **Aggregated panel** — CEX spot sidebar (web-only extra)
 
 ## Quick start
 
@@ -42,6 +43,7 @@ See [docs/development.md](docs/development.md) for full setup and troubleshootin
 |-----|-------------|
 | [Development](docs/development.md) | Local setup, scripts, troubleshooting |
 | [Architecture](docs/architecture.md) | Data flow, state model, screens |
+| [Feature reference](docs/feature-reference.md) | Screens, DEX monitor, shortcuts, parity |
 | [Deployment](docs/deployment.md) | Production build and hosting |
 | [gRPC API](docs/grpc-api.md) | RPC contract and proto sync |
 | [Publishing](docs/publishing.md) | First-time GitHub push checklist |

@@ -34,7 +34,7 @@ trading-system-ui/
 ├── src/api/            # RPC wrappers, display transforms
 ├── src/hooks/          # Stream, levels poll, monitor actions
 ├── src/store/          # Zustand UI state
-├── src/screens/        # MainMenu, SpotMonitor, FuturesMonitor
+├── src/screens/        # MainMenu, SpotMonitor, FuturesMonitor, DexMonitor
 ├── src/components/     # Panels, dialogs, layout
 ├── docker/             # Envoy gRPC-Web compose + envoy.yaml
 └── scripts/            # free-port helper
@@ -46,19 +46,21 @@ trading-system-ui/
 |-------|--------|-----------------|
 | `tradingEnabled` | `GetTradingStatus` | On connect, after global toggle |
 | `monitoringData` | `StreamMonitoringData` | Replace full snapshot ~1 Hz |
-| `levels` | `GetLevels` | On monitor enter, 5s poll (Spot), after mutations |
-| `screen` | `instrument_type` in stream | `main` / `spot` / `futures` |
-| `mode` | derived | `strategies` if `strategies.length > 0`, else `levels` |
+| `levels` | `GetLevels` | On monitor enter, 5s poll (spot + futures), after mutations |
+| `screen` | `monitoringData` | `main` / `spot` / `futures` / `dex` |
+| `mode` | derived | `dex` when `monitoringData.dex` present; else `strategies` if `strategies.length > 0`, else `levels` |
 
 ## Screens
 
 ```mermaid
 stateDiagram-v2
     [*] --> Dashboard
-    Dashboard --> SpotMonitor: Open Monitor + Spot
-    Dashboard --> FuturesMonitor: Open Monitor + Futures
+    Dashboard --> DexMonitor: Open Monitor + dex present
+    Dashboard --> SpotMonitor: Open Monitor + CEX spot
+    Dashboard --> FuturesMonitor: Open Monitor + CEX futures
     SpotMonitor --> FuturesMonitor: instrument_type changes
     FuturesMonitor --> SpotMonitor: instrument_type changes
+    DexMonitor --> Dashboard: Back
     SpotMonitor --> Dashboard: Back
     FuturesMonitor --> Dashboard: Back
 ```
@@ -67,8 +69,20 @@ stateDiagram-v2
 
 - Left: Orders, Balances, Levels or Strategies
 - Center: Orderbook (pair tabs)
-- Right: Indicators, Aggregated, DEX (when present)
+- Right: Indicators, Aggregated (web-only)
 - Bottom: Recent trades
+
+### DEX layout (`DexMonitor`)
+
+When `monitoringData.dex` is set (runner `--mode dex`), the UI opens a dedicated full-screen monitor instead of embedding DEX in CEX sidebars.
+
+- Left: Venue info, pool-filtered DEX indicators, open orders
+- Center: Orderbook (pair tabs drive pool filter)
+- Right: Venue balances, pending transactions
+- Bottom: Quotes, strategies (if any), recent trades
+- Toolbar: toggle quote, toggle strategy, cancel pool orders
+
+Pool scoping matches the TUI: orderbook tab label filters quotes, strategies, indicators, and open orders via `matchesPool()` in `src/lib/dexPool.ts`.
 
 ### Futures layout
 
@@ -83,6 +97,7 @@ Replicated from the Rust TUI (`cli/src/screens/shared/panels.rs`):
 - PnL coloring: red if negative prefix, green otherwise
 - Trades: newest first (reversed before display)
 - Create/update: wrap price/qty as `Fixed(value)` for the server
+- DEX: asset label resolution, `resolvedPrice || price` for quotes, truncated signatures/order ids
 
 ## Known limitations
 

@@ -9,6 +9,9 @@ import {
   SetTradingEnabledRequest,
   StreamMonitoringDataRequest,
   Symbol,
+  ToggleDexQuoteRequest,
+  ToggleDexStrategyRequest,
+  CancelDexPoolOrdersRequest,
   ToggleLevelRequest,
   ToggleStrategyRequest,
   UpdateLevelRequest,
@@ -92,6 +95,30 @@ export async function toggleStrategy(
   return client.toggleStrategy(
     new ToggleStrategyRequest({ strategyName, symbol, enabled }),
     rpcOptions.toggle,
+  );
+}
+
+export async function toggleDexQuote(quoteId: string, enabled: boolean) {
+  const client = getTradingClient();
+  return client.toggleDexQuote(
+    new ToggleDexQuoteRequest({ quoteId, enabled }),
+    rpcOptions.dexToggle,
+  );
+}
+
+export async function toggleDexStrategy(strategyId: string, enabled: boolean) {
+  const client = getTradingClient();
+  return client.toggleDexStrategy(
+    new ToggleDexStrategyRequest({ strategyId, enabled }),
+    rpcOptions.dexToggle,
+  );
+}
+
+export async function cancelDexPoolOrders(pool: string) {
+  const client = getTradingClient();
+  return client.cancelDexPoolOrders(
+    new CancelDexPoolOrdersRequest({ pool }),
+    rpcOptions.dexCancel,
   );
 }
 

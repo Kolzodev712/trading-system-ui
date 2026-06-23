@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
+  dexAssetLabel,
+  dexQuotePriceDisplay,
   findCollateralBalance,
   levelEnabledIndicator,
   levelStatusVisual,
   pnlClassName,
   stripFixed,
+  truncateMiddle,
   wrapFixed,
 } from "@/api/transforms";
+import { matchesPool, normalizePool } from "@/lib/dexPool";
 import { configIdFromExpanded } from "@/lib/levelId";
 import { validateCreateLevelForm } from "@/lib/validation";
 
@@ -75,5 +79,32 @@ describe("findCollateralBalance", () => {
         { asset: "USDT", total: "500" },
       ]),
     ).toBe("500");
+  });
+});
+
+describe("dex transforms", () => {
+  it("resolves asset labels", () => {
+    expect(dexAssetLabel("0xabc::SUI::SUI", { "0xabc::SUI::SUI": "SUI" })).toBe("SUI");
+    expect(dexAssetLabel("0xabc::SUI::SUI", {})).toBe("SUI");
+  });
+
+  it("prefers resolved quote price", () => {
+    expect(dexQuotePriceDisplay("3.50", "Binding")).toBe("3.50");
+    expect(dexQuotePriceDisplay("", "Binding")).toBe("Binding");
+  });
+
+  it("truncates long ids", () => {
+    expect(truncateMiddle("abcdefghijklmnop", 4, 3)).toBe("abcd…nop");
+  });
+});
+
+describe("dex pool matching", () => {
+  it("normalizes slash pools", () => {
+    expect(normalizePool("SUI/DBUSDC")).toBe("SUI_DBUSDC");
+  });
+
+  it("matches pool to tab label", () => {
+    expect(matchesPool("SUI_DBUSDC", "SUI/DBUSDC")).toBe(true);
+    expect(matchesPool("OTHER", "SUI/DBUSDC")).toBe(false);
   });
 });

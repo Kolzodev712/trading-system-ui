@@ -1,6 +1,5 @@
 import {
   AggregatedPanel,
-  DexPanel,
   MarginPanel,
 } from "@/components/panels/ExtrasPanels";
 import { IndicatorsPanel } from "@/components/panels/IndicatorsPanel";
@@ -122,7 +121,6 @@ export function FuturesMonitor() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           <TradesPanel trades={data.trades} />
           {data.aggregated && <AggregatedPanel aggregated={data.aggregated} />}
-          {data.dex && <DexPanel dex={data.dex} />}
         </div>
       </div>
     </div>
