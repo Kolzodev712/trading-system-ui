@@ -52,7 +52,9 @@ Open **http://127.0.0.1:5173** → sign in with `admin` / `admin` → **Connect 
 | `npm test` | Unit tests |
 | `npm run dev:all` | UI + auth API during development |
 | `npm run server` | Auth API only (`:3001`, seeds `admin` in Mongo) |
-| `npm run proxy:up` / `proxy:down` | Manage Docker stack (Mongo + Envoy) |
+| `npm run proxy:up` / `proxy:down` | Envoy gRPC-Web proxy only (`:8081`) |
+| `npm run mongo:up` | Docker Mongo for auth (optional; skip if you already have Mongo on `:27017`) |
+| `npm run stack:up` / `stack:down` | Envoy + Mongo together |
 
 ## Proto sync
 

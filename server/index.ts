@@ -83,6 +83,17 @@ async function main() {
     console.log(`[auth] API listening on http://127.0.0.1:${PORT}`);
   });
 
+  server.on("error", (err: NodeJS.ErrnoException) => {
+    if (err.code === "EADDRINUSE") {
+      console.error(
+        `[auth] Port ${PORT} is already in use. Stop the other process or run: node scripts/free-port.mjs ${PORT}`,
+      );
+    } else {
+      console.error("[auth] Server error:", err);
+    }
+    process.exit(1);
+  });
+
   const shutdown = async () => {
     server.close();
     await closeDb();

@@ -23,15 +23,16 @@ Browser (:5173)  →  Auth API (:3001) + MongoDB (:27017)
 **Prerequisites:** Node.js 18+, Docker (Mongo + gRPC-Web proxy), trading runner on `:50051`.
 
 ```bash
-# 1. Mongo + gRPC-Web proxy (Envoy)
-docker-compose -f docker/docker-compose.yml up -d
+# 1. gRPC-Web proxy (required for Connect)
+npm run proxy:up
 
-# 2. UI + auth API
+# 2. UI + auth API (Mongo optional — see below)
 npm install
 cp .env.example .env
-npm run dev:all   # UI on :5173, auth API on :3001
-# or: npm run start (UI only) + npm run server (auth, separate terminal)
+npm run dev:all
 ```
+
+**Mongo:** If you already have Mongo on `:27017`, auth uses it as-is. Otherwise run `npm run mongo:up`, or `npm run stack:up` for Envoy + Mongo. If port 27017 is taken, set `MONGO_HOST_PORT=27018` in `.env` and update `MONGODB_URI`.
 
 Open **http://127.0.0.1:5173** → Sign in (`admin` / `admin`) → Connect runner (default `/grpc`).
 
