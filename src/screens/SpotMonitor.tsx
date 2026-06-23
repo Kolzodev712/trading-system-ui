@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { BalancesPanel } from "@/components/panels/BalancesPanel";
-import {
-  AggregatedPanel,
-  DexPanel,
-} from "@/components/panels/ExtrasPanels";
+import { AggregatedPanel } from "@/components/panels/ExtrasPanels";
 import { IndicatorsPanel } from "@/components/panels/IndicatorsPanel";
 import { LevelsPanel } from "@/components/panels/LevelsPanel";
 import { OrderbookPanel } from "@/components/panels/OrderbookPanel";
@@ -111,7 +108,6 @@ export function SpotMonitor() {
             {data.aggregated && (
               <AggregatedPanel aggregated={data.aggregated} />
             )}
-            {data.dex && <DexPanel dex={data.dex} />}
           </div>
         </div>
 

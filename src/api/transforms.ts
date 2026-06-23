@@ -77,3 +77,32 @@ export function findCollateralBalance(
   const usdt = balances.find((b) => b.asset === "USDT" || b.asset === "USD");
   return usdt?.total ?? "0";
 }
+
+/** Resolve DEX mint to human label (TUI: asset_label). */
+export function dexAssetLabel(
+  mint: string,
+  assetLabels: Record<string, string> | undefined,
+): string {
+  if (assetLabels?.[mint]) return assetLabels[mint];
+  const segment = mint.split("::").pop();
+  return segment || mint;
+}
+
+/** Show resolved price when available, else config price spec. */
+export function dexQuotePriceDisplay(
+  resolvedPrice: string,
+  configPrice: string,
+): string {
+  return resolvedPrice?.trim() ? resolvedPrice : configPrice;
+}
+
+/** Truncate long on-chain ids for table display. */
+export function truncateMiddle(value: string, head = 6, tail = 4): string {
+  if (!value) return "—";
+  if (value.length <= head + tail + 1) return value;
+  return `${value.slice(0, head)}…${value.slice(-tail)}`;
+}
+
+export function dexEnabledBadge(enabled: boolean): string {
+  return enabled ? "on" : "off";
+}

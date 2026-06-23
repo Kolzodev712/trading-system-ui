@@ -1,8 +1,11 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { StatusBar } from "@/components/layout/StatusBar";
+import { DexQuoteDetailsDialog } from "@/components/dex/DexQuoteDetailsDialog";
+import { DexStrategyDetailsDialog } from "@/components/dex/DexStrategyDetailsDialog";
 import { DeleteLevelStub } from "@/components/levels/DeleteLevelStub";
 import { CreateLevelDialog } from "@/components/levels/CreateLevelDialog";
 import { EditLevelDialog } from "@/components/levels/EditLevelDialog";
@@ -18,11 +21,23 @@ import { WelcomeScreen } from "@/screens/WelcomeScreen";
 import { useIsAuthenticated } from "@/store/authStore";
 import { useTradingStore } from "@/store/tradingStore";
 
+const DexMonitor = lazy(() =>
+  import("@/screens/DexMonitor").then((m) => ({ default: m.DexMonitor })),
+);
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: 1 },
   },
 });
+
+function MonitorFallback() {
+  return (
+    <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
+      Loading monitor…
+    </div>
+  );
+}
 
 function TradingApp() {
   const { hydrated } = useAuth();
@@ -60,6 +75,11 @@ function TradingApp() {
           {screen === "main" && <MainMenu />}
           {screen === "spot" && <SpotMonitor />}
           {screen === "futures" && <FuturesMonitor />}
+          {screen === "dex" && (
+            <Suspense fallback={<MonitorFallback />}>
+              <DexMonitor />
+            </Suspense>
+          )}
         </main>
       </ErrorBoundary>
 
@@ -67,6 +87,8 @@ function TradingApp() {
 
       <LevelDetailsDialog />
       <StrategyDetailsDialog />
+      <DexQuoteDetailsDialog />
+      <DexStrategyDetailsDialog />
       <CreateLevelDialog />
       <EditLevelDialog />
       <DeleteLevelStub />

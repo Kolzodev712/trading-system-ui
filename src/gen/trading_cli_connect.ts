@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse } from "./trading_cli_pb.js";
+import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse } from "./trading_cli_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -97,6 +97,35 @@ export const TradingCliService = {
       name: "ToggleLevel",
       I: ToggleLevelRequest,
       O: ToggleLevelResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * DEX quote control (Phase 2 — on-chain venues)
+     *
+     * @generated from rpc trading_cli.TradingCliService.ToggleDexQuote
+     */
+    toggleDexQuote: {
+      name: "ToggleDexQuote",
+      I: ToggleDexQuoteRequest,
+      O: ToggleDexQuoteResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.CancelDexPoolOrders
+     */
+    cancelDexPoolOrders: {
+      name: "CancelDexPoolOrders",
+      I: CancelDexPoolOrdersRequest,
+      O: CancelDexPoolOrdersResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.ToggleDexStrategy
+     */
+    toggleDexStrategy: {
+      name: "ToggleDexStrategy",
+      I: ToggleDexStrategyRequest,
+      O: ToggleDexStrategyResponse,
       kind: MethodKind.Unary,
     },
     /**

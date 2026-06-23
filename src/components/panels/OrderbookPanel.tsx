@@ -1,4 +1,6 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Orderbook } from "@/gen/trading_cli_pb";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/shared/DataTable";
@@ -7,12 +9,14 @@ interface OrderbookPanelProps {
   orderbooks: Orderbook[];
   selectedIndex: number;
   onSelectIndex: (index: number) => void;
+  showPoolNavigation?: boolean;
 }
 
 export function OrderbookPanel({
   orderbooks,
   selectedIndex,
   onSelectIndex,
+  showPoolNavigation = false,
 }: OrderbookPanelProps) {
   if (orderbooks.length === 0) {
     return (
@@ -33,7 +37,38 @@ export function OrderbookPanel({
   return (
     <Card className="h-full flex flex-col min-h-0">
       <CardHeader>
-        <CardTitle>Orderbook</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle>Orderbook</CardTitle>
+          {showPoolNavigation && orderbooks.length > 1 && (
+            <div className="flex items-center gap-1">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                aria-label="Previous pool"
+                disabled={safeIndex <= 0}
+                onClick={() => onSelectIndex(safeIndex - 1)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-xs font-mono text-muted-foreground min-w-[5rem] text-center">
+                {current.pair}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                aria-label="Next pool"
+                disabled={safeIndex >= orderbooks.length - 1}
+                onClick={() => onSelectIndex(safeIndex + 1)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
         <Tabs
           value={String(safeIndex)}
           onValueChange={(v) => onSelectIndex(Number(v))}

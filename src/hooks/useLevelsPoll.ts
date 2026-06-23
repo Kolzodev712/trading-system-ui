@@ -3,10 +3,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getLevels } from "@/api/tradingCliService";
 import { useTradingStore } from "@/store/tradingStore";
 
-export function useLevelsPoll(enabled: boolean, spotOnly: boolean) {
+export function useLevelsPoll(enabled: boolean, cexMonitorsOnly = true) {
   const screen = useTradingStore((s) => s.screen);
   const setLevels = useTradingStore((s) => s.setLevels);
-  const shouldPoll = enabled && (!spotOnly || screen === "spot");
+  const isCexMonitor = screen === "spot" || screen === "futures";
+  const shouldPoll = enabled && (!cexMonitorsOnly || isCexMonitor);
 
   const query = useQuery({
     queryKey: ["levels"],
