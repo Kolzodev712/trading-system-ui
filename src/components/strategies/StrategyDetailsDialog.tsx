@@ -36,6 +36,7 @@ export function StrategyDetailsDialog() {
     enabled: open && !!strategy,
   });
 
+  const [strategyType, setStrategyType] = useState("");
   const [maxPosition, setMaxPosition] = useState("");
   const [positionSize, setPositionSize] = useState("");
   const [buyThreshold, setBuyThreshold] = useState("");
@@ -49,6 +50,7 @@ export function StrategyDetailsDialog() {
   useEffect(() => {
     const c = configQuery.data;
     if (!c) return;
+    setStrategyType(c.strategyType || strategy?.strategyName || "");
     setMaxPosition(c.maxPosition);
     setPositionSize(c.positionSize);
     setBuyThreshold(c.buyThresholdPercent);
@@ -58,7 +60,7 @@ export function StrategyDetailsDialog() {
     setMaxActiveOrders(String(c.maxActiveOrders || ""));
     setPriceHistorySize(String(c.priceHistorySize || ""));
     setMinPriceHistory(String(c.minPriceHistory || ""));
-  }, [configQuery.data]);
+  }, [configQuery.data, strategy?.strategyName]);
 
   const capMutation = useMutation({
     mutationFn: () => {
@@ -76,7 +78,7 @@ export function StrategyDetailsDialog() {
       if (!strategy) throw new Error("No strategy selected");
       return updateStrategyConfig(
         new OperatorStrategyConfig({
-          strategyType: strategy.strategyName,
+          strategyType: strategyType || strategy.strategyName,
           symbol: strategy.symbol,
           positionSize,
           maxPosition,
@@ -154,9 +156,21 @@ export function StrategyDetailsDialog() {
             {configQuery.data && (
               <div className="grid gap-3">
                 <p className="text-xs text-muted-foreground">
-                  Cap applies immediately. Other fields persist and need a runner
-                  restart. Keys and venue settings are not editable here.
+                  Cap applies immediately. Type, size, and lookbacks persist and
+                  need Restart. PropHold stays available; Donchian is the slow
+                  breakout. Keys are not editable here.
                 </p>
+                <Field label="Strategy type (restart)">
+                  <select
+                    className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+                    value={strategyType}
+                    onChange={(e) => setStrategyType(e.target.value)}
+                  >
+                    <option value="PropHold">PropHold (flat / flatten leftover)</option>
+                    <option value="Donchian">Donchian (20-day / 10-day)</option>
+                    <option value="BuyLowSellHigh">BuyLowSellHigh</option>
+                  </select>
+                </Field>
                 <Field label="Max position (live cap)">
                   <Input
                     value={maxPosition}
@@ -199,13 +213,13 @@ export function StrategyDetailsDialog() {
                     onChange={(e) => setMaxActiveOrders(e.target.value)}
                   />
                 </Field>
-                <Field label="Price history size (restart)">
+                <Field label="Entry days (Donchian, restart)">
                   <Input
                     value={priceHistorySize}
                     onChange={(e) => setPriceHistorySize(e.target.value)}
                   />
                 </Field>
-                <Field label="Min price history (restart)">
+                <Field label="Exit days (Donchian, restart)">
                   <Input
                     value={minPriceHistory}
                     onChange={(e) => setMinPriceHistory(e.target.value)}
