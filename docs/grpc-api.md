@@ -17,6 +17,10 @@
 | `UpdateLevel` | unary | Edit level form |
 | `ToggleLevel` | unary | Enable/disable selected level |
 | `ToggleStrategy` | unary | Enable/disable selected strategy |
+| `GetStrategyConfig` | unary | Strategy details operator form |
+| `UpdateStrategyCap` | unary | Live `max_position` (no restart) |
+| `UpdateStrategyConfig` | unary | Persist operator knobs; `needs_restart` if non-cap fields change |
+| `RequestRestart` | unary | Write snapshot + `restart.requested`; supervisor relaunches |
 | `DeleteLevel` | unary | **Unimplemented** on server |
 
 ## Streaming
