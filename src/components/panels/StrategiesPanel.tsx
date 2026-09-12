@@ -49,6 +49,11 @@ export function StrategiesPanel({
               render: (s) => <PnlText value={s.unrealizedPnl} />,
             },
             {
+              key: "cap",
+              header: "Cap",
+              render: (s) => s.maxPosition || "—",
+            },
+            {
               key: "orders",
               header: "Orders",
               render: (s) => `${s.activeOrders}/${s.maxActiveOrders}`,

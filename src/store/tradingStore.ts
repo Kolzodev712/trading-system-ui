@@ -162,14 +162,14 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
 
 export function useMode(): "levels" | "strategies" | "dex" {
   const dex = useTradingStore((s) => s.monitoringData?.dex);
+  const cexStrategies = useTradingStore(
+    (s) => s.monitoringData?.strategies ?? EMPTY_STRATEGIES,
+  );
   if (dex) {
     const strategies = dex.dexStrategies ?? EMPTY_DEX_STRATEGIES;
     return strategies.length > 0 ? "strategies" : "levels";
   }
-  const strategies = useTradingStore(
-    (s) => s.monitoringData?.strategies ?? EMPTY_STRATEGIES,
-  );
-  return strategies.length > 0 ? "strategies" : "levels";
+  return cexStrategies.length > 0 ? "strategies" : "levels";
 }
 
 export function useSelectedStrategy(): StrategyStatus | null {

@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse } from "./trading_cli_pb.js";
+import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetStrategyConfigRequest, GetStrategyConfigResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, RequestRestartRequest, RequestRestartResponse, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse, UpdateStrategyCapRequest, UpdateStrategyCapResponse, UpdateStrategyConfigRequest, UpdateStrategyConfigResponse } from "./trading_cli_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -41,6 +41,42 @@ export const TradingCliService = {
       name: "ToggleStrategy",
       I: ToggleStrategyRequest,
       O: ToggleStrategyResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.GetStrategyConfig
+     */
+    getStrategyConfig: {
+      name: "GetStrategyConfig",
+      I: GetStrategyConfigRequest,
+      O: GetStrategyConfigResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.UpdateStrategyCap
+     */
+    updateStrategyCap: {
+      name: "UpdateStrategyCap",
+      I: UpdateStrategyCapRequest,
+      O: UpdateStrategyCapResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.UpdateStrategyConfig
+     */
+    updateStrategyConfig: {
+      name: "UpdateStrategyConfig",
+      I: UpdateStrategyConfigRequest,
+      O: UpdateStrategyConfigResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.RequestRestart
+     */
+    requestRestart: {
+      name: "RequestRestart",
+      I: RequestRestartRequest,
+      O: RequestRestartResponse,
       kind: MethodKind.Unary,
     },
     /**

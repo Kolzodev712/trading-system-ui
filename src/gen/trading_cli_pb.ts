@@ -271,6 +271,445 @@ export class ToggleStrategyResponse extends Message<ToggleStrategyResponse> {
 }
 
 /**
+ * Operator knobs only. Never includes keys, hosts, or venue identity.
+ *
+ * @generated from message trading_cli.OperatorStrategyConfig
+ */
+export class OperatorStrategyConfig extends Message<OperatorStrategyConfig> {
+  /**
+   * @generated from field: string strategy_type = 1;
+   */
+  strategyType = "";
+
+  /**
+   * @generated from field: string symbol = 2;
+   */
+  symbol = "";
+
+  /**
+   * @generated from field: string position_size = 3;
+   */
+  positionSize = "";
+
+  /**
+   * @generated from field: string max_position = 4;
+   */
+  maxPosition = "";
+
+  /**
+   * @generated from field: string buy_threshold_percent = 5;
+   */
+  buyThresholdPercent = "";
+
+  /**
+   * @generated from field: string sell_threshold_percent = 6;
+   */
+  sellThresholdPercent = "";
+
+  /**
+   * @generated from field: string stop_loss_percent = 7;
+   */
+  stopLossPercent = "";
+
+  /**
+   * @generated from field: string take_profit_percent = 8;
+   */
+  takeProfitPercent = "";
+
+  /**
+   * @generated from field: int32 max_active_orders = 9;
+   */
+  maxActiveOrders = 0;
+
+  /**
+   * @generated from field: int32 price_history_size = 10;
+   */
+  priceHistorySize = 0;
+
+  /**
+   * @generated from field: int32 min_price_history = 11;
+   */
+  minPriceHistory = 0;
+
+  constructor(data?: PartialMessage<OperatorStrategyConfig>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.OperatorStrategyConfig";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "strategy_type", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "symbol", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "position_size", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "max_position", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "buy_threshold_percent", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "sell_threshold_percent", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "stop_loss_percent", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "take_profit_percent", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "max_active_orders", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 10, name: "price_history_size", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 11, name: "min_price_history", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OperatorStrategyConfig {
+    return new OperatorStrategyConfig().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OperatorStrategyConfig {
+    return new OperatorStrategyConfig().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OperatorStrategyConfig {
+    return new OperatorStrategyConfig().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: OperatorStrategyConfig | PlainMessage<OperatorStrategyConfig> | undefined, b: OperatorStrategyConfig | PlainMessage<OperatorStrategyConfig> | undefined): boolean {
+    return proto3.util.equals(OperatorStrategyConfig, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.GetStrategyConfigRequest
+ */
+export class GetStrategyConfigRequest extends Message<GetStrategyConfigRequest> {
+  /**
+   * @generated from field: string strategy_name = 1;
+   */
+  strategyName = "";
+
+  /**
+   * @generated from field: string symbol = 2;
+   */
+  symbol = "";
+
+  constructor(data?: PartialMessage<GetStrategyConfigRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.GetStrategyConfigRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "strategy_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "symbol", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetStrategyConfigRequest {
+    return new GetStrategyConfigRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetStrategyConfigRequest {
+    return new GetStrategyConfigRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetStrategyConfigRequest {
+    return new GetStrategyConfigRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetStrategyConfigRequest | PlainMessage<GetStrategyConfigRequest> | undefined, b: GetStrategyConfigRequest | PlainMessage<GetStrategyConfigRequest> | undefined): boolean {
+    return proto3.util.equals(GetStrategyConfigRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.GetStrategyConfigResponse
+ */
+export class GetStrategyConfigResponse extends Message<GetStrategyConfigResponse> {
+  /**
+   * @generated from field: trading_cli.OperatorStrategyConfig config = 1;
+   */
+  config?: OperatorStrategyConfig;
+
+  constructor(data?: PartialMessage<GetStrategyConfigResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.GetStrategyConfigResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "config", kind: "message", T: OperatorStrategyConfig },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetStrategyConfigResponse {
+    return new GetStrategyConfigResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetStrategyConfigResponse {
+    return new GetStrategyConfigResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetStrategyConfigResponse {
+    return new GetStrategyConfigResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetStrategyConfigResponse | PlainMessage<GetStrategyConfigResponse> | undefined, b: GetStrategyConfigResponse | PlainMessage<GetStrategyConfigResponse> | undefined): boolean {
+    return proto3.util.equals(GetStrategyConfigResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.UpdateStrategyCapRequest
+ */
+export class UpdateStrategyCapRequest extends Message<UpdateStrategyCapRequest> {
+  /**
+   * @generated from field: string strategy_name = 1;
+   */
+  strategyName = "";
+
+  /**
+   * @generated from field: string symbol = 2;
+   */
+  symbol = "";
+
+  /**
+   * @generated from field: string max_position = 3;
+   */
+  maxPosition = "";
+
+  constructor(data?: PartialMessage<UpdateStrategyCapRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.UpdateStrategyCapRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "strategy_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "symbol", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "max_position", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateStrategyCapRequest {
+    return new UpdateStrategyCapRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateStrategyCapRequest {
+    return new UpdateStrategyCapRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateStrategyCapRequest {
+    return new UpdateStrategyCapRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UpdateStrategyCapRequest | PlainMessage<UpdateStrategyCapRequest> | undefined, b: UpdateStrategyCapRequest | PlainMessage<UpdateStrategyCapRequest> | undefined): boolean {
+    return proto3.util.equals(UpdateStrategyCapRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.UpdateStrategyCapResponse
+ */
+export class UpdateStrategyCapResponse extends Message<UpdateStrategyCapResponse> {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success = false;
+
+  /**
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  constructor(data?: PartialMessage<UpdateStrategyCapResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.UpdateStrategyCapResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateStrategyCapResponse {
+    return new UpdateStrategyCapResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateStrategyCapResponse {
+    return new UpdateStrategyCapResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateStrategyCapResponse {
+    return new UpdateStrategyCapResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UpdateStrategyCapResponse | PlainMessage<UpdateStrategyCapResponse> | undefined, b: UpdateStrategyCapResponse | PlainMessage<UpdateStrategyCapResponse> | undefined): boolean {
+    return proto3.util.equals(UpdateStrategyCapResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.UpdateStrategyConfigRequest
+ */
+export class UpdateStrategyConfigRequest extends Message<UpdateStrategyConfigRequest> {
+  /**
+   * @generated from field: trading_cli.OperatorStrategyConfig config = 1;
+   */
+  config?: OperatorStrategyConfig;
+
+  constructor(data?: PartialMessage<UpdateStrategyConfigRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.UpdateStrategyConfigRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "config", kind: "message", T: OperatorStrategyConfig },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateStrategyConfigRequest {
+    return new UpdateStrategyConfigRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateStrategyConfigRequest {
+    return new UpdateStrategyConfigRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateStrategyConfigRequest {
+    return new UpdateStrategyConfigRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UpdateStrategyConfigRequest | PlainMessage<UpdateStrategyConfigRequest> | undefined, b: UpdateStrategyConfigRequest | PlainMessage<UpdateStrategyConfigRequest> | undefined): boolean {
+    return proto3.util.equals(UpdateStrategyConfigRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.UpdateStrategyConfigResponse
+ */
+export class UpdateStrategyConfigResponse extends Message<UpdateStrategyConfigResponse> {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success = false;
+
+  /**
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  /**
+   * @generated from field: bool needs_restart = 3;
+   */
+  needsRestart = false;
+
+  constructor(data?: PartialMessage<UpdateStrategyConfigResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.UpdateStrategyConfigResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "needs_restart", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateStrategyConfigResponse {
+    return new UpdateStrategyConfigResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateStrategyConfigResponse {
+    return new UpdateStrategyConfigResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateStrategyConfigResponse {
+    return new UpdateStrategyConfigResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UpdateStrategyConfigResponse | PlainMessage<UpdateStrategyConfigResponse> | undefined, b: UpdateStrategyConfigResponse | PlainMessage<UpdateStrategyConfigResponse> | undefined): boolean {
+    return proto3.util.equals(UpdateStrategyConfigResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.RequestRestartRequest
+ */
+export class RequestRestartRequest extends Message<RequestRestartRequest> {
+  /**
+   * cancel_working (default) | flatten | keep_working
+   *
+   * @generated from field: string on_stop = 1;
+   */
+  onStop = "";
+
+  constructor(data?: PartialMessage<RequestRestartRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.RequestRestartRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "on_stop", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RequestRestartRequest {
+    return new RequestRestartRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RequestRestartRequest {
+    return new RequestRestartRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RequestRestartRequest {
+    return new RequestRestartRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RequestRestartRequest | PlainMessage<RequestRestartRequest> | undefined, b: RequestRestartRequest | PlainMessage<RequestRestartRequest> | undefined): boolean {
+    return proto3.util.equals(RequestRestartRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.RequestRestartResponse
+ */
+export class RequestRestartResponse extends Message<RequestRestartResponse> {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success = false;
+
+  /**
+   * @generated from field: string message = 2;
+   */
+  message = "";
+
+  constructor(data?: PartialMessage<RequestRestartResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.RequestRestartResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RequestRestartResponse {
+    return new RequestRestartResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RequestRestartResponse {
+    return new RequestRestartResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RequestRestartResponse {
+    return new RequestRestartResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RequestRestartResponse | PlainMessage<RequestRestartResponse> | undefined, b: RequestRestartResponse | PlainMessage<RequestRestartResponse> | undefined): boolean {
+    return proto3.util.equals(RequestRestartResponse, a, b);
+  }
+}
+
+/**
  * Level Management Messages (Phase 3 - placeholders for now)
  *
  * @generated from message trading_cli.GetLevelsRequest
@@ -2654,6 +3093,13 @@ export class StrategyStatus extends Message<StrategyStatus> {
    */
   signalStrength = "";
 
+  /**
+   * Live abs qty cap
+   *
+   * @generated from field: string max_position = 13;
+   */
+  maxPosition = "";
+
   constructor(data?: PartialMessage<StrategyStatus>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2674,6 +3120,7 @@ export class StrategyStatus extends Message<StrategyStatus> {
     { no: 10, name: "max_active_orders", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 11, name: "last_signal", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 12, name: "signal_strength", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "max_position", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StrategyStatus {

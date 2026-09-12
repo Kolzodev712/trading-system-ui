@@ -4,6 +4,7 @@ import {
   GetLevelRequest,
   GetLevelsRequest,
   GetMonitoringDataRequest,
+  GetStrategyConfigRequest,
   GetTradingStatusRequest,
   LevelConfig,
   SetTradingEnabledRequest,
@@ -15,8 +16,12 @@ import {
   ToggleLevelRequest,
   ToggleStrategyRequest,
   UpdateLevelRequest,
+  UpdateStrategyCapRequest,
+  UpdateStrategyConfigRequest,
+  RequestRestartRequest,
   type Level,
   type MonitoringData,
+  type OperatorStrategyConfig,
 } from "@/gen/trading_cli_pb";
 import { getTradingClient, rpcOptions, resetTradingClient } from "@/api/client";
 import { wrapFixed } from "@/api/transforms";
@@ -83,6 +88,43 @@ export async function toggleLevel(levelId: string, enabled: boolean) {
   return client.toggleLevel(
     new ToggleLevelRequest({ levelId, enabled }),
     rpcOptions.toggle,
+  );
+}
+
+export async function getStrategyConfig(strategyName: string, symbol: string) {
+  const client = getTradingClient();
+  const res = await client.getStrategyConfig(
+    new GetStrategyConfigRequest({ strategyName, symbol }),
+    rpcOptions.default,
+  );
+  return res.config;
+}
+
+export async function updateStrategyCap(
+  strategyName: string,
+  symbol: string,
+  maxPosition: string,
+) {
+  const client = getTradingClient();
+  return client.updateStrategyCap(
+    new UpdateStrategyCapRequest({ strategyName, symbol, maxPosition }),
+    rpcOptions.default,
+  );
+}
+
+export async function updateStrategyConfig(config: OperatorStrategyConfig) {
+  const client = getTradingClient();
+  return client.updateStrategyConfig(
+    new UpdateStrategyConfigRequest({ config }),
+    rpcOptions.default,
+  );
+}
+
+export async function requestRestart(onStop = "cancel_working") {
+  const client = getTradingClient();
+  return client.requestRestart(
+    new RequestRestartRequest({ onStop }),
+    rpcOptions.default,
   );
 }
 
