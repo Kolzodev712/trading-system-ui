@@ -1,8 +1,8 @@
 # Prop trading browser control-plane guide
 
-**Status:** 5A fixes are in `trading-system-ui` `0476c58` against `trading_system` `9a0dd97`. A timestamp/mode fail-open correction and recorded 5R/5A runtime checks remain; 5B is blocked.
+**Status:** UI `d8c7b271` fixes missing/invalid snapshot timestamps and `UNKNOWN` execution mode. The main plan records 49 passing UI tests, generate/build and an Envoy -> backend `e6fac236` Paper+Shadow browser session. 5B is blocked on backend Shadow shutdown and restart-state corrections.
 
-**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. Current 5A code requires the 5R verification record, timestamp/mode correction and 5A browser acceptance before 5B.
+**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Complete the backend 5R Shadow safety/restart gate before 5B.
 
 ## Purpose and ownership
 
@@ -45,9 +45,11 @@ Place a persistent, unmistakable venue/environment **and** mode label on every c
 
 One fail-open remains in `src/lib/operatorStatus.ts`: `computeStatusFreshness` returns `live` when `snapshotUnixMs` is missing, zero or invalid, because the age check only runs if conversion succeeds. `snapshotIsComplete` also accepts the nonempty execution mode `UNKNOWN`. Treat these payloads as unknown and leave all mutating controls disabled; add tests using actual generated `MonitoringData` defaults and invalid values. Confirm the fix through browser -> Envoy -> a matching runner, including main-screen first update, clean/silent disconnect, reconnect, and Shadow order count. The count comes from runner trading state; actual zero exchange mutations require runner guard evidence and an exchange-side order check. No UI generate/test/build transcript or real browser session has been recorded for these commits. Capture exact UI/backend SHAs, commands and observed results, then stop for acceptance review.
 
+**5A verification update (2026-09-28):** UI `d8c7b271` rejects missing, zero or invalid `snapshotUnixMs` and `UNKNOWN` execution mode; tests include generated `MonitoringData()` defaults. The main plan records `npm run generate` exit 0, `npm test` 49 passed (with an `ECONNREFUSED 127.0.0.1:3000` message on one happy-dom fetch), `npm run build` exit 0, and a browser -> Envoy -> backend `e6fac236` Paper+Shadow session showing live/unknown/stale/reconnect behavior, separate `BASELINE` and rejected-alpha labels, and observed order count 0. These are reported local results; no raw transcript is attached in this repo. After the backend fixes its unguarded Shadow shutdown and restored-disable behavior, repeat the affected browser checks with matched SHAs. The placeholder credentials in the Bybit Shadow sample do not block the local Spot/levels 5B preflight; the backend runtime correctness gate does.
+
 ## Increment 5B — Paper smoke label
 
-Begin only after 5R verification and 5A timestamp correction/browser acceptance are recorded. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
+Begin only after the backend 5R Shadow shutdown/restart corrections pass and the matching browser status is rechecked. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
 
 ## Increment 8 — safety controls
 
