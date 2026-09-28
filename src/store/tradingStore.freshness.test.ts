@@ -105,4 +105,42 @@ describe("monitoring snapshot freshness", () => {
     );
     expect(freshnessNow(5_000)).toBe("unknown");
   });
+
+  it("treats generated MonitoringData defaults as unknown and not actionable", () => {
+    const generated = new MonitoringData();
+    expect(generated.executionMode).toBe("");
+    expect(Number(generated.snapshotUnixMs)).toBe(0);
+    useTradingStore.setState({ connected: true });
+    useTradingStore.getState().applyStreamUpdate(generated);
+    expect(freshnessNow(Date.now())).toBe("unknown");
+    expect(statusIsActionable(freshnessNow(Date.now()))).toBe(false);
+  });
+
+  it("treats a zero snapshotUnixMs as unknown even with complete labels", () => {
+    useTradingStore.setState({ connected: true });
+    useTradingStore.getState().applyStreamUpdate(
+      new MonitoringData({
+        venue: "PAPER",
+        environment: "LOCAL",
+        executionMode: "exchange",
+        snapshotUnixMs: BigInt(0),
+      }),
+    );
+    expect(freshnessNow(10_000)).toBe("unknown");
+    expect(statusIsActionable(freshnessNow(10_000))).toBe(false);
+  });
+
+  it("treats UNKNOWN execution mode as unknown even with a valid timestamp", () => {
+    useTradingStore.setState({ connected: true });
+    useTradingStore.getState().applyStreamUpdate(
+      new MonitoringData({
+        venue: "BYBIT",
+        environment: "MAINNET",
+        executionMode: "UNKNOWN",
+        snapshotUnixMs: BigInt(5_000),
+      }),
+    );
+    expect(freshnessNow(5_000)).toBe("unknown");
+    expect(statusIsActionable(freshnessNow(5_000))).toBe(false);
+  });
 });

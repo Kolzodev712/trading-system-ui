@@ -159,6 +159,53 @@ describe("computeStatusFreshness", () => {
     ).toBe("unknown");
   });
 
+  it("treats UNKNOWN execution mode as unknown", () => {
+    expect(
+      snapshotIsComplete({
+        venue: "BYBIT",
+        environment: "MAINNET",
+        executionMode: "UNKNOWN",
+      }),
+    ).toBe(false);
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: true,
+        streamEnded: false,
+        streamConnected: true,
+        lastStreamUpdateAtMs: 5_000,
+        snapshotUnixMs: 5_000,
+        nowMs: 5_000,
+        venue: "BYBIT",
+        environment: "MAINNET",
+        executionMode: "UNKNOWN",
+      }),
+    ).toBe("unknown");
+    expect(statusIsActionable("unknown")).toBe(false);
+  });
+
+  it("treats a missing, zero, or invalid snapshot timestamp as unknown", () => {
+    const liveFields = {
+      connected: true,
+      receivedFirstStreamUpdate: true,
+      streamEnded: false,
+      streamConnected: true,
+      lastStreamUpdateAtMs: 5_000,
+      nowMs: 5_000,
+      ...complete,
+    };
+    expect(computeStatusFreshness({ ...liveFields })).toBe("unknown");
+    expect(computeStatusFreshness({ ...liveFields, snapshotUnixMs: 0 })).toBe(
+      "unknown",
+    );
+    expect(computeStatusFreshness({ ...liveFields, snapshotUnixMs: -1 })).toBe(
+      "unknown",
+    );
+    expect(
+      computeStatusFreshness({ ...liveFields, snapshotUnixMs: Number.NaN }),
+    ).toBe("unknown");
+  });
+
   it("is live only after a fresh complete stream snapshot", () => {
     expect(
       computeStatusFreshness({

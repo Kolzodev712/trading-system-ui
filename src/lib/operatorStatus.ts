@@ -43,13 +43,14 @@ export function snapshotIsComplete(args: {
 }): boolean {
   const venue = (args.venue || "").trim().toUpperCase();
   const environment = (args.environment || "").trim().toUpperCase();
-  const mode = (args.executionMode || "").trim();
+  const mode = (args.executionMode || "").trim().toLowerCase();
+  const knownMode = mode === "shadow" || mode === "exchange";
   return Boolean(
     venue &&
       venue !== "UNKNOWN" &&
       environment &&
       environment !== "UNKNOWN" &&
-      mode,
+      knownMode,
   );
 }
 
@@ -68,6 +69,8 @@ export function computeStatusFreshness(args: {
   if (!args.connected) return "unknown";
   if (!args.receivedFirstStreamUpdate) return "unknown";
   if (!snapshotIsComplete(args)) return "unknown";
+  const snapMs = snapshotUnixMsNumber(args.snapshotUnixMs);
+  if (snapMs == null) return "unknown";
   if (args.streamEnded || !args.streamConnected) return "stale";
   if (
     args.lastStreamUpdateAtMs != null &&
@@ -75,8 +78,7 @@ export function computeStatusFreshness(args: {
   ) {
     return "stale";
   }
-  const snapMs = snapshotUnixMsNumber(args.snapshotUnixMs);
-  if (snapMs != null && args.nowMs - snapMs > SNAPSHOT_STALE_MS) {
+  if (args.nowMs - snapMs > SNAPSHOT_STALE_MS) {
     return "stale";
   }
   return "live";
