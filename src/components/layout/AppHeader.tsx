@@ -1,5 +1,6 @@
 import { Activity, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 import { useAuth } from "@/hooks/useAuth";
 import { useConnection } from "@/hooks/useConnection";
 import { useTradingStore } from "@/store/tradingStore";
@@ -9,7 +10,6 @@ export function AppHeader() {
   const user = useAuthStore((s) => s.user);
   const connected = useTradingStore((s) => s.connected);
   const tradingEnabled = useTradingStore((s) => s.tradingEnabled);
-  const exchange = useTradingStore((s) => s.monitoringData?.exchange);
   const { logout } = useAuth();
   const { disconnect } = useConnection();
 
@@ -26,9 +26,7 @@ export function AppHeader() {
           <h1 className="text-sm font-semibold tracking-tight truncate">
             Trading Console
           </h1>
-          {exchange && (
-            <p className="text-xs text-muted-foreground truncate">{exchange}</p>
-          )}
+          <VenueModeBanner className="mt-1 max-w-full truncate" />
         </div>
       </div>
 

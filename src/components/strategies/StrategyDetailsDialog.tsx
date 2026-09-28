@@ -18,13 +18,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PnlText } from "@/components/shared/PnlText";
-import { useSelectedStrategy, useTradingStore } from "@/store/tradingStore";
+import { useSelectedStrategy, useStatusFreshness, useTradingStore } from "@/store/tradingStore";
+import {
+  displayReadiness,
+  exchangeOrdersLabel,
+  executionPausedNote,
+} from "@/lib/operatorStatus";
 
 export function StrategyDetailsDialog() {
   const overlay = useTradingStore((s) => s.overlay);
   const closeOverlay = useTradingStore((s) => s.closeOverlay);
   const strategy = useSelectedStrategy();
   const globalTrading = useTradingStore((s) => s.tradingEnabled);
+  const freshness = useStatusFreshness();
   const open = overlay === "strategyDetails";
 
   const configQuery = useQuery({
@@ -122,9 +128,76 @@ export function StrategyDetailsDialog() {
           <div className="space-y-4">
             <div className="space-y-2 text-sm font-mono">
               <Row label="Strategy ID" value={strategy.strategyId} />
+              <Row label="Version" value={strategy.strategyVersion || "—"} />
+              <Row label="Config hash" value={strategy.configHash || "—"} />
               <Row label="Name" value={strategy.strategyName} />
               <Row label="Symbol" value={strategy.symbol} />
               <Row label="Enabled" value={strategy.enabled ? "Yes" : "No"} />
+              <Row
+                label="Research"
+                value={strategy.researchDisposition || "—"}
+              />
+              <Row
+                label="Operational role"
+                value={strategy.operationalRole || "—"}
+              />
+              <Row
+                label="Execution mode"
+                value={strategy.executionMode || "—"}
+              />
+              <Row
+                label="Readiness"
+                value={displayReadiness(freshness, strategy.readiness)}
+              />
+              <Row label="Ready reason" value={strategy.readinessReason || "—"} />
+              <Row
+                label="Last candle start"
+                value={
+                  strategy.lastCompletedCandleStartMs
+                    ? String(strategy.lastCompletedCandleStartMs)
+                    : "—"
+                }
+              />
+              <Row
+                label="Last candle end"
+                value={
+                  strategy.lastCompletedCandleEndMs
+                    ? String(strategy.lastCompletedCandleEndMs)
+                    : "—"
+                }
+              />
+              <Row label="Last close" value={strategy.lastClose || "—"} />
+              <Row label="Geometric mean" value={strategy.geometricMean || "—"} />
+              <Row label="Log spread" value={strategy.logSpread || "—"} />
+              <Row
+                label="Model direction"
+                value={strategy.modelDirection || strategy.lastSignal}
+              />
+              <Row
+                label="Previous direction"
+                value={strategy.previousDirection || "—"}
+              />
+              <Row label="Desired target" value={strategy.desiredTarget || "—"} />
+              <Row label="Filled position" value={strategy.filledPosition || "—"} />
+              <Row label="Working qty" value={strategy.workingQty || "—"} />
+              <Row label="Reserved qty" value={strategy.reservedQty || "—"} />
+              <Row label="Effective qty" value={strategy.effectiveQty || "—"} />
+              <Row
+                label="Fresh entry"
+                value={strategy.freshEntryEligible ? "yes" : "no"}
+              />
+              <Row
+                label="Unresolved submission"
+                value={strategy.unresolvedSubmission ? "yes" : "no"}
+              />
+              <Row label="Recovery" value={strategy.recovery || "—"} />
+              <Row
+                label="Exchange orders"
+                value={exchangeOrdersLabel(
+                  strategy.executionMode,
+                  strategy.activeOrders,
+                )}
+              />
               <Row label="Position Qty" value={strategy.positionQuantity} />
               <Row label="Live cap" value={strategy.maxPosition || "—"} />
               <Row label="Avg Price" value={strategy.positionAvgPrice} />
@@ -137,12 +210,16 @@ export function StrategyDetailsDialog() {
                 label="Active Orders"
                 value={`${strategy.activeOrders}/${strategy.maxActiveOrders}`}
               />
-              <Row label="Last Signal" value={strategy.lastSignal} />
               <Row
-                label="Status"
-                value={globalTrading ? "Global trading ON" : "Global trading OFF"}
+                label="Global execution"
+                value={globalTrading ? "ON" : "OFF (model still shown)"}
               />
             </div>
+            {executionPausedNote(globalTrading, strategy.executionMode) && (
+              <p className="text-xs text-amber-300 border border-amber-500/30 rounded-md p-2">
+                {executionPausedNote(globalTrading, strategy.executionMode)}
+              </p>
+            )}
 
             {configQuery.isLoading && (
               <p className="text-sm text-muted-foreground">Loading operator config…</p>

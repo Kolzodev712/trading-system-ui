@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMode, useSelectedLevel, useSelectedStrategy } from "@/store/tradingStore";
+import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 
 interface MonitorToolbarProps {
   onRefresh: () => void;
@@ -46,6 +47,8 @@ export function MonitorToolbar({
         Dashboard
       </Button>
 
+      <div className="h-5 w-px bg-border mx-1" />
+      <VenueModeBanner />
       <div className="h-5 w-px bg-border mx-1" />
 
       <Button variant="outline" size="sm" onClick={onRefresh} disabled={refreshing}>

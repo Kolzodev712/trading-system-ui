@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { Wifi, WifiOff } from "lucide-react";
+import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 import { useTradingStore, useMode } from "@/store/tradingStore";
 import { cn } from "@/lib/utils";
 
@@ -7,7 +8,6 @@ export function StatusBar() {
   const connected = useTradingStore((s) => s.connected);
   const streamConnected = useTradingStore((s) => s.streamConnected);
   const endpoint = useTradingStore((s) => s.endpoint);
-  const exchange = useTradingStore((s) => s.monitoringData?.exchange ?? "—");
   const mode = useMode();
   const modeLabel =
     mode === "dex"
@@ -38,8 +38,8 @@ export function StatusBar() {
           {endpoint}
         </span>
       </div>
-      <div className="flex items-center gap-3">
-        <span>{exchange}</span>
+      <div className="flex items-center gap-3 min-w-0">
+        <VenueModeBanner className="truncate" />
         <span className="text-border">|</span>
         <span>{modeLabel}</span>
       </div>
