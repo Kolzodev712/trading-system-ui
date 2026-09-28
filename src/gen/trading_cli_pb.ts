@@ -174,6 +174,13 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
    */
   globalToggleSemantics = "";
 
+  /**
+   * TRADING_OPERATOR_ID; never a browser username
+   *
+   * @generated from field: string operator_id = 8;
+   */
+  operatorId = "";
+
   constructor(data?: PartialMessage<GetTradingStatusResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -189,6 +196,7 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
     { no: 5, name: "entries_paused", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 6, name: "flatten_latched", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 7, name: "global_toggle_semantics", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "operator_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTradingStatusResponse {
@@ -2107,6 +2115,13 @@ export class MonitoringData extends Message<MonitoringData> {
    */
   ledgerEquity = "";
 
+  /**
+   * TRADING_OPERATOR_ID; never a browser username
+   *
+   * @generated from field: string operator_id = 28;
+   */
+  operatorId = "";
+
   constructor(data?: PartialMessage<MonitoringData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2142,6 +2157,7 @@ export class MonitoringData extends Message<MonitoringData> {
     { no: 25, name: "fees_paid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 26, name: "funding_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 27, name: "ledger_equity", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 28, name: "operator_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MonitoringData {

@@ -1,6 +1,6 @@
 # Prop trading browser control-plane guide
 
-**Status:** Increment 9 ledger economics and Increment 9A Paper matrix browser checks are recorded below. The local 5R/5A gates and bounded 5B Spot/levels connectivity preflight remain accepted. Candidate #2 remains an operational baseline, not validated alpha. Bybit demo is not started.
+**Status:** Increment 9A is accepted locally as a Paper qualification. Increment 10 preflight moves operator authorization to Envoy/runner secrets; UI login is not a runner authorization boundary. Demo entries stay paused. Candidate #2 remains an operational baseline, not validated alpha.
 
 **Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Backend 5R is accepted locally for the limited 5B preflight at `f9d1299`.
 
@@ -57,7 +57,7 @@ Begin with backend persistence, exchange lookup and K-paper fault hooks. If the 
 
 ## Increment 8 — safety controls
 
-Runner gRPC now owns `PauseEntries`, `CancelWorking`, `FlattenAndPause` and `Resume`. This repo copies the source proto, regenerates the Connect client, and presents those actions with venue/environment/scope confirmation. Flatten UI state stays `in_progress` while runner positions remain open; a successful RPC is not treated as flat. Mutating RPCs send `x-operator-token` / `x-operator-id` when `VITE_OPERATOR_TOKEN` is set; Envoy forwards those headers. UI login is still not a runner authorization boundary.
+Runner gRPC now owns `PauseEntries`, `CancelWorking`, `FlattenAndPause` and `Resume`. This repo copies the source proto, regenerates the Connect client, and presents those actions with venue/environment/scope confirmation. Flatten UI state stays `in_progress` while runner positions remain open; a successful RPC is not treated as flat. The browser does not send `x-operator-token` or `x-operator-id`. Envoy injects `TRADING_OPERATOR_TOKEN` from `/run/secrets/trading_operator_token` when that file is non-empty. UI login is still not a runner authorization boundary.
 
 Do not claim daily-loss safety until Increment 9 PnL is correct. Candidate #2 remains an operational baseline, not validated alpha.
 
