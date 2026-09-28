@@ -1,8 +1,8 @@
 # Prop trading browser control-plane guide
 
-**Status:** Initial 5A implementation is in `trading-system-ui` `66025f4` against `trading_system` `6295913`. The 5A correction/acceptance gate in the primary plan is open; 5B is blocked.
+**Status:** 5A fixes are in `trading-system-ui` `0476c58` against `trading_system` `9a0dd97`. A timestamp/mode fail-open correction and recorded 5R/5A runtime checks remain; 5B is blocked.
 
-**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. Current 5A code still requires the 5R verification record and 5A corrections before 5B.
+**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. Current 5A code requires the 5R verification record, timestamp/mode correction and 5A browser acceptance before 5B.
 
 ## Purpose and ownership
 
@@ -23,7 +23,7 @@ This repository is the next-generation **browser** operator layer. The old Rust 
 | Global/strategy actions and environment chrome | `src/hooks/useMonitorActions.ts`, `src/components/layout/{AppHeader,MonitorToolbar,StatusBar}.tsx` |
 | Auth service | `server/index.ts`, `server/seed.ts` |
 
-At `66025f4`, `MonitoringData` carries runner mode, venue/environment, execution mode and strategy snapshots, and the UI copies the source proto and generated client. The four future safety commands are still absent. Verify the complete status contract against the matching runner rather than inferring mode from a strategy count or reporting stale context as healthy.
+At `0476c58`, `MonitoringData` carries runner mode, venue/environment, execution mode and strategy snapshots, and the UI copies the source proto and generated client. The four future safety commands are still absent. Verify the complete status contract against the matching runner rather than inferring mode from a strategy count or reporting stale context as healthy.
 
 ## Backend-first contract workflow
 
@@ -39,11 +39,15 @@ After 5R, build a Candidate #2 view that answers: what the model wants, what ris
 
 Place a persistent, unmistakable venue/environment **and** mode label on every control screen. `BYBIT MAINNET + SHADOW`, `K-PAPER LOCAL + EXCHANGE` and `BYBIT DEMO + EXCHANGE` must not look interchangeable or collapse to the current global on/off boolean. Verify live updates and the disconnected/stale case with the actual runner.
 
-**5A review correction (2026-09-28):** `useMonitoringStream` marks the stream connected before its first update and does not mark a normally ended stream disconnected; `useStatusFreshness` ignores snapshot age and treats main-screen data as live even without a stream. Replace the hard-coded “0 exchange orders (shadow)” label with the observed count and a visible violation if nonzero. Render Candidate #2's `BASELINE` role separately from `SHADOW` execution mode. The Spot/levels runner must publish venue/environment before its K-paper preflight. Keep operator controls inactive when status is unknown, stale or incomplete; cover these cases in tests and a real browser-to-runner session. The primary plan's section 5A lists the full correction gate.
+**5A review correction of `66025f4` (2026-09-28):** At that revision, `useMonitoringStream` marked the stream connected before its first update and did not mark a normally ended stream disconnected; `useStatusFreshness` ignored snapshot age and treated main-screen data as live even without a stream. The required corrections covered the hard-coded “0 exchange orders (shadow)” label, Candidate #2's `BASELINE` role, Spot/levels venue/environment, and controls on stale or incomplete status. The follow-up review below records what changed and what remains. The primary plan's section 5A lists the full acceptance gate.
+
+**5A follow-up review (2026-09-28, `0476c58` / backend `9a0dd97`):** The stream now starts on the main screen, waits for an actual update, marks clean end/failure, and checks stream silence and snapshot age. Venue, environment, execution mode and Candidate #2's `BASELINE` role are separate; the Spot/levels and DEX backend paths have explicit labels. Shadow shows the observed `active_orders` count and flags a nonzero count. The new store/component tests cover several stale and label cases.
+
+One fail-open remains in `src/lib/operatorStatus.ts`: `computeStatusFreshness` returns `live` when `snapshotUnixMs` is missing, zero or invalid, because the age check only runs if conversion succeeds. `snapshotIsComplete` also accepts the nonempty execution mode `UNKNOWN`. Treat these payloads as unknown and leave all mutating controls disabled; add tests using actual generated `MonitoringData` defaults and invalid values. Confirm the fix through browser -> Envoy -> a matching runner, including main-screen first update, clean/silent disconnect, reconnect, and Shadow order count. The count comes from runner trading state; actual zero exchange mutations require runner guard evidence and an exchange-side order check. No UI generate/test/build transcript or real browser session has been recorded for these commits. Capture exact UI/backend SHAs, commands and observed results, then stop for acceptance review.
 
 ## Increment 5B — Paper smoke label
 
-Begin only after 5R verification and 5A acceptance are recorded. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
+Begin only after 5R verification and 5A timestamp correction/browser acceptance are recorded. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
 
 ## Increment 8 — safety controls
 
