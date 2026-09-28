@@ -1,5 +1,6 @@
 import { Activity, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { EconomicPnl } from "@/components/layout/EconomicPnl";
 import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 import { useAuth } from "@/hooks/useAuth";
 import { useConnection } from "@/hooks/useConnection";
@@ -32,6 +33,7 @@ export function AppHeader() {
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        <EconomicPnl />
         {connected && (
           <span
             className={
