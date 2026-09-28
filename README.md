@@ -47,6 +47,7 @@ See [docs/development.md](docs/development.md) for full setup and troubleshootin
 | [Feature reference](docs/feature-reference.md) | Screens, DEX monitor, shortcuts, parity |
 | [Deployment](docs/deployment.md) | Production build and hosting |
 | [gRPC API](docs/grpc-api.md) | RPC contract and proto sync |
+| [Prop trading control plane](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md) | Cursor handoff for Candidate #2 status, Paper/demo labels, safety controls and cross-repo gates |
 | [Publishing](docs/publishing.md) | First-time GitHub push checklist |
 | [Changelog](CHANGELOG.md) | Release history |
 
