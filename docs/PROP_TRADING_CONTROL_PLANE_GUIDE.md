@@ -1,8 +1,8 @@
 # Prop trading browser control-plane guide
 
-**Status:** UI `d8c7b271` fixes missing/invalid snapshot timestamps and `UNKNOWN` execution mode. The main plan records 49 passing UI tests, generate/build and an Envoy -> backend `e6fac236` Paper+Shadow browser session. 5B is blocked on backend Shadow shutdown and restart-state corrections.
+**Status:** UI `d8c7b271` fixes missing/invalid snapshot timestamps and `UNKNOWN` execution mode. Local generate/test/build and matching Paper+Shadow browser checks are recorded in the primary plan. The 5R/5A local gates are accepted for Increment 5B; begin the existing Spot/levels K-paper connectivity preflight and stop before Increment 6.
 
-**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Complete the backend 5R Shadow safety/restart gate before 5B.
+**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Backend 5R is accepted locally for the limited 5B preflight at `f9d1299`.
 
 ## Purpose and ownership
 
@@ -49,7 +49,7 @@ One fail-open remains in `src/lib/operatorStatus.ts`: `computeStatusFreshness` r
 
 ## Increment 5B — Paper smoke label
 
-Begin only after the backend 5R Shadow shutdown/restart corrections pass and the matching browser status is rechecked. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
+The backend 5R Shadow shutdown/restart corrections and matching browser status were reviewed for this limited preflight. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
 
 ## Increment 8 — safety controls
 
