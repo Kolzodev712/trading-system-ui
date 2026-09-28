@@ -10,6 +10,7 @@ export function AppHeader() {
   const user = useAuthStore((s) => s.user);
   const connected = useTradingStore((s) => s.connected);
   const tradingEnabled = useTradingStore((s) => s.tradingEnabled);
+  const data = useTradingStore((s) => s.monitoringData);
   const { logout } = useAuth();
   const { disconnect } = useConnection();
 
@@ -40,6 +41,16 @@ export function AppHeader() {
             }
           >
             Trading {tradingEnabled ? "ON" : "OFF"}
+          </span>
+        )}
+        {connected && data?.entriesPaused && (
+          <span className="hidden sm:inline text-xs px-2 py-1 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            Entries paused
+          </span>
+        )}
+        {connected && data?.flattenLatched && (
+          <span className="hidden sm:inline text-xs px-2 py-1 rounded-full bg-orange-500/15 text-orange-400 border border-orange-500/30">
+            Flatten latch
           </span>
         )}
         {user && (

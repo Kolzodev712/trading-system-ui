@@ -57,11 +57,9 @@ Begin with backend persistence, exchange lookup and K-paper fault hooks. If the 
 
 ## Increment 8 — safety controls
 
-Add explicit `PauseEntries`, `CancelWorking`, `FlattenAndPause` and `Resume` actions only after runner gRPC commands exist. These differ from the existing global toggle and strategy-enabled state. Show server-confirmed accepted/in-progress/completed/failed status, including unresolved cancel/fill races and flatten verification. A successful RPC acknowledgement alone does not mean the account is flat.
+Runner gRPC now owns `PauseEntries`, `CancelWorking`, `FlattenAndPause` and `Resume`. This repo copies the source proto, regenerates the Connect client, and presents those actions with venue/environment/scope confirmation. Flatten UI state stays `in_progress` while runner positions remain open; a successful RPC is not treated as flat. Mutating RPCs send `x-operator-token` / `x-operator-id` when `VITE_OPERATOR_TOKEN` is set; Envoy forwards those headers. UI login is still not a runner authorization boundary.
 
-For flatten/resume, show exact venue, account, instrument, current position, working orders and action consequences in a deliberate confirmation. Disable or reject actions when context is stale or ambiguous. The backend must enforce readiness, idempotence/duplicate-command handling, risk limits, operator authorization and the flatten latch; a disabled button or a browser confirmation is no security boundary. Existing `max_position` edits must remain within backend risk limits.
-
-The Express/MongoDB login exists, but direct gRPC/Envoy calls are a separate path. Before capital-bearing controls, protect mutating RPCs at the runner/proxy boundary and bind the operator identity to the server-side audit record. [deployment.md](deployment.md) describes the current deployment pieces; do not regard the seeded local `admin/admin` credentials as production access control.
+Do not claim daily-loss safety until Increment 9 PnL is correct. Candidate #2 remains an operational baseline, not validated alpha.
 
 ## Increments 9, 9A and 10 — ledger, Paper, demo
 

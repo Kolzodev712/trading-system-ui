@@ -246,5 +246,7 @@ describe("executionPausedNote", () => {
     expect(executionPausedNote(false, "shadow")).toContain("Model status remains visible");
     expect(executionPausedNote(true, "shadow")).toContain("observed order count");
     expect(executionPausedNote(true, "exchange")).toBeNull();
+    expect(executionPausedNote(true, "exchange", true)).toContain("PauseEntries");
+    expect(executionPausedNote(true, "exchange", true, true)).toContain("Flatten latch");
   });
 });

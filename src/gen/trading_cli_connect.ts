@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetStrategyConfigRequest, GetStrategyConfigResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, RequestRestartRequest, RequestRestartResponse, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse, UpdateStrategyCapRequest, UpdateStrategyCapResponse, UpdateStrategyConfigRequest, UpdateStrategyConfigResponse } from "./trading_cli_pb.js";
+import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetStrategyConfigRequest, GetStrategyConfigResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, OperatorCommandRequest, OperatorCommandResponse, RequestRestartRequest, RequestRestartResponse, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse, UpdateStrategyCapRequest, UpdateStrategyCapResponse, UpdateStrategyConfigRequest, UpdateStrategyConfigResponse } from "./trading_cli_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -183,6 +183,44 @@ export const TradingCliService = {
       I: StreamMonitoringDataRequest,
       O: MonitoringDataUpdate,
       kind: MethodKind.ServerStreaming,
+    },
+    /**
+     * Prop-trading operator commands (not aliases of SetTradingEnabled).
+     *
+     * @generated from rpc trading_cli.TradingCliService.PauseEntries
+     */
+    pauseEntries: {
+      name: "PauseEntries",
+      I: OperatorCommandRequest,
+      O: OperatorCommandResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.CancelWorking
+     */
+    cancelWorking: {
+      name: "CancelWorking",
+      I: OperatorCommandRequest,
+      O: OperatorCommandResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.FlattenAndPause
+     */
+    flattenAndPause: {
+      name: "FlattenAndPause",
+      I: OperatorCommandRequest,
+      O: OperatorCommandResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.Resume
+     */
+    resume: {
+      name: "Resume",
+      I: OperatorCommandRequest,
+      O: OperatorCommandResponse,
+      kind: MethodKind.Unary,
     },
   }
 } as const;

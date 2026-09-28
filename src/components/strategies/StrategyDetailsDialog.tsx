@@ -32,6 +32,7 @@ export function StrategyDetailsDialog() {
   const closeOverlay = useTradingStore((s) => s.closeOverlay);
   const strategy = useSelectedStrategy();
   const globalTrading = useTradingStore((s) => s.tradingEnabled);
+  const data = useTradingStore((s) => s.monitoringData);
   const freshness = useStatusFreshness();
   const open = overlay === "strategyDetails";
   const controlsLive = freshness === "live";
@@ -240,9 +241,19 @@ export function StrategyDetailsDialog() {
                 value={globalTrading ? "ON" : "OFF (model still shown)"}
               />
             </div>
-            {executionPausedNote(globalTrading, strategy.executionMode) && (
+            {executionPausedNote(
+              globalTrading,
+              strategy.executionMode,
+              data?.entriesPaused,
+              data?.flattenLatched,
+            ) && (
               <p className="text-xs text-amber-300 border border-amber-500/30 rounded-md p-2">
-                {executionPausedNote(globalTrading, strategy.executionMode)}
+                {executionPausedNote(
+                  globalTrading,
+                  strategy.executionMode,
+                  data?.entriesPaused,
+                  data?.flattenLatched,
+                )}
               </p>
             )}
 
