@@ -62,6 +62,11 @@ export function OperatorControls() {
                 Venue / environment / mode: <span className="font-mono">{venueLabel}</span>
               </p>
               <p>
+                Runner operator:{" "}
+                <span className="font-mono">{data?.operatorId || "unconfigured"}</span>
+                {" "}(not the UI login)
+              </p>
+              <p>
                 Scope: <span className="font-mono">{scope}</span>
               </p>
               <p>

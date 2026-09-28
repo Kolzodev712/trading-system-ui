@@ -31,10 +31,30 @@ static_resources:
                         allow_origin_string_match:
                           - prefix: "*"
                         allow_methods: GET, PUT, DELETE, POST, OPTIONS
-                        allow_headers: keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout,connect-protocol-version,connect-content-encoding,connect-accept-encoding,connect-timeout-ms,x-operator-token,x-operator-id
+                        allow_headers: keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout,connect-protocol-version,connect-content-encoding,connect-accept-encoding,connect-timeout-ms
                         max_age: "1728000"
                         expose_headers: grpc-status,grpc-message,grpc-status-details-bin
                 http_filters:
+                  - name: envoy.filters.http.lua
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+                      default_source_code:
+                        inline_string: |
+                          function envoy_on_request(request_handle)
+                            request_handle:headers():remove("x-operator-id")
+                            local f = io.open("/run/secrets/trading_operator_token", "r")
+                            if f ~= nil then
+                              local token = f:read("*l")
+                              f:close()
+                              if token ~= nil and token ~= "" then
+                                request_handle:headers():replace("x-operator-token", token)
+                              else
+                                request_handle:headers():remove("x-operator-token")
+                              end
+                            else
+                              request_handle:headers():remove("x-operator-token")
+                            end
+                          end
                   - name: envoy.filters.http.grpc_web
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_web.v3.GrpcWeb

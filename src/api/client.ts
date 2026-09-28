@@ -1,30 +1,13 @@
-import { createClient, type Client, type Interceptor } from "@connectrpc/connect";
+import { createClient, type Client } from "@connectrpc/connect";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
 import { TradingCliService } from "@/gen/trading_cli_connect";
 import { loadEndpoint } from "@/lib/endpoint";
-import { loadUser } from "@/lib/authStorage";
 
 const RPC_TIMEOUT_MS = 5_000;
 const TOGGLE_TIMEOUT_MS = 2_000;
 const DEX_TOGGLE_TIMEOUT_MS = 10_000;
 const DEX_CANCEL_TIMEOUT_MS = 30_000;
 const OPERATOR_TIMEOUT_MS = 15_000;
-
-const operatorAuthInterceptor: Interceptor = (next) => async (req) => {
-  const token = (import.meta.env.VITE_OPERATOR_TOKEN as string | undefined)?.trim();
-  if (token) {
-    req.header.set("x-operator-token", token);
-  }
-  try {
-    const user = loadUser();
-    if (user?.username) {
-      req.header.set("x-operator-id", user.username);
-    }
-  } catch {
-    /* tests / missing storage */
-  }
-  return next(req);
-};
 
 let client: Client<typeof TradingCliService> | null = null;
 let currentBaseUrl = "";
@@ -35,7 +18,6 @@ export function getTradingClient(): Client<typeof TradingCliService> {
     currentBaseUrl = baseUrl;
     const transport = createGrpcWebTransport({
       baseUrl,
-      interceptors: [operatorAuthInterceptor],
     });
     client = createClient(TradingCliService, transport);
   }

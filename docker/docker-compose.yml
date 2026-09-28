@@ -14,6 +14,7 @@ services:
     network_mode: host
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+      - ${TRADING_OPERATOR_TOKEN_FILE:-./operator_token.empty}:/run/secrets/trading_operator_token:ro
     command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml --log-level info
 
 volumes:
