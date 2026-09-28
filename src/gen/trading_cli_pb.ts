@@ -2070,6 +2070,43 @@ export class MonitoringData extends Message<MonitoringData> {
    */
   globalToggleSemantics = "";
 
+  /**
+   * "simulation" for Paper/local; "exchange" otherwise
+   *
+   * @generated from field: string economic_source = 21;
+   */
+  economicSource = "";
+
+  /**
+   * @generated from field: string realized_pnl = 22;
+   */
+  realizedPnl = "";
+
+  /**
+   * @generated from field: string unrealized_pnl = 23;
+   */
+  unrealizedPnl = "";
+
+  /**
+   * @generated from field: string daily_pnl = 24;
+   */
+  dailyPnl = "";
+
+  /**
+   * @generated from field: string fees_paid = 25;
+   */
+  feesPaid = "";
+
+  /**
+   * @generated from field: string funding_pnl = 26;
+   */
+  fundingPnl = "";
+
+  /**
+   * @generated from field: string ledger_equity = 27;
+   */
+  ledgerEquity = "";
+
   constructor(data?: PartialMessage<MonitoringData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2098,6 +2135,13 @@ export class MonitoringData extends Message<MonitoringData> {
     { no: 18, name: "entries_paused", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 19, name: "flatten_latched", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 20, name: "global_toggle_semantics", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 21, name: "economic_source", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 22, name: "realized_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 23, name: "unrealized_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 24, name: "daily_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 25, name: "fees_paid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 26, name: "funding_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 27, name: "ledger_equity", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MonitoringData {

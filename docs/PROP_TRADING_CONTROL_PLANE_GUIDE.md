@@ -61,7 +61,13 @@ Runner gRPC now owns `PauseEntries`, `CancelWorking`, `FlattenAndPause` and `Res
 
 Do not claim daily-loss safety until Increment 9 PnL is correct. Candidate #2 remains an operational baseline, not validated alpha.
 
-## Increments 9, 9A and 10 — ledger, Paper, demo
+## Increment 9 — ledger economics (simulation)
+
+Backend `MonitoringData` now carries `economic_source`, realized/unrealized/daily PnL, fees, funding and ledger equity from the runner execution ledger. This UI copies the source proto, regenerates the client, and shows those values in the header. Paper/local snapshots are labeled **SIMULATION**; live Bybit values are not. No Paper number changes Candidate #2's rejected-as-validated-alpha research disposition.
+
+**Local Increment 9 record (2026-09-28):** proto synced from `trading_system`; `npm test` 54 passed including `EconomicPnl` simulation vs exchange labels; `npm run build` exit 0. Matching runner SHA is recorded in that repo's plan section 64.
+
+## Increments 9A and 10 — Paper matrix, demo
 
 Render backend-calculated ledger/PnL with an explicit **simulation** label for Paper. During the deterministic K-paper matrix, observe Unknown submission, reserved exposure, blocked entries, reconciliation and recovery from runner status. Invoke safety actions through this browser and compare their result with K-paper's independent account/order view. The core automated fault matrix belongs in the runner/K-paper integration harness, not UI click tests.
 
