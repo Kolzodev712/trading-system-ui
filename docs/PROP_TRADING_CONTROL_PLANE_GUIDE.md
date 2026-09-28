@@ -1,6 +1,6 @@
 # Prop trading browser control-plane guide
 
-**Status:** The local 5R/5A gates and bounded 5B Spot/levels connectivity preflight are accepted for proceeding. UI `66632ed` connected through Envoy to the default levels runner and showed backend-sourced **PAPER LOCAL + EXCHANGE**. Increment 6 begins in `trading_system` and k-paper; sync this UI only if the runner status/proto contract changes, then stop for review before Increment 7.
+**Status:** Increment 9 ledger economics and Increment 9A Paper matrix browser checks are recorded below. The local 5R/5A gates and bounded 5B Spot/levels connectivity preflight remain accepted. Candidate #2 remains an operational baseline, not validated alpha. Bybit demo is not started.
 
 **Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Backend 5R is accepted locally for the limited 5B preflight at `f9d1299`.
 
@@ -70,6 +70,8 @@ Backend `MonitoringData` now carries `economic_source`, realized/unrealized/dail
 ## Increments 9A and 10 — Paper matrix, demo
 
 Render backend-calculated ledger/PnL with an explicit **simulation** label for Paper. During the deterministic K-paper matrix, observe Unknown submission, reserved exposure, blocked entries, reconciliation and recovery from runner status. Invoke safety actions through this browser and compare their result with K-paper's independent account/order view. The core automated fault matrix belongs in the runner/K-paper integration harness, not UI click tests.
+
+**Local Increment 9A record (2026-09-28):** proto unchanged from Increment 9. `npm test` 54 passed; no generate/build required. Browser `http://127.0.0.1:5173/` → Envoy `:8081` → Candidate #2 composition `:50051` with Paper linear live: **PAPER LOCAL + EXCHANGE**, header **SIMULATION**, strategy **REJECTED AS VALIDATED ALPHA**, Stream live. Pause entries confirmation showed `Positions: BTCUSDT qty=0.001`; grpc `entries_paused=true` while Paper still held 0.001. Flatten confirmation stated RPC success is not flat; after confirm grpc `flatten_latched=true` `pos=0` and Paper `/positions` `[]` with an independent sell trade. Resume confirmation: latch cleared, global toggle unchanged. Matching runner `b1361112d32e34f03b48dd6c77ab769bbf8b90a3` and k-paper `09266a313fc244259b39e421f4d0126053a219ee` are in `trading_system` plan Increment 9A.
 
 Use the same views and controls on Bybit demo with an unmistakable `BYBIT DEMO + EXCHANGE` label. An optional future Simulation Lab may request faults through a **runner-owned Paper/local-only API**; it must never talk directly to K-paper or expose fault buttons in a Bybit session. It is not a prerequisite for the first demo gate.
 
