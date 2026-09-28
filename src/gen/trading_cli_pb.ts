@@ -157,6 +157,23 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
    */
   environment = "";
 
+  /**
+   * @generated from field: bool entries_paused = 5;
+   */
+  entriesPaused = false;
+
+  /**
+   * @generated from field: bool flatten_latched = 6;
+   */
+  flattenLatched = false;
+
+  /**
+   * legacy SetTradingEnabled cancels working when disabling
+   *
+   * @generated from field: string global_toggle_semantics = 7;
+   */
+  globalToggleSemantics = "";
+
   constructor(data?: PartialMessage<GetTradingStatusResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -169,6 +186,9 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
     { no: 2, name: "execution_mode", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "venue", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "environment", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "entries_paused", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 6, name: "flatten_latched", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: "global_toggle_semantics", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTradingStatusResponse {
@@ -185,6 +205,126 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
 
   static equals(a: GetTradingStatusResponse | PlainMessage<GetTradingStatusResponse> | undefined, b: GetTradingStatusResponse | PlainMessage<GetTradingStatusResponse> | undefined): boolean {
     return proto3.util.equals(GetTradingStatusResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.OperatorCommandRequest
+ */
+export class OperatorCommandRequest extends Message<OperatorCommandRequest> {
+  /**
+   * @generated from field: string request_id = 1;
+   */
+  requestId = "";
+
+  /**
+   * e.g. BTC/USDT; empty means all configured pairs
+   *
+   * @generated from field: string symbol = 2;
+   */
+  symbol = "";
+
+  constructor(data?: PartialMessage<OperatorCommandRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.OperatorCommandRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "request_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "symbol", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OperatorCommandRequest {
+    return new OperatorCommandRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OperatorCommandRequest {
+    return new OperatorCommandRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OperatorCommandRequest {
+    return new OperatorCommandRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: OperatorCommandRequest | PlainMessage<OperatorCommandRequest> | undefined, b: OperatorCommandRequest | PlainMessage<OperatorCommandRequest> | undefined): boolean {
+    return proto3.util.equals(OperatorCommandRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.OperatorCommandResponse
+ */
+export class OperatorCommandResponse extends Message<OperatorCommandResponse> {
+  /**
+   * @generated from field: bool accepted = 1;
+   */
+  accepted = false;
+
+  /**
+   * accepted | in_progress | completed | failed
+   *
+   * @generated from field: string state = 2;
+   */
+  state = "";
+
+  /**
+   * @generated from field: string message = 3;
+   */
+  message = "";
+
+  /**
+   * @generated from field: string venue = 4;
+   */
+  venue = "";
+
+  /**
+   * @generated from field: string environment = 5;
+   */
+  environment = "";
+
+  /**
+   * @generated from field: string scope = 6;
+   */
+  scope = "";
+
+  /**
+   * @generated from field: repeated string order_ids = 7;
+   */
+  orderIds: string[] = [];
+
+  constructor(data?: PartialMessage<OperatorCommandResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.OperatorCommandResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "accepted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "state", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "venue", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "environment", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "scope", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "order_ids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OperatorCommandResponse {
+    return new OperatorCommandResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OperatorCommandResponse {
+    return new OperatorCommandResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OperatorCommandResponse {
+    return new OperatorCommandResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: OperatorCommandResponse | PlainMessage<OperatorCommandResponse> | undefined, b: OperatorCommandResponse | PlainMessage<OperatorCommandResponse> | undefined): boolean {
+    return proto3.util.equals(OperatorCommandResponse, a, b);
   }
 }
 
@@ -1915,6 +2055,21 @@ export class MonitoringData extends Message<MonitoringData> {
    */
   runnerMode = "";
 
+  /**
+   * @generated from field: bool entries_paused = 18;
+   */
+  entriesPaused = false;
+
+  /**
+   * @generated from field: bool flatten_latched = 19;
+   */
+  flattenLatched = false;
+
+  /**
+   * @generated from field: string global_toggle_semantics = 20;
+   */
+  globalToggleSemantics = "";
+
   constructor(data?: PartialMessage<MonitoringData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1940,6 +2095,9 @@ export class MonitoringData extends Message<MonitoringData> {
     { no: 15, name: "snapshot_unix_ms", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
     { no: 16, name: "trading_enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 17, name: "runner_mode", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 18, name: "entries_paused", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 19, name: "flatten_latched", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 20, name: "global_toggle_semantics", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MonitoringData {

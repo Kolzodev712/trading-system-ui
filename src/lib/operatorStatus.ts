@@ -139,8 +139,16 @@ export function resolveRunnerMode(
 export function executionPausedNote(
   tradingEnabled: boolean,
   executionMode: string | undefined,
+  entriesPaused?: boolean,
+  flattenLatched?: boolean,
 ): string | null {
   const shadow = (executionMode || "").toLowerCase() === "shadow";
+  if (flattenLatched) {
+    return "Flatten latch is held. Strategy target cannot reopen until Resume. A successful flatten RPC is not a verified flat account.";
+  }
+  if (entriesPaused) {
+    return "PauseEntries: evaluation continues; exposure increases are blocked. This is not the legacy global toggle.";
+  }
   if (shadow && !tradingEnabled) {
     return "Model status remains visible. Shadow forbids new exchange orders; global execution is paused.";
   }
@@ -148,7 +156,7 @@ export function executionPausedNote(
     return "Shadow: model decisions only. New exchange orders are forbidden; the observed order count is shown separately.";
   }
   if (!tradingEnabled) {
-    return "Model status remains visible. Global execution is paused.";
+    return "Model status remains visible. Global execution is paused (legacy toggle cancels working orders).";
   }
   return null;
 }

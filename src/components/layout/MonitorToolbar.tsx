@@ -14,6 +14,7 @@ import {
   useSelectedStrategy,
 } from "@/store/tradingStore";
 import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
+import { OperatorControls } from "@/components/layout/OperatorControls";
 
 interface MonitorToolbarProps {
   onRefresh: () => void;
@@ -47,6 +48,7 @@ export function MonitorToolbar({
       : (selectedLevel?.enabled ?? false);
 
   return (
+    <>
     <div className="flex flex-wrap items-center gap-2 px-4 py-2 border-b border-border bg-card/50">
       <Button variant="ghost" size="sm" onClick={onBack}>
         <ArrowLeft className="h-4 w-4" />
@@ -108,5 +110,9 @@ export function MonitorToolbar({
         </>
       )}
     </div>
+    <div className="px-4 py-2 border-b border-border bg-card/30">
+      <OperatorControls />
+    </div>
+    </>
   );
 }

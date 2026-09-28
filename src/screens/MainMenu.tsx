@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { OperatorControls } from "@/components/layout/OperatorControls";
 import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 import { useMonitorActions } from "@/hooks/useMonitorActions";
 import { useControlsEnabled, useMode, useTradingStore } from "@/store/tradingStore";
@@ -33,7 +34,7 @@ export function MainMenu() {
                 Global Trading
               </Label>
               <p className="text-xs text-muted-foreground">
-                When disabled, cancels open orders across all sources
+                Legacy toggle: disabling cancels working orders. Not PauseEntries or FlattenAndPause.
               </p>
             </div>
             <Switch
@@ -43,6 +44,8 @@ export function MainMenu() {
               onCheckedChange={(enabled) => toggleGlobal(enabled)}
             />
           </div>
+
+          <OperatorControls />
 
           <Button size="lg" className="w-full" onClick={enterMonitor}>
             <LayoutDashboard className="h-5 w-5" />

@@ -22,6 +22,8 @@ import {
   type Level,
   type MonitoringData,
   type OperatorStrategyConfig,
+  OperatorCommandRequest,
+  type OperatorCommandResponse,
 } from "@/gen/trading_cli_pb";
 import { getTradingClient, rpcOptions, resetTradingClient } from "@/api/client";
 import { wrapFixed } from "@/api/transforms";
@@ -42,13 +44,29 @@ export async function connectAndFetchInitial(): Promise<{
   };
 }
 
-export async function getTradingStatus(): Promise<boolean> {
+export async function getTradingStatus(): Promise<{
+  enabled: boolean;
+  entriesPaused: boolean;
+  flattenLatched: boolean;
+  venue: string;
+  environment: string;
+  executionMode: string;
+  globalToggleSemantics: string;
+}> {
   const client = getTradingClient();
   const res = await client.getTradingStatus(
     new GetTradingStatusRequest(),
     rpcOptions.default,
   );
-  return res.enabled;
+  return {
+    enabled: res.enabled,
+    entriesPaused: res.entriesPaused,
+    flattenLatched: res.flattenLatched,
+    venue: res.venue,
+    environment: res.environment,
+    executionMode: res.executionMode,
+    globalToggleSemantics: res.globalToggleSemantics,
+  };
 }
 
 export async function setTradingEnabled(enabled: boolean) {
@@ -127,6 +145,32 @@ export async function requestRestart(onStop = "cancel_working") {
     rpcOptions.default,
   );
 }
+
+function operatorRequest(requestId: string, symbol: string) {
+  return new OperatorCommandRequest({ requestId, symbol });
+}
+
+export async function pauseEntries(requestId: string, symbol = "") {
+  const client = getTradingClient();
+  return client.pauseEntries(operatorRequest(requestId, symbol), rpcOptions.operator);
+}
+
+export async function cancelWorking(requestId: string, symbol = "") {
+  const client = getTradingClient();
+  return client.cancelWorking(operatorRequest(requestId, symbol), rpcOptions.operator);
+}
+
+export async function flattenAndPause(requestId: string, symbol = "") {
+  const client = getTradingClient();
+  return client.flattenAndPause(operatorRequest(requestId, symbol), rpcOptions.operator);
+}
+
+export async function resumeEntries(requestId: string, symbol = "") {
+  const client = getTradingClient();
+  return client.resume(operatorRequest(requestId, symbol), rpcOptions.operator);
+}
+
+export type { OperatorCommandResponse };
 
 export async function toggleStrategy(
   strategyName: string,
