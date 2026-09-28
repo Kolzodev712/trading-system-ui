@@ -1,8 +1,8 @@
 # Prop trading browser control-plane guide
 
-**Status:** Implementation handoff; future status fields and controls described here are not current UI features.
+**Status:** Initial 5A implementation is in `trading-system-ui` `66025f4` against `trading_system` `6295913`. The 5A correction/acceptance gate in the primary plan is open; 5B is blocked.
 
-**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. Increment 5A begins only after the 5R dependency-boundary gate passes.
+**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. Current 5A code still requires the 5R verification record and 5A corrections before 5B.
 
 ## Purpose and ownership
 
@@ -23,7 +23,7 @@ This repository is the next-generation **browser** operator layer. The old Rust 
 | Global/strategy actions and environment chrome | `src/hooks/useMonitorActions.ts`, `src/components/layout/{AppHeader,MonitorToolbar,StatusBar}.tsx` |
 | Auth service | `server/index.ts`, `server/seed.ts` |
 
-Today `GetTradingStatus` returns a boolean, `MonitoringData` has general orders/positions/strategies, and the UI can toggle global trading and strategies. The proposed execution mode, per-pair readiness, reservations, recovery state and four safety commands are **not yet** part of the proto. The current UI also derives CEX mode from whether the strategies list is nonempty; use a server-reported mode for the new operator status.
+At `66025f4`, `MonitoringData` carries runner mode, venue/environment, execution mode and strategy snapshots, and the UI copies the source proto and generated client. The four future safety commands are still absent. Verify the complete status contract against the matching runner rather than inferring mode from a strategy count or reporting stale context as healthy.
 
 ## Backend-first contract workflow
 
@@ -39,9 +39,11 @@ After 5R, build a Candidate #2 view that answers: what the model wants, what ris
 
 Place a persistent, unmistakable venue/environment **and** mode label on every control screen. `BYBIT MAINNET + SHADOW`, `K-PAPER LOCAL + EXCHANGE` and `BYBIT DEMO + EXCHANGE` must not look interchangeable or collapse to the current global on/off boolean. Verify live updates and the disconnected/stale case with the actual runner.
 
+**5A review correction (2026-09-28):** `useMonitoringStream` marks the stream connected before its first update and does not mark a normally ended stream disconnected; `useStatusFreshness` ignores snapshot age and treats main-screen data as live even without a stream. Replace the hard-coded “0 exchange orders (shadow)” label with the observed count and a visible violation if nonzero. Render Candidate #2's `BASELINE` role separately from `SHADOW` execution mode. The Spot/levels runner must publish venue/environment before its K-paper preflight. Keep operator controls inactive when status is unknown, stale or incomplete; cover these cases in tests and a real browser-to-runner session. The primary plan's section 5A lists the full correction gate.
+
 ## Increment 5B — Paper smoke label
 
-Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
+Begin only after 5R verification and 5A acceptance are recorded. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
 
 ## Increment 8 — safety controls
 
