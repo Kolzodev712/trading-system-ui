@@ -2,13 +2,13 @@
 
 **Status:** Implementation handoff; future status fields and controls described here are not current UI features.
 
-**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5A, 5B, 8, 9, 9A and 10.
+**Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. Increment 5A begins only after the 5R dependency-boundary gate passes.
 
 ## Purpose and ownership
 
 This repository is the next-generation **browser** operator layer. The old Rust `cli`/TUI is a separate compatibility/debug client. The browser renders the actual runner's decisions and sends operator requests through the runner API; it never evaluates a strategy, calculates exchange exposure/readiness as an authority, reads `bot.json`, or calls K-paper/Bybit directly.
 
-`trading_system` owns strategy/risk/execution/recovery state and the source `libs/trading_core/proto/trading_cli.proto`. This repo owns presentation, interaction state, confirmations and its auth UI/API. `k-paper` is a separate test venue behind the runner's exchange abstraction.
+`trading_system`'s Candidate #2 composition app instantiates the model adapter and generic runner in **one process**. The runner owns strategy status, risk/execution/recovery state and the source `libs/trading_core/proto/trading_cli.proto`; its crate and `trading_engine` do not depend on model/research crates. This repo owns presentation, interaction state, confirmations and its auth UI/API. `k-paper` is a separate test venue behind the runner's exchange abstraction.
 
 ## Current path and starting points
 
@@ -35,7 +35,7 @@ Treat a stream interruption or stale/incomplete snapshot as **unknown/degraded**
 
 ## Increment 5A — Shadow observability
 
-Build a Candidate #2 view that answers: what the model wants, what risk/execution permits, what the exchange actually holds, and what is unhealthy. Show the last completed candle, close/mean/spread, direction/transition, target and entry freshness; distinguish filled position, working remainder and unresolved reservation. In Shadow, show that evaluation continues and exchange-order calls are forbidden.
+After 5R, build a Candidate #2 view that answers: what the model wants, what risk/execution permits, what the exchange actually holds, and what is unhealthy. Show the last completed candle, close/mean/spread, direction/transition, target and entry freshness; distinguish filled position, working remainder and unresolved reservation. In Shadow, show that evaluation continues and exchange-order calls are forbidden. Connect through the same runner gRPC contract whether the runner was started by its default binary or the Candidate #2 composition app.
 
 Place a persistent, unmistakable venue/environment **and** mode label on every control screen. `BYBIT MAINNET + SHADOW`, `K-PAPER LOCAL + EXCHANGE` and `BYBIT DEMO + EXCHANGE` must not look interchangeable or collapse to the current global on/off boolean. Verify live updates and the disconnected/stale case with the actual runner.
 
