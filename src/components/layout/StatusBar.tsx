@@ -1,12 +1,12 @@
 import type { ComponentType } from "react";
 import { Wifi, WifiOff } from "lucide-react";
 import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
-import { useTradingStore, useMode } from "@/store/tradingStore";
+import { useTradingStore, useMode, useStatusFreshness } from "@/store/tradingStore";
 import { cn } from "@/lib/utils";
 
 export function StatusBar() {
   const connected = useTradingStore((s) => s.connected);
-  const streamConnected = useTradingStore((s) => s.streamConnected);
+  const freshness = useStatusFreshness();
   const endpoint = useTradingStore((s) => s.endpoint);
   const mode = useMode();
   const modeLabel =
@@ -15,7 +15,13 @@ export function StatusBar() {
       : mode === "strategies"
         ? "Strategies"
         : "Levels";
-  const screen = useTradingStore((s) => s.screen);
+  const streamOk = freshness === "live";
+  const streamLabel =
+    freshness === "live"
+      ? "Stream live"
+      : freshness === "stale"
+        ? "Stream stale"
+        : "Stream waiting";
 
   return (
     <footer className="border-t border-border px-4 py-2 text-xs text-muted-foreground flex items-center justify-between gap-4 flex-wrap bg-card/20">
@@ -26,14 +32,12 @@ export function StatusBar() {
           badLabel="Runner offline"
           icon={connected ? Wifi : WifiOff}
         />
-        {screen !== "main" && (
-          <StatusPill
-            ok={streamConnected}
-            okLabel="Stream live"
-            badLabel="Stream reconnecting"
-            pulse={!streamConnected}
-          />
-        )}
+        <StatusPill
+          ok={streamOk}
+          okLabel="Stream live"
+          badLabel={streamLabel}
+          pulse={!streamOk}
+        />
         <span className="hidden md:inline text-muted-foreground/80 font-mono">
           {endpoint}
         </span>

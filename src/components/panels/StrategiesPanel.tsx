@@ -68,10 +68,14 @@ export function StrategiesPanel({
             {
               key: "ready",
               header: "Ready",
-              render: (s) => displayReadiness(freshness, s.readiness),
+              render: (s) => (
+                <span data-testid={`strategy-ready-${s.strategyName}`}>
+                  {displayReadiness(freshness, s.readiness)}
+                </span>
+              ),
             },
             {
-              key: "disp",
+              key: "research",
               header: "Research",
               render: (s) => s.researchDisposition || "—",
             },
@@ -81,10 +85,24 @@ export function StrategiesPanel({
               render: (s) => s.operationalRole || "—",
             },
             {
+              key: "mode",
+              header: "Mode",
+              render: (s) => (s.executionMode || "—").toUpperCase(),
+            },
+            {
               key: "orders",
               header: "Orders",
-              render: (s) =>
-                exchangeOrdersLabel(s.executionMode, s.activeOrders),
+              render: (s) => {
+                const label = exchangeOrdersLabel(s.executionMode, s.activeOrders);
+                return (
+                  <span
+                    className={label.violation ? "text-red-400 font-semibold" : undefined}
+                    data-testid={`exchange-orders-${s.strategyName}`}
+                  >
+                    {label.text}
+                  </span>
+                );
+              },
             },
           ]}
         />

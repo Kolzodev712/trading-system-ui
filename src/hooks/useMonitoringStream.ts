@@ -6,8 +6,10 @@ const INITIAL_BACKOFF_MS = 1_000;
 const MAX_BACKOFF_MS = 30_000;
 
 export function useMonitoringStream(active: boolean) {
-  const setMonitoringData = useTradingStore((s) => s.setMonitoringData);
-  const setStreamConnected = useTradingStore((s) => s.setStreamConnected);
+  const applyStreamUpdate = useTradingStore((s) => s.applyStreamUpdate);
+  const beginStreamAttempt = useTradingStore((s) => s.beginStreamAttempt);
+  const markStreamEnded = useTradingStore((s) => s.markStreamEnded);
+  const markStreamFailed = useTradingStore((s) => s.markStreamFailed);
   const attemptRef = useRef(0);
 
   useEffect(() => {
@@ -19,31 +21,41 @@ export function useMonitoringStream(active: boolean) {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const abortController = new AbortController();
 
+    const sleep = (ms: number) =>
+      new Promise<void>((resolve) => {
+        timeoutId = setTimeout(resolve, ms);
+      });
+
     const run = async () => {
       while (!cancelled) {
+        beginStreamAttempt();
         try {
-          setStreamConnected(true);
-          attemptRef.current = 0;
           const stream = streamMonitoringData(abortController.signal);
+          let received = false;
           for await (const update of stream) {
             if (cancelled) break;
             if (update.data) {
-              setMonitoringData(update.data);
+              received = true;
+              applyStreamUpdate(update.data);
+              attemptRef.current = 0;
             }
           }
           if (cancelled) break;
+          if (received) {
+            markStreamEnded();
+          } else {
+            markStreamFailed();
+          }
         } catch {
           if (cancelled) break;
-          setStreamConnected(false);
-          attemptRef.current += 1;
-          const backoff = Math.min(
-            INITIAL_BACKOFF_MS * 2 ** (attemptRef.current - 1),
-            MAX_BACKOFF_MS,
-          );
-          await new Promise<void>((resolve) => {
-            timeoutId = setTimeout(resolve, backoff);
-          });
+          markStreamFailed();
         }
+        attemptRef.current += 1;
+        const backoff = Math.min(
+          INITIAL_BACKOFF_MS * 2 ** (attemptRef.current - 1),
+          MAX_BACKOFF_MS,
+        );
+        await sleep(backoff);
       }
     };
 
@@ -53,7 +65,13 @@ export function useMonitoringStream(active: boolean) {
       cancelled = true;
       abortController.abort();
       if (timeoutId) clearTimeout(timeoutId);
-      setStreamConnected(false);
+      markStreamFailed();
     };
-  }, [active, setMonitoringData, setStreamConnected]);
+  }, [
+    active,
+    applyStreamUpdate,
+    beginStreamAttempt,
+    markStreamEnded,
+    markStreamFailed,
+  ]);
 }

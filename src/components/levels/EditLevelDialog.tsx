@@ -14,13 +14,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useInvalidateLevels } from "@/hooks/useLevelsPoll";
-import { useSelectedLevel, useTradingStore } from "@/store/tradingStore";
+import { STALE_CONTROLS_MESSAGE } from "@/lib/operatorStatus";
+import { useControlsEnabled, useSelectedLevel, useTradingStore } from "@/store/tradingStore";
 
 export function EditLevelDialog() {
   const overlay = useTradingStore((s) => s.overlay);
   const closeOverlay = useTradingStore((s) => s.closeOverlay);
   const selectedLevel = useSelectedLevel();
   const invalidateLevels = useInvalidateLevels();
+  const controlsEnabled = useControlsEnabled();
 
   const [enabled, setEnabled] = useState(true);
   const [price, setPrice] = useState("");
@@ -45,6 +47,7 @@ export function EditLevelDialog() {
 
   const mutation = useMutation({
     mutationFn: () => {
+      if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
       if (!selectedLevel) throw new Error("No level selected");
       return updateLevel(selectedLevel.id, {
         enabled,
@@ -107,7 +110,7 @@ export function EditLevelDialog() {
           />
           <Button
             onClick={() => mutation.mutate()}
-            disabled={mutation.isPending || !selectedLevel}
+            disabled={mutation.isPending || !selectedLevel || !controlsEnabled}
           >
             {mutation.isPending ? "Saving…" : "Save Changes"}
           </Button>

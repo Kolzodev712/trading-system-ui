@@ -1,12 +1,30 @@
 import { describe, expect, it } from "vitest";
 import {
+  computeStatusFreshness,
   displayReadiness,
   exchangeOrdersLabel,
   executionPausedNote,
+  formatCandidateIdentity,
   formatSessionLabel,
   formatVenueMode,
   resolveRunnerMode,
+  SNAPSHOT_STALE_MS,
+  snapshotIsComplete,
+  statusIsActionable,
+  STREAM_SILENCE_MS,
 } from "@/lib/operatorStatus";
+
+describe("formatCandidateIdentity", () => {
+  it("keeps rejected-alpha research, BASELINE role, and SHADOW mode distinct", () => {
+    expect(
+      formatCandidateIdentity({
+        researchDisposition: "REJECTED AS VALIDATED ALPHA",
+        operationalRole: "BASELINE",
+        executionMode: "shadow",
+      }),
+    ).toBe("REJECTED AS VALIDATED ALPHA · BASELINE · SHADOW");
+  });
+});
 
 describe("formatVenueMode", () => {
   it("keeps venue, environment and execution mode distinct", () => {
@@ -18,6 +36,12 @@ describe("formatVenueMode", () => {
     );
     expect(formatVenueMode("BYBIT", "DEMO", "exchange")).toBe(
       "BYBIT DEMO + EXCHANGE",
+    );
+    expect(formatVenueMode("BYBIT", "TESTNET", "exchange")).toBe(
+      "BYBIT TESTNET + EXCHANGE",
+    );
+    expect(formatVenueMode("DEEPBOOK", "TESTNET", "exchange")).toBe(
+      "DEEPBOOK TESTNET + EXCHANGE",
     );
   });
 });
@@ -35,9 +59,122 @@ describe("formatSessionLabel", () => {
 });
 
 describe("shadow order display", () => {
-  it("shows zero exchange orders in shadow even if a count is present", () => {
-    expect(exchangeOrdersLabel("shadow", 3)).toBe("0 exchange orders (shadow)");
-    expect(exchangeOrdersLabel("exchange", 3)).toBe("3");
+  it("shows the observed count and flags a nonzero shadow count", () => {
+    expect(exchangeOrdersLabel("shadow", 0)).toEqual({
+      text: "0",
+      violation: false,
+    });
+    expect(exchangeOrdersLabel("shadow", 3)).toEqual({
+      text: "3 exchange orders (shadow violation)",
+      violation: true,
+    });
+    expect(exchangeOrdersLabel("exchange", 3)).toEqual({
+      text: "3",
+      violation: false,
+    });
+  });
+});
+
+describe("computeStatusFreshness", () => {
+  const complete = {
+    venue: "BYBIT",
+    environment: "MAINNET",
+    executionMode: "shadow",
+  };
+
+  it("waits for the first stream update", () => {
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: false,
+        streamEnded: false,
+        streamConnected: false,
+        lastStreamUpdateAtMs: null,
+        nowMs: 10_000,
+        ...complete,
+      }),
+    ).toBe("unknown");
+  });
+
+  it("marks a cleanly ended stream stale", () => {
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: true,
+        streamEnded: true,
+        streamConnected: false,
+        lastStreamUpdateAtMs: 9_000,
+        snapshotUnixMs: 9_000,
+        nowMs: 9_500,
+        ...complete,
+      }),
+    ).toBe("stale");
+  });
+
+  it("marks a silent stream stale", () => {
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: true,
+        streamEnded: false,
+        streamConnected: true,
+        lastStreamUpdateAtMs: 1_000,
+        snapshotUnixMs: 1_000,
+        nowMs: 1_000 + STREAM_SILENCE_MS + 1,
+        ...complete,
+      }),
+    ).toBe("stale");
+  });
+
+  it("marks an old snapshot stale even on the main screen", () => {
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: true,
+        streamEnded: false,
+        streamConnected: true,
+        lastStreamUpdateAtMs: 20_000,
+        snapshotUnixMs: 1_000,
+        nowMs: 1_000 + SNAPSHOT_STALE_MS + 1,
+        ...complete,
+      }),
+    ).toBe("stale");
+  });
+
+  it("treats incomplete venue labels as unknown", () => {
+    expect(snapshotIsComplete({ venue: "UNKNOWN", environment: "LOCAL", executionMode: "exchange" })).toBe(false);
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: true,
+        streamEnded: false,
+        streamConnected: true,
+        lastStreamUpdateAtMs: 5_000,
+        snapshotUnixMs: 5_000,
+        nowMs: 5_000,
+        venue: "UNKNOWN",
+        environment: "LOCAL",
+        executionMode: "exchange",
+      }),
+    ).toBe("unknown");
+  });
+
+  it("is live only after a fresh complete stream snapshot", () => {
+    expect(
+      computeStatusFreshness({
+        connected: true,
+        receivedFirstStreamUpdate: true,
+        streamEnded: false,
+        streamConnected: true,
+        lastStreamUpdateAtMs: 5_000,
+        snapshotUnixMs: 5_000,
+        nowMs: 5_500,
+        ...complete,
+      }),
+    ).toBe("live");
+    expect(statusIsActionable("live")).toBe(true);
+    expect(statusIsActionable("stale")).toBe(false);
+    expect(statusIsActionable("unknown")).toBe(false);
   });
 });
 
@@ -60,7 +197,7 @@ describe("resolveRunnerMode", () => {
 describe("executionPausedNote", () => {
   it("keeps model visibility when execution is paused or in shadow", () => {
     expect(executionPausedNote(false, "shadow")).toContain("Model status remains visible");
-    expect(executionPausedNote(true, "shadow")).toContain("Zero exchange order calls");
+    expect(executionPausedNote(true, "shadow")).toContain("observed order count");
     expect(executionPausedNote(true, "exchange")).toBeNull();
   });
 });

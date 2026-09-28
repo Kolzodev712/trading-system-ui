@@ -6,7 +6,9 @@ import {
   toggleDexQuote,
   toggleDexStrategy,
 } from "@/api/tradingCliService";
+import { STALE_CONTROLS_MESSAGE } from "@/lib/operatorStatus";
 import {
+  useControlsEnabled,
   useSelectedDexQuote,
   useSelectedDexStrategy,
   useTradingStore,
@@ -16,6 +18,7 @@ export function useDexMonitorActions() {
   const setMonitoringData = useTradingStore((s) => s.setMonitoringData);
   const selectedQuote = useSelectedDexQuote();
   const selectedStrategy = useSelectedDexStrategy();
+  const controlsEnabled = useControlsEnabled();
 
   const refreshMutation = useMutation({
     mutationFn: getMonitoringData,
@@ -33,6 +36,7 @@ export function useDexMonitorActions() {
 
   const toggleQuoteMutation = useMutation({
     mutationFn: async () => {
+      if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
       if (!selectedQuote) throw new Error("Select a quote first");
       return toggleDexQuote(selectedQuote.id, !selectedQuote.enabled);
     },
@@ -44,6 +48,7 @@ export function useDexMonitorActions() {
 
   const toggleStrategyMutation = useMutation({
     mutationFn: async () => {
+      if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
       if (!selectedStrategy) throw new Error("Select a strategy first");
       return toggleDexStrategy(selectedStrategy.id, !selectedStrategy.enabled);
     },
@@ -54,7 +59,10 @@ export function useDexMonitorActions() {
   });
 
   const cancelPoolMutation = useMutation({
-    mutationFn: (pool: string) => cancelDexPoolOrders(pool),
+    mutationFn: (pool: string) => {
+      if (!controlsEnabled) return Promise.reject(new Error(STALE_CONTROLS_MESSAGE));
+      return cancelDexPoolOrders(pool);
+    },
     onSuccess: async (res) => {
       const sigs = res.transactionSignatures?.length ?? 0;
       await afterDexAction(

@@ -13,13 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useInvalidateLevels } from "@/hooks/useLevelsPoll";
+import { STALE_CONTROLS_MESSAGE } from "@/lib/operatorStatus";
 import {
   nextOrderType,
   toggleSide,
   validateCreateLevelForm,
   type CreateLevelFormValues,
 } from "@/lib/validation";
-import { useTradingStore } from "@/store/tradingStore";
+import { useControlsEnabled, useTradingStore } from "@/store/tradingStore";
 
 const initialValues: CreateLevelFormValues = {
   levelId: "",
@@ -41,6 +42,7 @@ export function CreateLevelDialog() {
   const closeOverlay = useTradingStore((s) => s.closeOverlay);
   const [values, setValues] = useState<CreateLevelFormValues>(initialValues);
   const invalidateLevels = useInvalidateLevels();
+  const controlsEnabled = useControlsEnabled();
 
   const mutation = useMutation({
     mutationFn: createLevel,
@@ -54,6 +56,10 @@ export function CreateLevelDialog() {
   });
 
   const onSubmit = () => {
+    if (!controlsEnabled) {
+      toast.error(STALE_CONTROLS_MESSAGE);
+      return;
+    }
     const err = validateCreateLevelForm(values);
     if (err) {
       toast.error(err);
@@ -175,7 +181,7 @@ export function CreateLevelDialog() {
               setValues({ ...values, repostOnCancel })
             }
           />
-          <Button onClick={onSubmit} disabled={mutation.isPending}>
+          <Button onClick={onSubmit} disabled={mutation.isPending || !controlsEnabled}>
             {mutation.isPending ? "Creating…" : "Create Level"}
           </Button>
         </div>

@@ -7,7 +7,12 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useMode, useSelectedLevel, useSelectedStrategy } from "@/store/tradingStore";
+import {
+  useControlsEnabled,
+  useMode,
+  useSelectedLevel,
+  useSelectedStrategy,
+} from "@/store/tradingStore";
 import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 
 interface MonitorToolbarProps {
@@ -34,6 +39,7 @@ export function MonitorToolbar({
   const mode = useMode();
   const selectedLevel = useSelectedLevel();
   const selectedStrategy = useSelectedStrategy();
+  const controlsEnabled = useControlsEnabled();
   const hasSelection = mode === "strategies" ? !!selectedStrategy : !!selectedLevel;
   const isEnabled =
     mode === "strategies"
@@ -62,7 +68,7 @@ export function MonitorToolbar({
             variant="outline"
             size="sm"
             onClick={onToggle}
-            disabled={toggling}
+            disabled={toggling || !controlsEnabled}
           >
             <Power className="h-4 w-4" />
             {isEnabled ? "Disable" : "Enable"}
@@ -78,13 +84,23 @@ export function MonitorToolbar({
       {mode === "levels" && (
         <>
           {onCreate && (
-            <Button variant="default" size="sm" onClick={onCreate}>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={onCreate}
+              disabled={!controlsEnabled}
+            >
               <Plus className="h-4 w-4" />
               New Level
             </Button>
           )}
           {onEdit && hasSelection && (
-            <Button variant="outline" size="sm" onClick={onEdit}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onEdit}
+              disabled={!controlsEnabled}
+            >
               <Pencil className="h-4 w-4" />
               Edit
             </Button>

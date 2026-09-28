@@ -44,10 +44,8 @@ function TradingApp() {
   const authenticated = useIsAuthenticated();
   const connected = useTradingStore((s) => s.connected);
   const screen = useTradingStore((s) => s.screen);
-  const streamActive = connected && screen !== "main";
-
-  useMonitoringStream(streamActive);
-  useLevelsPoll(streamActive, true);
+  useMonitoringStream(connected);
+  useLevelsPoll(connected && screen !== "main", true);
 
   if (!hydrated) {
     return (

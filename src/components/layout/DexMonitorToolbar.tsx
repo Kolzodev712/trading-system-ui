@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
+  useControlsEnabled,
   useFilteredDexStrategies,
   useSelectedDexQuote,
   useSelectedDexStrategy,
@@ -37,6 +38,7 @@ export function DexMonitorToolbar({
   const selectedQuote = useSelectedDexQuote();
   const selectedStrategy = useSelectedDexStrategy();
   const dexStrategies = useFilteredDexStrategies();
+  const controlsEnabled = useControlsEnabled();
   const hasStrategies = dexStrategies.length > 0;
 
   return (
@@ -58,7 +60,7 @@ export function DexMonitorToolbar({
           variant="outline"
           size="sm"
           onClick={onToggleQuote}
-          disabled={togglingQuote}
+          disabled={togglingQuote || !controlsEnabled}
         >
           <Power className="h-4 w-4" />
           {selectedQuote.enabled ? "Disable" : "Enable"} Quote
@@ -70,7 +72,7 @@ export function DexMonitorToolbar({
           variant="outline"
           size="sm"
           onClick={onToggleStrategy}
-          disabled={togglingStrategy}
+          disabled={togglingStrategy || !controlsEnabled}
         >
           <Power className="h-4 w-4" />
           {selectedStrategy.enabled ? "Disable" : "Enable"} Strategy
@@ -81,7 +83,7 @@ export function DexMonitorToolbar({
         variant="outline"
         size="sm"
         onClick={onCancelPool}
-        disabled={cancelling}
+        disabled={cancelling || !controlsEnabled}
       >
         <Ban className="h-4 w-4" />
         Cancel Pool Orders
