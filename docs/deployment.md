@@ -27,6 +27,8 @@ server {
 }
 ```
 
+The static bundle alone does not provide login. The current Express auth API (`server/index.ts`) and MongoDB must also be reachable through an appropriately protected `/api` route. The example above only serves static files; it is not a complete production deployment configuration.
+
 ## gRPC-Web proxy (required)
 
 Browsers cannot call native gRPC. Run Envoy (or equivalent) alongside the UI:
@@ -57,7 +59,8 @@ If the UI and proxy share a domain, you can proxy `/grpc` through nginx to Envoy
 
 - The runner gRPC port (`50051`) should **not** be exposed to the public internet without TLS and auth
 - Restrict Envoy and the runner to a private network or VPN where possible
-- This UI has no built-in authentication; add network-level or proxy-level auth for production
+- This UI has a MongoDB-backed Express login API and seeds `admin/admin` for local development. Change those credentials and the JWT secret before any non-local deployment.
+- Browser login alone does **not** authorize direct gRPC/Envoy calls. Protect mutating runner RPCs at the runner/proxy boundary before capital-bearing operation; see the [prop-trading control-plane guide](PROP_TRADING_CONTROL_PLANE_GUIDE.md).
 
 ## Health checks
 
