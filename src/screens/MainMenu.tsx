@@ -5,7 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 import { useMonitorActions } from "@/hooks/useMonitorActions";
-import { useMode, useTradingStore } from "@/store/tradingStore";
+import { useControlsEnabled, useMode, useTradingStore } from "@/store/tradingStore";
 
 export function MainMenu() {
   const tradingEnabled = useTradingStore((s) => s.tradingEnabled);
@@ -18,6 +18,7 @@ export function MainMenu() {
         ? "Strategies"
         : "Levels";
   const { toggleGlobal, togglingGlobal } = useMonitorActions();
+  const controlsEnabled = useControlsEnabled();
 
   return (
     <div className="flex-1 flex items-center justify-center p-8">
@@ -38,7 +39,7 @@ export function MainMenu() {
             <Switch
               id="global-trading"
               checked={tradingEnabled}
-              disabled={togglingGlobal}
+              disabled={togglingGlobal || !controlsEnabled}
               onCheckedChange={(enabled) => toggleGlobal(enabled)}
             />
           </div>

@@ -1,6 +1,9 @@
 export type StatusFreshness = "live" | "stale" | "unknown";
 export type RunnerMode = "levels" | "strategies" | "dex";
 
+export const SNAPSHOT_STALE_MS = 15_000;
+export const STREAM_SILENCE_MS = 8_000;
+
 export function formatVenueMode(
   venue: string | undefined,
   environment: string | undefined,
@@ -24,14 +27,91 @@ export function formatSessionLabel(
   return core;
 }
 
+export function snapshotUnixMsNumber(
+  value: bigint | number | undefined,
+): number | undefined {
+  if (value === undefined || value === null) return undefined;
+  const n = typeof value === "bigint" ? Number(value) : value;
+  if (!Number.isFinite(n) || n <= 0) return undefined;
+  return n;
+}
+
+export function snapshotIsComplete(args: {
+  venue?: string;
+  environment?: string;
+  executionMode?: string;
+}): boolean {
+  const venue = (args.venue || "").trim().toUpperCase();
+  const environment = (args.environment || "").trim().toUpperCase();
+  const mode = (args.executionMode || "").trim();
+  return Boolean(
+    venue &&
+      venue !== "UNKNOWN" &&
+      environment &&
+      environment !== "UNKNOWN" &&
+      mode,
+  );
+}
+
+export function computeStatusFreshness(args: {
+  connected: boolean;
+  receivedFirstStreamUpdate: boolean;
+  streamEnded: boolean;
+  streamConnected: boolean;
+  lastStreamUpdateAtMs: number | null;
+  snapshotUnixMs?: bigint | number;
+  nowMs: number;
+  venue?: string;
+  environment?: string;
+  executionMode?: string;
+}): StatusFreshness {
+  if (!args.connected) return "unknown";
+  if (!args.receivedFirstStreamUpdate) return "unknown";
+  if (!snapshotIsComplete(args)) return "unknown";
+  if (args.streamEnded || !args.streamConnected) return "stale";
+  if (
+    args.lastStreamUpdateAtMs != null &&
+    args.nowMs - args.lastStreamUpdateAtMs > STREAM_SILENCE_MS
+  ) {
+    return "stale";
+  }
+  const snapMs = snapshotUnixMsNumber(args.snapshotUnixMs);
+  if (snapMs != null && args.nowMs - snapMs > SNAPSHOT_STALE_MS) {
+    return "stale";
+  }
+  return "live";
+}
+
+export const STALE_CONTROLS_MESSAGE =
+  "Status is stale or incomplete; controls are blocked until a live snapshot arrives.";
+
+export function statusIsActionable(freshness: StatusFreshness): boolean {
+  return freshness === "live";
+}
+
+export function formatCandidateIdentity(args: {
+  researchDisposition?: string;
+  operationalRole?: string;
+  executionMode?: string;
+}): string {
+  const research = (args.researchDisposition || "—").trim() || "—";
+  const role = (args.operationalRole || "—").trim() || "—";
+  const mode = (args.executionMode || "unknown").toUpperCase();
+  return `${research} · ${role} · ${mode}`;
+}
+
 export function exchangeOrdersLabel(
   executionMode: string | undefined,
   activeOrders: number,
-): string {
-  if ((executionMode || "").toLowerCase() === "shadow") {
-    return "0 exchange orders (shadow)";
+): { text: string; violation: boolean } {
+  const shadow = (executionMode || "").toLowerCase() === "shadow";
+  if (shadow && activeOrders > 0) {
+    return {
+      text: `${activeOrders} exchange orders (shadow violation)`,
+      violation: true,
+    };
   }
-  return String(activeOrders);
+  return { text: String(activeOrders), violation: false };
 }
 
 export function displayReadiness(
@@ -60,10 +140,10 @@ export function executionPausedNote(
 ): string | null {
   const shadow = (executionMode || "").toLowerCase() === "shadow";
   if (shadow && !tradingEnabled) {
-    return "Model status remains visible. Shadow forbids exchange orders; global execution is paused.";
+    return "Model status remains visible. Shadow forbids new exchange orders; global execution is paused.";
   }
   if (shadow) {
-    return "Shadow: model decisions only. Zero exchange order calls.";
+    return "Shadow: model decisions only. New exchange orders are forbidden; the observed order count is shown separately.";
   }
   if (!tradingEnabled) {
     return "Model status remains visible. Global execution is paused.";

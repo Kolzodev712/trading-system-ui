@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useEffect, useState } from "react";
 import type { Level, MonitoringData, StrategyStatus } from "@/gen/trading_cli_pb";
 import {
   EMPTY_DEX_INDICATORS,
@@ -11,7 +12,9 @@ import {
 import { matchesPool, selectedTabLabel } from "@/lib/dexPool";
 import { loadEndpoint, saveEndpoint } from "@/lib/endpoint";
 import {
+  computeStatusFreshness,
   resolveRunnerMode,
+  statusIsActionable,
   type RunnerMode,
   type StatusFreshness,
 } from "@/lib/operatorStatus";
@@ -37,6 +40,9 @@ interface TradingStore {
   monitoringData: MonitoringData | null;
   levels: Level[];
   streamConnected: boolean;
+  receivedFirstStreamUpdate: boolean;
+  lastStreamUpdateAtMs: number | null;
+  streamEnded: boolean;
 
   selectedLevelIndex: number | null;
   selectedStrategyIndex: number | null;
@@ -54,6 +60,10 @@ interface TradingStore {
   setTradingEnabled: (enabled: boolean) => void;
   setScreen: (screen: Screen) => void;
   setMonitoringData: (data: MonitoringData | null) => void;
+  applyStreamUpdate: (data: MonitoringData) => void;
+  beginStreamAttempt: () => void;
+  markStreamEnded: () => void;
+  markStreamFailed: () => void;
   setLevels: (levels: Level[]) => void;
   setStreamConnected: (connected: boolean) => void;
   setSelectedLevelIndex: (index: number | null) => void;
@@ -86,6 +96,13 @@ function deriveScreenFromStream(
   return data.instrumentType === "Futures" ? "futures" : "spot";
 }
 
+const streamReset = {
+  streamConnected: false,
+  receivedFirstStreamUpdate: false,
+  lastStreamUpdateAtMs: null as number | null,
+  streamEnded: false,
+};
+
 export const useTradingStore = create<TradingStore>((set, get) => ({
   connected: false,
   connecting: false,
@@ -95,7 +112,7 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
   screen: "main",
   monitoringData: null,
   levels: [],
-  streamConnected: false,
+  ...streamReset,
   selectedLevelIndex: null,
   selectedStrategyIndex: null,
   selectedOrderbookIndex: 0,
@@ -119,6 +136,19 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
       screen: deriveScreenFromStream(data, state.screen),
       tradingEnabled: data?.tradingEnabled ?? state.tradingEnabled,
     })),
+  applyStreamUpdate: (data) =>
+    set((state) => ({
+      monitoringData: data,
+      screen: deriveScreenFromStream(data, state.screen),
+      tradingEnabled: data.tradingEnabled ?? state.tradingEnabled,
+      streamConnected: true,
+      receivedFirstStreamUpdate: true,
+      lastStreamUpdateAtMs: Date.now(),
+      streamEnded: false,
+    })),
+  beginStreamAttempt: () => set({ streamConnected: false, streamEnded: false }),
+  markStreamEnded: () => set({ streamConnected: false, streamEnded: true }),
+  markStreamFailed: () => set({ streamConnected: false, streamEnded: false }),
   setLevels: (levels) => set({ levels }),
   setStreamConnected: (streamConnected) => set({ streamConnected }),
   setSelectedLevelIndex: (selectedLevelIndex) => set({ selectedLevelIndex }),
@@ -147,7 +177,6 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
       screen: "main",
       overlay: "none",
       levelDetails: null,
-      streamConnected: false,
     }),
   reset: () =>
     set({
@@ -157,7 +186,7 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
       tradingEnabled: false,
       monitoringData: null,
       levels: [],
-      streamConnected: false,
+      ...streamReset,
       screen: "main",
       overlay: "none",
       levelDetails: null,
@@ -178,14 +207,39 @@ export function useMode(): RunnerMode {
   );
 }
 
+export function useNowMs(intervalMs = 1_000): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), intervalMs);
+    return () => window.clearInterval(id);
+  }, [intervalMs]);
+  return now;
+}
+
 export function useStatusFreshness(): StatusFreshness {
+  const nowMs = useNowMs();
   const connected = useTradingStore((s) => s.connected);
   const streamConnected = useTradingStore((s) => s.streamConnected);
+  const receivedFirstStreamUpdate = useTradingStore((s) => s.receivedFirstStreamUpdate);
+  const lastStreamUpdateAtMs = useTradingStore((s) => s.lastStreamUpdateAtMs);
+  const streamEnded = useTradingStore((s) => s.streamEnded);
   const data = useTradingStore((s) => s.monitoringData);
-  const screen = useTradingStore((s) => s.screen);
-  if (!connected || !data) return "unknown";
-  if (screen !== "main" && !streamConnected) return "stale";
-  return "live";
+  return computeStatusFreshness({
+    connected,
+    receivedFirstStreamUpdate,
+    streamEnded,
+    streamConnected,
+    lastStreamUpdateAtMs,
+    snapshotUnixMs: data?.snapshotUnixMs,
+    nowMs,
+    venue: data?.venue,
+    environment: data?.environment,
+    executionMode: data?.executionMode,
+  });
+}
+
+export function useControlsEnabled(): boolean {
+  return statusIsActionable(useStatusFreshness());
 }
 
 export function useSelectedStrategy(): StrategyStatus | null {

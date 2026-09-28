@@ -1,11 +1,12 @@
 import { useDexStreamHealth } from "@/lib/dexHealth";
 import { cn } from "@/lib/utils";
-import { useTradingStore } from "@/store/tradingStore";
+import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
+import { useStatusFreshness, useTradingStore } from "@/store/tradingStore";
 
 export function DexMonitorHeader() {
   const data = useTradingStore((s) => s.monitoringData);
   const dex = data?.dex;
-  const streamConnected = useTradingStore((s) => s.streamConnected);
+  const freshness = useStatusFreshness();
   const health = useDexStreamHealth();
 
   if (!data || !dex) return null;
@@ -13,19 +14,20 @@ export function DexMonitorHeader() {
   return (
     <div className="px-4 py-2 border-b border-border bg-card/30 flex flex-wrap items-center justify-between gap-2">
       <h2 className="text-sm font-semibold">
-        DEX Monitor — {dex.venue || "venue"}
+        DEX Monitor — {data.venue || dex.venue || "venue"} {data.environment}
         {data.exchange ? ` · ${data.exchange}` : ""}
       </h2>
       <div className="flex items-center gap-2 text-xs">
+        <VenueModeBanner />
         <span
           className={cn(
             "px-2 py-0.5 rounded-full border",
-            streamConnected
+            freshness === "live"
               ? "bg-green-500/10 border-green-500/30 text-green-400"
               : "bg-yellow-500/10 border-yellow-500/30 text-yellow-400 animate-pulse",
           )}
         >
-          Stream: {streamConnected ? "live" : "reconnecting…"}
+          Stream: {freshness === "live" ? "live" : freshness === "stale" ? "stale" : "waiting"}
         </span>
         <span
           className={cn(

@@ -15,6 +15,7 @@ import { useDexKeyboardShortcuts } from "@/hooks/useDexKeyboardShortcuts";
 import { useDexMonitorActions } from "@/hooks/useDexMonitorActions";
 import { normalizePool } from "@/lib/dexPool";
 import {
+  useControlsEnabled,
   useFilteredDexStrategies,
   usePoolTabLabel,
   useTradingStore,
@@ -34,6 +35,7 @@ export function DexMonitor() {
   const leaveMonitor = useTradingStore((s) => s.leaveMonitor);
   const poolTab = usePoolTabLabel();
   const dexStrategies = useFilteredDexStrategies();
+  const controlsEnabled = useControlsEnabled();
   const [cancelOpen, setCancelOpen] = useState(false);
 
   const {
@@ -73,6 +75,7 @@ export function DexMonitor() {
       onPrevPool: () => cyclePool(-1),
       onNextPool: () => cyclePool(1),
       hasStrategy: dexStrategies.length > 0,
+      controlsEnabled,
     }),
     [
       refresh,
@@ -81,6 +84,7 @@ export function DexMonitor() {
       leaveMonitor,
       cyclePool,
       dexStrategies.length,
+      controlsEnabled,
     ],
   );
 

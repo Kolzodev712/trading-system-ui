@@ -23,6 +23,8 @@ import {
   displayReadiness,
   exchangeOrdersLabel,
   executionPausedNote,
+  formatCandidateIdentity,
+  STALE_CONTROLS_MESSAGE,
 } from "@/lib/operatorStatus";
 
 export function StrategyDetailsDialog() {
@@ -32,6 +34,7 @@ export function StrategyDetailsDialog() {
   const globalTrading = useTradingStore((s) => s.tradingEnabled);
   const freshness = useStatusFreshness();
   const open = overlay === "strategyDetails";
+  const controlsLive = freshness === "live";
 
   const configQuery = useQuery({
     queryKey: ["strategy-config", strategy?.strategyName, strategy?.symbol],
@@ -70,6 +73,7 @@ export function StrategyDetailsDialog() {
 
   const capMutation = useMutation({
     mutationFn: () => {
+      if (!controlsLive) throw new Error(STALE_CONTROLS_MESSAGE);
       if (!strategy) throw new Error("No strategy selected");
       return updateStrategyCap(strategy.strategyName, strategy.symbol, maxPosition);
     },
@@ -81,6 +85,7 @@ export function StrategyDetailsDialog() {
 
   const saveMutation = useMutation({
     mutationFn: () => {
+      if (!controlsLive) throw new Error(STALE_CONTROLS_MESSAGE);
       if (!strategy) throw new Error("No strategy selected");
       return updateStrategyConfig(
         new OperatorStrategyConfig({
@@ -110,7 +115,10 @@ export function StrategyDetailsDialog() {
   });
 
   const restartMutation = useMutation({
-    mutationFn: () => requestRestart("cancel_working"),
+    mutationFn: () => {
+      if (!controlsLive) throw new Error(STALE_CONTROLS_MESSAGE);
+      return requestRestart("cancel_working");
+    },
     onSuccess: (res) => {
       toast.success(res.message || "Restart requested");
       closeOverlay();
@@ -133,6 +141,14 @@ export function StrategyDetailsDialog() {
               <Row label="Name" value={strategy.strategyName} />
               <Row label="Symbol" value={strategy.symbol} />
               <Row label="Enabled" value={strategy.enabled ? "Yes" : "No"} />
+              <Row
+                label="Candidate identity"
+                value={formatCandidateIdentity({
+                  researchDisposition: strategy.researchDisposition,
+                  operationalRole: strategy.operationalRole,
+                  executionMode: strategy.executionMode,
+                })}
+              />
               <Row
                 label="Research"
                 value={strategy.researchDisposition || "—"}
@@ -193,10 +209,19 @@ export function StrategyDetailsDialog() {
               <Row label="Recovery" value={strategy.recovery || "—"} />
               <Row
                 label="Exchange orders"
-                value={exchangeOrdersLabel(
-                  strategy.executionMode,
-                  strategy.activeOrders,
-                )}
+                value={(() => {
+                  const label = exchangeOrdersLabel(
+                    strategy.executionMode,
+                    strategy.activeOrders,
+                  );
+                  return (
+                    <span
+                      className={label.violation ? "text-red-400 font-semibold" : undefined}
+                    >
+                      {label.text}
+                    </span>
+                  );
+                })()}
               />
               <Row label="Position Qty" value={strategy.positionQuantity} />
               <Row label="Live cap" value={strategy.maxPosition || "—"} />
@@ -305,14 +330,14 @@ export function StrategyDetailsDialog() {
                 <div className="flex flex-wrap gap-2">
                   <Button
                     onClick={() => capMutation.mutate()}
-                    disabled={capMutation.isPending || !maxPosition}
+                    disabled={capMutation.isPending || !maxPosition || !controlsLive}
                   >
                     {capMutation.isPending ? "Applying…" : "Apply cap"}
                   </Button>
                   <Button
                     variant="secondary"
                     onClick={() => saveMutation.mutate()}
-                    disabled={saveMutation.isPending}
+                    disabled={saveMutation.isPending || !controlsLive}
                   >
                     {saveMutation.isPending ? "Saving…" : "Save"}
                   </Button>
@@ -327,7 +352,7 @@ export function StrategyDetailsDialog() {
                         restartMutation.mutate();
                       }
                     }}
-                    disabled={restartMutation.isPending}
+                    disabled={restartMutation.isPending || !controlsLive}
                   >
                     {restartMutation.isPending ? "Restarting…" : "Restart runner"}
                   </Button>

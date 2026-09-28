@@ -9,7 +9,9 @@ import {
   toggleStrategy,
 } from "@/api/tradingCliService";
 import { useInvalidateLevels } from "@/hooks/useLevelsPoll";
+import { STALE_CONTROLS_MESSAGE } from "@/lib/operatorStatus";
 import {
+  useControlsEnabled,
   useMode,
   useSelectedLevel,
   useSelectedStrategy,
@@ -21,6 +23,7 @@ export function useMonitorActions() {
   const mode = useMode();
   const selectedLevel = useSelectedLevel();
   const selectedStrategy = useSelectedStrategy();
+  const controlsEnabled = useControlsEnabled();
 
   const setMonitoringData = useTradingStore((s) => s.setMonitoringData);
   const setTradingEnabledStore = useTradingStore((s) => s.setTradingEnabled);
@@ -37,7 +40,10 @@ export function useMonitorActions() {
   });
 
   const toggleGlobalMutation = useMutation({
-    mutationFn: async (enabled: boolean) => setTradingEnabled(enabled),
+    mutationFn: async (enabled: boolean) => {
+      if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
+      return setTradingEnabled(enabled);
+    },
     onSuccess: (res, enabled) => {
       setTradingEnabledStore(enabled);
       const cancelled = res.cancelledOrders?.length ?? 0;
@@ -51,6 +57,7 @@ export function useMonitorActions() {
 
   const toggleItemMutation = useMutation({
     mutationFn: async () => {
+      if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
       if (mode === "strategies" && selectedStrategy) {
         return toggleStrategy(
           selectedStrategy.strategyName,

@@ -15,6 +15,7 @@ interface DexKeyboardActions {
   onPrevPool: () => void;
   onNextPool: () => void;
   hasStrategy: boolean;
+  controlsEnabled: boolean;
 }
 
 export function useDexKeyboardShortcuts(actions: DexKeyboardActions) {
@@ -24,6 +25,8 @@ export function useDexKeyboardShortcuts(actions: DexKeyboardActions) {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
 
       const key = e.key.toLowerCase();
+      const mutating = key === "t" || key === "s" || key === "c";
+      if (mutating && !actions.controlsEnabled) return;
 
       switch (key) {
         case "r":
