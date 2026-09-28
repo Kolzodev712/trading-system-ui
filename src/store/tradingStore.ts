@@ -10,6 +10,11 @@ import {
 } from "@/lib/empty";
 import { matchesPool, selectedTabLabel } from "@/lib/dexPool";
 import { loadEndpoint, saveEndpoint } from "@/lib/endpoint";
+import {
+  resolveRunnerMode,
+  type RunnerMode,
+  type StatusFreshness,
+} from "@/lib/operatorStatus";
 
 export type Screen = "main" | "spot" | "futures" | "dex";
 export type Overlay =
@@ -112,6 +117,7 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
     set((state) => ({
       monitoringData: data,
       screen: deriveScreenFromStream(data, state.screen),
+      tradingEnabled: data?.tradingEnabled ?? state.tradingEnabled,
     })),
   setLevels: (levels) => set({ levels }),
   setStreamConnected: (streamConnected) => set({ streamConnected }),
@@ -160,16 +166,26 @@ export const useTradingStore = create<TradingStore>((set, get) => ({
     }),
 }));
 
-export function useMode(): "levels" | "strategies" | "dex" {
-  const dex = useTradingStore((s) => s.monitoringData?.dex);
-  const cexStrategies = useTradingStore(
-    (s) => s.monitoringData?.strategies ?? EMPTY_STRATEGIES,
+export function useMode(): RunnerMode {
+  const data = useTradingStore((s) => s.monitoringData);
+  const dex = data?.dex;
+  const cexStrategies = data?.strategies ?? EMPTY_STRATEGIES;
+  const dexStrategies = dex?.dexStrategies ?? EMPTY_DEX_STRATEGIES;
+  return resolveRunnerMode(
+    data?.runnerMode,
+    !!dex,
+    dex ? dexStrategies.length : cexStrategies.length,
   );
-  if (dex) {
-    const strategies = dex.dexStrategies ?? EMPTY_DEX_STRATEGIES;
-    return strategies.length > 0 ? "strategies" : "levels";
-  }
-  return cexStrategies.length > 0 ? "strategies" : "levels";
+}
+
+export function useStatusFreshness(): StatusFreshness {
+  const connected = useTradingStore((s) => s.connected);
+  const streamConnected = useTradingStore((s) => s.streamConnected);
+  const data = useTradingStore((s) => s.monitoringData);
+  const screen = useTradingStore((s) => s.screen);
+  if (!connected || !data) return "unknown";
+  if (screen !== "main" && !streamConnected) return "stale";
+  return "live";
 }
 
 export function useSelectedStrategy(): StrategyStatus | null {

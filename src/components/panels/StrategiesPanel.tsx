@@ -3,6 +3,11 @@ import { strategyEnabledVisual } from "@/api/transforms";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/shared/DataTable";
 import { PnlText } from "@/components/shared/PnlText";
+import {
+  displayReadiness,
+  exchangeOrdersLabel,
+} from "@/lib/operatorStatus";
+import { useStatusFreshness } from "@/store/tradingStore";
 
 interface StrategiesPanelProps {
   strategies: StrategyStatus[];
@@ -17,6 +22,7 @@ export function StrategiesPanel({
   onSelect,
   onOpenDetails,
 }: StrategiesPanelProps) {
+  const freshness = useStatusFreshness();
   return (
     <Card className="h-full flex flex-col min-h-0">
       <CardHeader className="pb-2">
@@ -53,12 +59,33 @@ export function StrategiesPanel({
               header: "Cap",
               render: (s) => s.maxPosition || "—",
             },
+            { key: "signal", header: "Signal", render: (s) => s.modelDirection || s.lastSignal },
+            {
+              key: "target",
+              header: "Target",
+              render: (s) => s.desiredTarget || "—",
+            },
+            {
+              key: "ready",
+              header: "Ready",
+              render: (s) => displayReadiness(freshness, s.readiness),
+            },
+            {
+              key: "disp",
+              header: "Research",
+              render: (s) => s.researchDisposition || "—",
+            },
+            {
+              key: "role",
+              header: "Role",
+              render: (s) => s.operationalRole || "—",
+            },
             {
               key: "orders",
               header: "Orders",
-              render: (s) => `${s.activeOrders}/${s.maxActiveOrders}`,
+              render: (s) =>
+                exchangeOrdersLabel(s.executionMode, s.activeOrders),
             },
-            { key: "signal", header: "Signal", render: (s) => s.lastSignal },
           ]}
         />
       </CardContent>

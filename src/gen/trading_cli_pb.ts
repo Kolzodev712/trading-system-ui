@@ -136,6 +136,27 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
    */
   enabled = false;
 
+  /**
+   * "shadow" | "exchange"
+   *
+   * @generated from field: string execution_mode = 2;
+   */
+  executionMode = "";
+
+  /**
+   * e.g. BYBIT, PAPER
+   *
+   * @generated from field: string venue = 3;
+   */
+  venue = "";
+
+  /**
+   * e.g. MAINNET, DEMO, LOCAL
+   *
+   * @generated from field: string environment = 4;
+   */
+  environment = "";
+
   constructor(data?: PartialMessage<GetTradingStatusResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -145,6 +166,9 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
   static readonly typeName = "trading_cli.GetTradingStatusResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "execution_mode", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "venue", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "environment", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTradingStatusResponse {
@@ -1851,6 +1875,46 @@ export class MonitoringData extends Message<MonitoringData> {
    */
   dex?: DexVenueSnapshot;
 
+  /**
+   * "shadow" | "exchange" — independent of venue
+   *
+   * @generated from field: string execution_mode = 12;
+   */
+  executionMode = "";
+
+  /**
+   * e.g. BYBIT, PAPER
+   *
+   * @generated from field: string venue = 13;
+   */
+  venue = "";
+
+  /**
+   * e.g. MAINNET, DEMO, LOCAL
+   *
+   * @generated from field: string environment = 14;
+   */
+  environment = "";
+
+  /**
+   * @generated from field: int64 snapshot_unix_ms = 15;
+   */
+  snapshotUnixMs = protoInt64.zero;
+
+  /**
+   * global entries/execution switch; not inferred from strategies
+   *
+   * @generated from field: bool trading_enabled = 16;
+   */
+  tradingEnabled = false;
+
+  /**
+   * "levels" | "strategies" | "dex"
+   *
+   * @generated from field: string runner_mode = 17;
+   */
+  runnerMode = "";
+
   constructor(data?: PartialMessage<MonitoringData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1870,6 +1934,12 @@ export class MonitoringData extends Message<MonitoringData> {
     { no: 9, name: "instrument_type", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 10, name: "exchange", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 11, name: "dex", kind: "message", T: DexVenueSnapshot },
+    { no: 12, name: "execution_mode", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "venue", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 14, name: "environment", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "snapshot_unix_ms", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 16, name: "trading_enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 17, name: "runner_mode", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MonitoringData {
@@ -3100,6 +3170,121 @@ export class StrategyStatus extends Message<StrategyStatus> {
    */
   maxPosition = "";
 
+  /**
+   * @generated from field: string execution_mode = 14;
+   */
+  executionMode = "";
+
+  /**
+   * @generated from field: string readiness = 15;
+   */
+  readiness = "";
+
+  /**
+   * @generated from field: string readiness_reason = 16;
+   */
+  readinessReason = "";
+
+  /**
+   * @generated from field: int64 last_completed_candle_start_ms = 17;
+   */
+  lastCompletedCandleStartMs = protoInt64.zero;
+
+  /**
+   * @generated from field: int64 last_completed_candle_end_ms = 18;
+   */
+  lastCompletedCandleEndMs = protoInt64.zero;
+
+  /**
+   * @generated from field: string last_close = 19;
+   */
+  lastClose = "";
+
+  /**
+   * @generated from field: string geometric_mean = 20;
+   */
+  geometricMean = "";
+
+  /**
+   * @generated from field: string log_spread = 21;
+   */
+  logSpread = "";
+
+  /**
+   * @generated from field: string model_direction = 22;
+   */
+  modelDirection = "";
+
+  /**
+   * @generated from field: string desired_target = 23;
+   */
+  desiredTarget = "";
+
+  /**
+   * @generated from field: string filled_position = 24;
+   */
+  filledPosition = "";
+
+  /**
+   * @generated from field: string working_qty = 25;
+   */
+  workingQty = "";
+
+  /**
+   * @generated from field: string reserved_qty = 26;
+   */
+  reservedQty = "";
+
+  /**
+   * @generated from field: string effective_qty = 27;
+   */
+  effectiveQty = "";
+
+  /**
+   * @generated from field: bool fresh_entry_eligible = 28;
+   */
+  freshEntryEligible = false;
+
+  /**
+   * @generated from field: bool unresolved_submission = 29;
+   */
+  unresolvedSubmission = false;
+
+  /**
+   * @generated from field: string research_disposition = 30;
+   */
+  researchDisposition = "";
+
+  /**
+   * @generated from field: string operational_role = 31;
+   */
+  operationalRole = "";
+
+  /**
+   * @generated from field: string strategy_version = 32;
+   */
+  strategyVersion = "";
+
+  /**
+   * @generated from field: string config_hash = 33;
+   */
+  configHash = "";
+
+  /**
+   * @generated from field: string previous_direction = 34;
+   */
+  previousDirection = "";
+
+  /**
+   * @generated from field: string recovery = 35;
+   */
+  recovery = "";
+
+  /**
+   * @generated from field: bool model_reconstructed = 36;
+   */
+  modelReconstructed = false;
+
   constructor(data?: PartialMessage<StrategyStatus>) {
     super();
     proto3.util.initPartial(data, this);
@@ -3121,6 +3306,29 @@ export class StrategyStatus extends Message<StrategyStatus> {
     { no: 11, name: "last_signal", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 12, name: "signal_strength", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "max_position", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 14, name: "execution_mode", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "readiness", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 16, name: "readiness_reason", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 17, name: "last_completed_candle_start_ms", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 18, name: "last_completed_candle_end_ms", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 19, name: "last_close", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 20, name: "geometric_mean", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 21, name: "log_spread", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 22, name: "model_direction", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 23, name: "desired_target", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 24, name: "filled_position", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 25, name: "working_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 26, name: "reserved_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 27, name: "effective_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 28, name: "fresh_entry_eligible", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 29, name: "unresolved_submission", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 30, name: "research_disposition", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 31, name: "operational_role", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 32, name: "strategy_version", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 33, name: "config_hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 34, name: "previous_direction", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 35, name: "recovery", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 36, name: "model_reconstructed", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StrategyStatus {

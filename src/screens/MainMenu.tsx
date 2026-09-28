@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { VenueModeBanner } from "@/components/layout/VenueModeBanner";
 import { useMonitorActions } from "@/hooks/useMonitorActions";
 import { useMode, useTradingStore } from "@/store/tradingStore";
 
 export function MainMenu() {
   const tradingEnabled = useTradingStore((s) => s.tradingEnabled);
   const enterMonitor = useTradingStore((s) => s.enterMonitor);
-  const exchange = useTradingStore((s) => s.monitoringData?.exchange ?? "—");
   const mode = useMode();
   const modeLabel =
     mode === "dex"
@@ -48,9 +48,9 @@ export function MainMenu() {
             Open Trading Monitor
           </Button>
 
-          <div className="text-sm text-muted-foreground border-t border-border pt-4 flex justify-between">
-            <span>Exchange: {exchange}</span>
-            <span>Mode: {modeLabel}</span>
+          <div className="text-sm text-muted-foreground border-t border-border pt-4 flex justify-between gap-3 items-center">
+            <VenueModeBanner />
+            <span>Runner: {modeLabel}</span>
           </div>
         </CardContent>
       </Card>

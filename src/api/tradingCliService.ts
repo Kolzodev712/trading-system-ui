@@ -37,7 +37,7 @@ export async function connectAndFetchInitial(): Promise<{
     client.getMonitoringData(new GetMonitoringDataRequest(), rpcOptions.default),
   ]);
   return {
-    tradingEnabled: statusRes.enabled,
+    tradingEnabled: monitoringRes.data?.tradingEnabled ?? statusRes.enabled,
     monitoringData: monitoringRes.data,
   };
 }
