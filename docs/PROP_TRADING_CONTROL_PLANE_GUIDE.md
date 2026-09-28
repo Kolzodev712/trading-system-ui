@@ -1,6 +1,6 @@
 # Prop trading browser control-plane guide
 
-**Status:** UI `d8c7b271` fixes missing/invalid snapshot timestamps and `UNKNOWN` execution mode. Local generate/test/build and matching Paper+Shadow browser checks are recorded in the primary plan. The 5R/5A local gates are accepted for Increment 5B; begin the existing Spot/levels K-paper connectivity preflight and stop before Increment 6.
+**Status:** The local 5R/5A gates and bounded 5B Spot/levels connectivity preflight are accepted for proceeding. UI `66632ed` connected through Envoy to the default levels runner and showed backend-sourced **PAPER LOCAL + EXCHANGE**. Increment 6 begins in `trading_system` and k-paper; sync this UI only if the runner status/proto contract changes, then stop for review before Increment 7.
 
 **Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Backend 5R is accepted locally for the limited 5B preflight at `f9d1299`.
 
@@ -49,7 +49,11 @@ One fail-open remains in `src/lib/operatorStatus.ts`: `computeStatusFreshness` r
 
 ## Increment 5B — Paper smoke label
 
-The backend 5R Shadow shutdown/restart corrections and matching browser status were reviewed for this limited preflight. Connect this same browser to the existing Spot/levels K-paper runner. Verify that venue and mode come from backend status, not endpoint text or local UI configuration. This is a connectivity check and cannot qualify Candidate #2's futures execution.
+The backend 5R Shadow shutdown/restart corrections and matching browser status were reviewed for this limited preflight. The 5B browser at UI `66632ed` → Envoy `:8081` → default levels runner `:50051` showed a live BTC/USDT book, mapped balances, SMA/EMA, four Spot levels, empty order/trade lists, Trading OFF and **PAPER LOCAL + EXCHANGE** in header/card/footer from the same runner fields as `grpc_ctl`. This is a locally reported connectivity check; no order was posted, and it does not qualify Candidate #2 futures or recovery.
+
+## Increment 6 — recovery status handoff
+
+Begin with backend persistence, exchange lookup and K-paper fault hooks. If the runner extends the source proto or recovery status, copy the exact proto here, regenerate the client, render unresolved reservation/Unknown and blocked-entry reasons from backend state, and verify stale status disables controls. Run generate/test/build and a matching browser → Envoy → runner check. Do not synthesize a recovery result from empty open orders or a successful RPC ACK. If the backend contract does not change in this increment, record that decision and keep this UI pinned; no standalone UI feature is required to close Increment 6.
 
 ## Increment 8 — safety controls
 
