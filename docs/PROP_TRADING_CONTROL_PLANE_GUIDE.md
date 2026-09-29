@@ -1,6 +1,6 @@
 # Prop trading browser control-plane guide
 
-**Status:** Increment 9A is accepted locally as a Paper qualification. Increment 10 preflight moves operator authorization to Envoy/runner secrets; UI login is not a runner authorization boundary. Demo entries stay paused. Candidate #2 remains an operational baseline, not validated alpha.
+**Status:** Increment 9A is accepted locally as a Paper qualification. Increment 10 is accepted as a bounded Bybit Demo operational qualification (synthetic signal; runner pack `docs/inc10-evidence-measured-e923fa8/`). Demo entries stay paused unless the owner explicitly Resumes. Candidate #2 remains an operational baseline, not validated alpha. This UI is not production complete or mainnet ready. Open outside this repo: validate Candidate #2 as a strategy; separate mainnet readiness. Operator flatten journal/recovery and CancelWorking-from-FlattenAndPause are runner work (no UI proto change unless the contract changes).
 
 **Primary plan:** [Prop Trading Productionization and Research Architecture Plan](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROP_TRADING_RESEARCH_AND_PRODUCTION_PLAN.md), especially sections 27, 30, 46, 48–49 and Increments 5R, 5A, 5B, 8, 9, 9A and 10. The 5A correction and Paper+Shadow browser checks are reported in the main plan. Backend 5R is accepted locally for the limited 5B preflight at `f9d1299`.
 
@@ -23,7 +23,7 @@ This repository is the next-generation **browser** operator layer. The old Rust 
 | Global/strategy actions and environment chrome | `src/hooks/useMonitorActions.ts`, `src/components/layout/{AppHeader,MonitorToolbar,StatusBar}.tsx` |
 | Auth service | `server/index.ts`, `server/seed.ts` |
 
-At `0476c58`, `MonitoringData` carries runner mode, venue/environment, execution mode and strategy snapshots, and the UI copies the source proto and generated client. The four future safety commands are still absent. Verify the complete status contract against the matching runner rather than inferring mode from a strategy count or reporting stale context as healthy.
+`PauseEntries`, `CancelWorking`, `FlattenAndPause`, and `Resume` are present. Flatten RPC success is not flat. Operator flatten durability is a runner/journal concern, not a UI proto change unless the contract changes.
 
 ## Backend-first contract workflow
 
