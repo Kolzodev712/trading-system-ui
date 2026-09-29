@@ -1,6 +1,10 @@
 # Trading System UI
 
-Browser dashboard for the [trading_system](https://github.com/Kolzodev712/trading_system) runner. A thin **gRPC-Web client** that replaces the Rust TUI (`trading-cli`) with a modern web interface — same API, no duplicate backend.
+Browser dashboard for the [trading_system](https://github.com/Kolzodev712/trading_system) runner. A thin **gRPC-Web client** — same runner API, no duplicate backend.
+
+**Status (2026-09-29):** Increments 0–9A are accepted locally as a Paper qualification. Increment 10 is accepted as bounded Bybit Demo operational qualification (synthetic signal). This UI is not exchange authority. Candidate #2 is an operational baseline, not validated alpha. The system is **not** production complete and **not** mainnet ready.
+
+Pinned with `trading_system` `9598044` and k-paper `6d03acc` at the start of the operator-flatten recovery work. See [docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md).
 
 ```
 Browser (:5173)  →  Auth API (:3001) + MongoDB (:27017)
