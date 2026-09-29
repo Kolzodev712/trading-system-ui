@@ -2,9 +2,9 @@
 
 Browser dashboard for the [trading_system](https://github.com/Kolzodev712/trading_system) runner. A thin **gRPC-Web client** — same runner API, no duplicate backend.
 
-**Status (2026-09-29):** Increments 0–9A are accepted locally as a Paper qualification. Increment 10 is accepted as bounded Bybit Demo operational qualification (synthetic signal). This UI is not exchange authority. Candidate #2 is an operational baseline, not validated alpha. The system is **not** production complete and **not** mainnet ready.
+This UI is not exchange authority. Candidate #2 is an operational baseline, not validated alpha. The system is **not** production complete and **not** mainnet ready.
 
-Pinned with `trading_system` `9598044` and k-paper `6d03acc` at the start of the operator-flatten recovery work. See [docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md).
+Increment status and next gates: [trading_system progression](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROGRESSION.md). This repo's increment notes: [docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md).
 
 ```
 Browser (:5173)  →  Auth API (:3001) + MongoDB (:27017)
@@ -51,7 +51,7 @@ See [docs/development.md](docs/development.md) for full setup and troubleshootin
 | [Feature reference](docs/feature-reference.md) | Screens, DEX monitor, shortcuts, parity |
 | [Deployment](docs/deployment.md) | Production build and hosting |
 | [gRPC API](docs/grpc-api.md) | RPC contract and proto sync |
-| [Prop trading control plane](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md) | Cursor handoff for Candidate #2 status, Paper/demo labels, safety controls and cross-repo gates |
+| [Prop trading control plane](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md) | Increment record for this UI (Paper/Demo labels, safety controls) |
 | [Publishing](docs/publishing.md) | First-time GitHub push checklist |
 | [Changelog](CHANGELOG.md) | Release history |
 
