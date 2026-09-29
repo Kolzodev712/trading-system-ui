@@ -5,6 +5,7 @@ import {
   exchangeOrdersLabel,
   executionPausedNote,
   formatCandidateIdentity,
+  formatHoldGate,
   formatSessionLabel,
   formatVenueMode,
   resolveRunnerMode,
@@ -23,6 +24,38 @@ describe("formatCandidateIdentity", () => {
         executionMode: "shadow",
       }),
     ).toBe("REJECTED AS VALIDATED ALPHA · BASELINE · SHADOW");
+  });
+});
+
+describe("formatHoldGate", () => {
+  it("prints reconstructed freshness age and eligibility", () => {
+    expect(
+      formatHoldGate({
+        modelReconstructed: true,
+        freshEntryEligible: false,
+        entryFreshness: "stale",
+        lastFlatToLongAgeSecs: 901103,
+      }),
+    ).toBe("reconstructed; stale; age_secs=901103; not eligible");
+  });
+
+  it("prints a fresh eligible gate and treats proto -1 as no age", () => {
+    expect(
+      formatHoldGate({
+        modelReconstructed: true,
+        freshEntryEligible: true,
+        entryFreshness: "fresh",
+        lastFlatToLongAgeSecs: 42332,
+      }),
+    ).toBe("reconstructed; fresh; age_secs=42332; eligible");
+    expect(
+      formatHoldGate({
+        modelReconstructed: true,
+        freshEntryEligible: false,
+        entryFreshness: "no_live_transition",
+        lastFlatToLongAgeSecs: -1n,
+      }),
+    ).toBe("reconstructed; no_live_transition; age_secs=none; not eligible");
   });
 });
 

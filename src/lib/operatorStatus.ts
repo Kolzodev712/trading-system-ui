@@ -4,6 +4,26 @@ export type RunnerMode = "levels" | "strategies" | "dex";
 export const SNAPSHOT_STALE_MS = 15_000;
 export const STREAM_SILENCE_MS = 8_000;
 
+export function formatHoldGate(args: {
+  modelReconstructed?: boolean;
+  freshEntryEligible?: boolean;
+  entryFreshness?: string;
+  lastFlatToLongAgeSecs?: bigint | number;
+}): string {
+  const recon = args.modelReconstructed ? "reconstructed" : "not reconstructed";
+  const freshness = (args.entryFreshness || "unknown").trim() || "unknown";
+  let age = "none";
+  if (args.lastFlatToLongAgeSecs !== undefined && args.lastFlatToLongAgeSecs !== null) {
+    const n =
+      typeof args.lastFlatToLongAgeSecs === "bigint"
+        ? Number(args.lastFlatToLongAgeSecs)
+        : args.lastFlatToLongAgeSecs;
+    if (Number.isFinite(n) && n >= 0) age = String(n);
+  }
+  const eligible = args.freshEntryEligible ? "eligible" : "not eligible";
+  return `${recon}; ${freshness}; age_secs=${age}; ${eligible}`;
+}
+
 export function formatVenueMode(
   venue: string | undefined,
   environment: string | undefined,
