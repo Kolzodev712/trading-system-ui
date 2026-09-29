@@ -8,7 +8,7 @@ import {
 import { useOperatorCommands, useOperatorConfirm } from "@/hooks/useOperatorCommands";
 import { operatorActionConsequence, operatorActionLabel, type OperatorAction } from "@/lib/operatorCommands";
 import { useControlsEnabled, useTradingStore } from "@/store/tradingStore";
-import { formatVenueMode } from "@/lib/operatorStatus";
+import { formatHoldGate, formatVenueMode } from "@/lib/operatorStatus";
 
 const ACTIONS: OperatorAction[] = [
   "PauseEntries",
@@ -23,6 +23,13 @@ export function OperatorControls() {
   const { run, running } = useOperatorCommands();
   const { pending, setPending } = useOperatorConfirm();
   const venueLabel = formatVenueMode(data?.venue, data?.environment, data?.executionMode);
+  const holdStrategy = data?.strategies?.[0];
+  const holdGate = formatHoldGate({
+    modelReconstructed: holdStrategy?.modelReconstructed,
+    freshEntryEligible: holdStrategy?.freshEntryEligible,
+    entryFreshness: holdStrategy?.entryFreshness,
+    lastFlatToLongAgeSecs: holdStrategy?.lastFlatToLongAgeSecs,
+  });
   const positions = data?.positions ?? [];
   const working = data?.orders ?? [];
   const scope = "account";
@@ -65,6 +72,9 @@ export function OperatorControls() {
                 Runner operator:{" "}
                 <span className="font-mono">{data?.operatorId || "unconfigured"}</span>
                 {" "}(not the UI login)
+              </p>
+              <p>
+                Hold gate: <span className="font-mono">{holdGate}</span>
               </p>
               <p>
                 Scope: <span className="font-mono">{scope}</span>

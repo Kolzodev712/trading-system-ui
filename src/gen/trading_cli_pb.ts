@@ -3464,6 +3464,20 @@ export class StrategyStatus extends Message<StrategyStatus> {
   freshEntryEligible = false;
 
   /**
+   * -1 if no live flat-to-long transition
+   *
+   * @generated from field: int64 last_flat_to_long_age_secs = 37;
+   */
+  lastFlatToLongAgeSecs = protoInt64.zero;
+
+  /**
+   * fresh | stale | no_live_transition | unconfigured
+   *
+   * @generated from field: string entry_freshness = 38;
+   */
+  entryFreshness = "";
+
+  /**
    * @generated from field: bool unresolved_submission = 29;
    */
   unresolvedSubmission = false;
@@ -3539,6 +3553,8 @@ export class StrategyStatus extends Message<StrategyStatus> {
     { no: 26, name: "reserved_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 27, name: "effective_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 28, name: "fresh_entry_eligible", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 37, name: "last_flat_to_long_age_secs", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 38, name: "entry_freshness", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 29, name: "unresolved_submission", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 30, name: "research_disposition", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 31, name: "operational_role", kind: "scalar", T: 9 /* ScalarType.STRING */ },
