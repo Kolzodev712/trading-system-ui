@@ -208,6 +208,14 @@ export async function cancelDexPoolOrders(pool: string) {
   );
 }
 
+export function omitUnsetDecimal(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const value = Number(trimmed);
+  if (Number.isFinite(value) && value === 0) return "";
+  return trimmed;
+}
+
 export async function createLevel(values: CreateLevelFormValues) {
   const config = new LevelConfig({
     id: values.levelId.trim(),
@@ -220,8 +228,8 @@ export async function createLevel(values: CreateLevelFormValues) {
     enabled: values.enabled,
     price: wrapFixed(values.price),
     quantity: wrapFixed(values.quantity),
-    riskLimit: values.riskLimit.trim() || "0",
-    maxPositionSize: values.maxPosition.trim() || "0",
+    riskLimit: omitUnsetDecimal(values.riskLimit),
+    maxPositionSize: omitUnsetDecimal(values.maxPosition),
     repostOnFill: values.repostOnFill,
     repostOnCancel: values.repostOnCancel,
   });
@@ -242,8 +250,8 @@ export interface EditLevelValues {
 export async function updateLevel(levelId: string, values: EditLevelValues) {
   const config = new LevelConfig({
     enabled: values.enabled,
-    riskLimit: values.riskLimit.trim() || undefined,
-    maxPositionSize: values.maxPosition.trim() || undefined,
+    riskLimit: omitUnsetDecimal(values.riskLimit),
+    maxPositionSize: omitUnsetDecimal(values.maxPosition),
     repostOnFill: values.repostOnFill,
     repostOnCancel: values.repostOnCancel,
     side: "",

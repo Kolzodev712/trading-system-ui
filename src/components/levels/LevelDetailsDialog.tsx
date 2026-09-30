@@ -39,7 +39,6 @@ function LevelDetailsContent({ level }: { level: Level }) {
       <Row label="Order Type" value={c?.orderType ?? "—"} />
       <Row label="Price" value={c?.price ? stripFixed(c.price) : "—"} />
       <Row label="Quantity" value={c?.quantity ? stripFixed(c.quantity) : "—"} />
-      <Row label="Risk Limit" value={c?.riskLimit ?? "—"} />
       <Row label="Max Position" value={c?.maxPositionSize ?? "—"} />
       <Row label="Repost on Fill" value={c?.repostOnFill ? "Yes" : "No"} />
       <Row label="Repost on Cancel" value={c?.repostOnCancel ? "Yes" : "No"} />

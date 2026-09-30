@@ -54,6 +54,7 @@ export function FuturesMonitor() {
         onDetails={() => void showDetails()}
         onCreate={!isStrategies ? () => setOverlay("createLevel") : undefined}
         onEdit={!isStrategies ? () => setOverlay("editLevel") : undefined}
+        onDelete={!isStrategies ? () => setOverlay("deleteLevel") : undefined}
         refreshing={refreshing}
         toggling={togglingSelected}
       />

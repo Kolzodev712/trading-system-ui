@@ -5,6 +5,7 @@ import {
   Plus,
   Power,
   RefreshCw,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +23,7 @@ interface MonitorToolbarProps {
   onDetails: () => void;
   onCreate?: () => void;
   onEdit?: () => void;
+  onDelete?: () => void;
   onBack: () => void;
   refreshing?: boolean;
   toggling?: boolean;
@@ -33,6 +35,7 @@ export function MonitorToolbar({
   onDetails,
   onCreate,
   onEdit,
+  onDelete,
   onBack,
   refreshing,
   toggling,
@@ -105,6 +108,17 @@ export function MonitorToolbar({
             >
               <Pencil className="h-4 w-4" />
               Edit
+            </Button>
+          )}
+          {onDelete && hasSelection && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onDelete}
+              disabled={!controlsEnabled}
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete
             </Button>
           )}
         </>

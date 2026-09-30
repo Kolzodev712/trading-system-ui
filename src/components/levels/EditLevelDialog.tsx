@@ -90,12 +90,6 @@ export function EditLevelDialog() {
               onChange={(e) => setQuantity(e.target.value)}
             />
           </Field>
-          <Field label="Risk Limit">
-            <Input
-              value={riskLimit}
-              onChange={(e) => setRiskLimit(e.target.value)}
-            />
-          </Field>
           <Field label="Max Position">
             <Input
               value={maxPosition}
