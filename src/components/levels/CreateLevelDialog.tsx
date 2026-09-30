@@ -31,8 +31,8 @@ const initialValues: CreateLevelFormValues = {
   enabled: true,
   price: "",
   quantity: "",
-  riskLimit: "0",
-  maxPosition: "0",
+  riskLimit: "",
+  maxPosition: "",
   repostOnFill: false,
   repostOnCancel: false,
 };
@@ -150,14 +150,6 @@ export function CreateLevelDialog() {
               value={values.quantity}
               onChange={(e) =>
                 setValues({ ...values, quantity: e.target.value })
-              }
-            />
-          </Field>
-          <Field label="Risk Limit">
-            <Input
-              value={values.riskLimit}
-              onChange={(e) =>
-                setValues({ ...values, riskLimit: e.target.value })
               }
             />
           </Field>

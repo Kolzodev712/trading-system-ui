@@ -26,6 +26,7 @@ export type Overlay =
   | "strategyDetails"
   | "createLevel"
   | "editLevel"
+  | "deleteLevel"
   | "dexQuoteDetails"
   | "dexStrategyDetails";
 

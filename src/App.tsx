@@ -6,7 +6,7 @@ import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { StatusBar } from "@/components/layout/StatusBar";
 import { DexQuoteDetailsDialog } from "@/components/dex/DexQuoteDetailsDialog";
 import { DexStrategyDetailsDialog } from "@/components/dex/DexStrategyDetailsDialog";
-import { DeleteLevelStub } from "@/components/levels/DeleteLevelStub";
+import { DeleteLevelDialog } from "@/components/levels/DeleteLevelDialog";
 import { CreateLevelDialog } from "@/components/levels/CreateLevelDialog";
 import { EditLevelDialog } from "@/components/levels/EditLevelDialog";
 import { LevelDetailsDialog } from "@/components/levels/LevelDetailsDialog";
@@ -89,7 +89,7 @@ function TradingApp() {
       <DexStrategyDetailsDialog />
       <CreateLevelDialog />
       <EditLevelDialog />
-      <DeleteLevelStub />
+      <DeleteLevelDialog />
       <Toaster theme="dark" position="top-right" richColors />
     </div>
   );

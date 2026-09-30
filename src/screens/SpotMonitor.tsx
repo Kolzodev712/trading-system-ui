@@ -51,6 +51,7 @@ export function SpotMonitor() {
         onDetails={() => void showDetails()}
         onCreate={() => setOverlay("createLevel")}
         onEdit={() => setOverlay("editLevel")}
+        onDelete={() => setOverlay("deleteLevel")}
         refreshing={refreshing}
         toggling={togglingSelected}
       />

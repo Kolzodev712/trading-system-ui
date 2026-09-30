@@ -13,6 +13,7 @@ import {
 import { matchesPool, normalizePool } from "@/lib/dexPool";
 import { configIdFromExpanded } from "@/lib/levelId";
 import { validateCreateLevelForm } from "@/lib/validation";
+import { omitUnsetDecimal } from "@/api/tradingCliService";
 
 describe("levelEnabledIndicator", () => {
   it("matches TUI rules", () => {
@@ -68,6 +69,15 @@ describe("validateCreateLevelForm", () => {
         repostOnCancel: false,
       }),
     ).toBe("Level ID is required");
+  });
+});
+
+describe("omitUnsetDecimal", () => {
+  it("drops empty and zero defaults the UI used to send", () => {
+    expect(omitUnsetDecimal("")).toBe("");
+    expect(omitUnsetDecimal("0")).toBe("");
+    expect(omitUnsetDecimal("0.0")).toBe("");
+    expect(omitUnsetDecimal("0.01")).toBe("0.01");
   });
 });
 
