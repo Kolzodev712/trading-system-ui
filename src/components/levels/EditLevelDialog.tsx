@@ -24,7 +24,6 @@ export function EditLevelDialog() {
   const invalidateLevels = useInvalidateLevels();
   const controlsEnabled = useControlsEnabled();
 
-  const [enabled, setEnabled] = useState(true);
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [riskLimit, setRiskLimit] = useState("");
@@ -35,7 +34,6 @@ export function EditLevelDialog() {
   useEffect(() => {
     if (selectedLevel?.config) {
       const c = selectedLevel.config;
-      setEnabled(selectedLevel.enabled);
       setPrice(c.price ? stripFixed(c.price) : "");
       setQuantity(c.quantity ? stripFixed(c.quantity) : "");
       setRiskLimit(c.riskLimit ?? "");
@@ -50,7 +48,7 @@ export function EditLevelDialog() {
       if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
       if (!selectedLevel) throw new Error("No level selected");
       return updateLevel(selectedLevel.id, {
-        enabled,
+        enabled: selectedLevel.enabled,
         price,
         quantity,
         riskLimit,
@@ -77,10 +75,6 @@ export function EditLevelDialog() {
           <DialogTitle>Edit Level — {selectedLevel?.id ?? ""}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-3">
-          <div className="flex items-center gap-2">
-            <Switch checked={enabled} onCheckedChange={setEnabled} />
-            <Label>Enabled</Label>
-          </div>
           <Field label="Price (empty = keep)">
             <Input value={price} onChange={(e) => setPrice(e.target.value)} />
           </Field>

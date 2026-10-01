@@ -248,6 +248,7 @@ export interface EditLevelValues {
 }
 
 export async function updateLevel(levelId: string, values: EditLevelValues) {
+  // `enabled` is echoed as the current flag. Enable/disable uses ToggleLevel.
   const config = new LevelConfig({
     enabled: values.enabled,
     riskLimit: omitUnsetDecimal(values.riskLimit),
