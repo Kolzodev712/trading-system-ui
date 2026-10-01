@@ -40,6 +40,7 @@ export function OperatorControls() {
         {ACTIONS.map((action) => (
           <Button
             key={action}
+            data-testid={`operator-${action}`}
             variant={action === "FlattenAndPause" ? "destructive" : "outline"}
             size="sm"
             disabled={!controlsEnabled || running}
@@ -52,8 +53,15 @@ export function OperatorControls() {
       <p className="text-xs text-muted-foreground">
         Pause/flatten are separate from the global toggle
         {data?.globalToggleSemantics ? ` (${data.globalToggleSemantics})` : ""}.
-        Entries paused: {data?.entriesPaused ? "yes" : "no"}. Flatten latch:{" "}
-        {data?.flattenLatched ? "held" : "clear"}.
+        Entries paused:{" "}
+        <span data-testid="operator-entries-paused">
+          {data?.entriesPaused ? "yes" : "no"}
+        </span>
+        . Flatten latch:{" "}
+        <span data-testid="operator-flatten-latched">
+          {data?.flattenLatched ? "held" : "clear"}
+        </span>
+        .
       </p>
 
       <Dialog open={pending != null} onOpenChange={(open) => !open && setPending(null)}>
@@ -101,6 +109,7 @@ export function OperatorControls() {
                   Cancel
                 </Button>
                 <Button
+                  data-testid="operator-confirm"
                   variant={pending === "FlattenAndPause" ? "destructive" : "default"}
                   disabled={running}
                   onClick={() => {
