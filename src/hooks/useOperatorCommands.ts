@@ -10,12 +10,14 @@ import {
 } from "@/api/tradingCliService";
 import { STALE_CONTROLS_MESSAGE } from "@/lib/operatorStatus";
 import {
-  flattenDisplayState,
   newOperatorRequestId,
   operatorActionConsequence,
   operatorActionLabel,
+  operatorCommandFeedback,
+  type MonitoringRefresh,
   type OperatorAction,
   type OperatorCommandView,
+  type OperatorFeedback,
 } from "@/lib/operatorCommands";
 import { useControlsEnabled, useTradingStore } from "@/store/tradingStore";
 
@@ -39,10 +41,46 @@ function viewFromResponse(res: {
   };
 }
 
+function showOperatorToast(feedback: OperatorFeedback) {
+  if (feedback.kind === "error") {
+    toast.error(feedback.toast);
+    return;
+  }
+  if (feedback.kind === "progress") {
+    toast.message(feedback.toast);
+    return;
+  }
+  toast.success(feedback.toast);
+}
+
+async function refreshMonitoring(): Promise<{
+  refresh: MonitoringRefresh;
+  data: Awaited<ReturnType<typeof getMonitoringData>>;
+}> {
+  try {
+    const latest = await getMonitoringData();
+    if (!latest) {
+      return { refresh: { status: "empty" }, data: undefined };
+    }
+    return {
+      refresh: {
+        status: "ok",
+        positions: (latest.positions ?? []).map((p) => ({
+          symbol: p.symbol,
+          quantity: p.quantity,
+        })),
+      },
+      data: latest,
+    };
+  } catch {
+    return { refresh: { status: "failed" }, data: undefined };
+  }
+}
+
 export function useOperatorCommands() {
   const controlsEnabled = useControlsEnabled();
-  const data = useTradingStore((s) => s.monitoringData);
   const setMonitoringData = useTradingStore((s) => s.setMonitoringData);
+  const [feedback, setFeedback] = useState<OperatorFeedback | null>(null);
 
   const run = async (action: OperatorAction) => {
     if (!controlsEnabled) throw new Error(STALE_CONTROLS_MESSAGE);
@@ -57,34 +95,33 @@ export function useOperatorCommands() {
             ? await flattenAndPause(requestId, symbol)
             : await resumeEntries(requestId, symbol);
     const view = viewFromResponse(res);
-    const latest = await getMonitoringData();
-    if (latest) setMonitoringData(latest);
-    if (action === "FlattenAndPause") {
-      const positions = (latest?.positions ?? data?.positions ?? []).map((p) => ({
-        symbol: p.symbol,
-        quantity: p.quantity,
-      }));
-      const shown = flattenDisplayState(view, positions);
-      if (shown !== "completed") {
-        toast.message(
-          `Flatten ${shown}: ${view.message}. Positions still open are not treated as flat.`,
-        );
-        return view;
-      }
-    }
-    toast.success(view.message || `${operatorActionLabel(action)} ${view.state}`);
+    const { refresh, data } = await refreshMonitoring();
+    if (data) setMonitoringData(data);
+    const next = operatorCommandFeedback(action, view, refresh);
+    setFeedback(next);
+    showOperatorToast(next);
     return view;
   };
 
   const mutation = useMutation({
     mutationFn: run,
-    onError: (err) => toast.error(String(err)),
+    onError: (err) => {
+      const message = String(err);
+      const next: OperatorFeedback = {
+        kind: "error",
+        toast: message,
+        status: message,
+      };
+      setFeedback(next);
+      toast.error(message);
+    },
   });
 
   return {
     run: (action: OperatorAction) => mutation.mutate(action),
     running: mutation.isPending,
     last: mutation.data,
+    feedback,
     consequence: operatorActionConsequence,
     label: operatorActionLabel,
   };

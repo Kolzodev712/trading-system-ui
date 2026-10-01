@@ -20,7 +20,7 @@ const ACTIONS: OperatorAction[] = [
 export function OperatorControls() {
   const controlsEnabled = useControlsEnabled();
   const data = useTradingStore((s) => s.monitoringData);
-  const { run, running } = useOperatorCommands();
+  const { run, running, feedback } = useOperatorCommands();
   const { pending, setPending } = useOperatorConfirm();
   const venueLabel = formatVenueMode(data?.venue, data?.environment, data?.executionMode);
   const holdStrategy = data?.strategies?.[0];
@@ -63,6 +63,15 @@ export function OperatorControls() {
         </span>
         .
       </p>
+      {feedback && (
+        <p
+          data-testid="operator-command-status"
+          data-kind={feedback.kind}
+          className="text-xs"
+        >
+          {feedback.status}
+        </p>
+      )}
 
       <Dialog open={pending != null} onOpenChange={(open) => !open && setPending(null)}>
         <DialogContent>
