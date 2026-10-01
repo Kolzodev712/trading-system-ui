@@ -87,6 +87,7 @@ export function WelcomeScreen() {
 
           {step === 1 ? (
             <form
+              data-testid="sign-in-form"
               className="space-y-5"
               onSubmit={(e) => {
                 e.preventDefault();
