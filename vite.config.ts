@@ -10,7 +10,7 @@ const proxy = {
   "/grpc": {
     target: process.env.GRPC_WEB_PROXY ?? "http://127.0.0.1:8081",
     changeOrigin: true,
-    timeout: 5_000,
+    timeout: 0,
     rewrite: (p: string) => p.replace(/^\/grpc/, ""),
   },
 };
