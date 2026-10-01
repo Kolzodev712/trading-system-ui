@@ -185,6 +185,7 @@ export function WelcomeScreen() {
               )}
 
               <Button
+                data-testid="connect-runner"
                 className="w-full"
                 size="lg"
                 disabled={connecting}

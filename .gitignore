@@ -7,3 +7,5 @@ target
 .DS_Store
 *.tsbuildinfo
 .cursor
+/test-results/
+/playwright-report/
