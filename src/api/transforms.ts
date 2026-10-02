@@ -64,6 +64,36 @@ export function reverseTrades<T>(trades: T[]): T[] {
   return [...trades].reverse();
 }
 
+/** CEX monitoring emits private account executions, newest first. Sort explicitly
+ * before DataTable applies its 15-row limit; never reverse the latest page. */
+export function newestTradesFirst<T extends { timestamp: bigint | number }>(
+  trades: T[],
+): T[] {
+  return [...trades].sort((a, b) =>
+    a.timestamp === b.timestamp ? 0 : a.timestamp > b.timestamp ? -1 : 1,
+  );
+}
+
+const sofiaTradeTime = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Sofia",
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hourCycle: "h23",
+  timeZoneName: "short",
+});
+
+/** Trade.timestamp is Unix milliseconds from the exchange, not seconds. */
+export function formatTradeTimeSofia(timestamp: bigint | number): string {
+  const millis = Number(timestamp);
+  if (!Number.isFinite(millis) || millis <= 0) return "—";
+  const date = new Date(millis);
+  return Number.isNaN(date.getTime()) ? "—" : sofiaTradeTime.format(date);
+}
+
 export function sumDecimalStrings(values: string[]): number {
   return values.reduce((sum, v) => {
     const n = parseFloat(v);

@@ -120,7 +120,7 @@ export function FuturesMonitor() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-          <TradesPanel trades={data.trades} />
+          <TradesPanel trades={data.trades} title="Recent Account Executions (24h)" />
           {data.aggregated && <AggregatedPanel aggregated={data.aggregated} />}
         </div>
       </div>

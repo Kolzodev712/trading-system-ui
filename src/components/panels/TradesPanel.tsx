@@ -1,17 +1,16 @@
 import type { Trade } from "@/gen/trading_cli_pb";
-import { reverseTrades } from "@/api/transforms";
+import { formatTradeTimeSofia, newestTradesFirst, truncateMiddle } from "@/api/transforms";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/shared/DataTable";
 import { SideText } from "@/components/shared/PnlText";
-import { formatTimestamp } from "@/lib/utils";
 
-export function TradesPanel({ trades }: { trades: Trade[] }) {
-  const display = reverseTrades(trades);
+export function TradesPanel({ trades, title = "Recent Trades" }: { trades: Trade[]; title?: string }) {
+  const display = newestTradesFirst(trades);
 
   return (
     <Card className="h-full flex flex-col min-h-0">
       <CardHeader>
-        <CardTitle>Recent Trades</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 min-h-0 overflow-hidden">
         <DataTable
@@ -24,9 +23,18 @@ export function TradesPanel({ trades }: { trades: Trade[] }) {
             { key: "price", header: "Price", render: (t) => t.price },
             { key: "qty", header: "Qty", render: (t) => t.quantity },
             {
+              key: "ids",
+              header: "Order / Exec ID",
+              render: (t) => (
+                <span title={`Order: ${t.orderId}\nExecution: ${t.tradeId}`}>
+                  {truncateMiddle(t.orderId, 6, 4)} / {truncateMiddle(t.tradeId, 6, 4)}
+                </span>
+              ),
+            },
+            {
               key: "time",
               header: "Time",
-              render: (t) => formatTimestamp(t.timestamp),
+              render: (t) => formatTradeTimeSofia(t.timestamp),
             },
           ]}
         />

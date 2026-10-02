@@ -79,6 +79,8 @@ DEX header shows stream reconnect state and indicator freshness (`src/lib/dexHea
 
 ## CEX monitors
 
+The **Recent Account Executions (24h)** panel on Spot/Futures displays the runner's private venue executions for the configured account and instrument category. It includes account fills from before this runner started; it does not show public market trades or filter to one strategy/run. Rows are newest first, show order/execution IDs, and show the execution time in `Europe/Sofia` (EEST in summer, EET in winter).
+
 - **Spot / Futures** — levels or strategies mode from `strategies.length`
 - **Levels poll** — `GetLevels` every 5s on spot **and** futures monitors (not DEX)
 - **Aggregated panel** — web-only extra on spot sidebar
