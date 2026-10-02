@@ -113,7 +113,7 @@ export function SpotMonitor() {
         </div>
 
         <div className="min-h-[140px]">
-          <TradesPanel trades={data.trades} />
+          <TradesPanel trades={data.trades} title="Recent Account Executions (24h)" />
         </div>
       </div>
     </div>
