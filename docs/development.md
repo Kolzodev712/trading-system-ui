@@ -61,7 +61,7 @@ Open **http://127.0.0.1:5173** → sign in with `admin` / `admin` → **Connect 
 When the backend proto changes:
 
 ```bash
-cp ../trading_system/libs/trading_core/proto/trading_cli.proto proto/
+cp ../trading_system/libs/trading_proto/proto/trading_cli.proto proto/
 npm run generate
 npm test && npm run build
 ```

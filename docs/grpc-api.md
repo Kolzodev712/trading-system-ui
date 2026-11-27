@@ -84,7 +84,7 @@ grpcurl -plaintext localhost:50051 trading_cli.TradingCliService/GetMonitoringDa
 ## Syncing from backend
 
 ```bash
-cp /path/to/trading_system/libs/trading_core/proto/trading_cli.proto proto/
+cp /path/to/trading_system/libs/trading_proto/proto/trading_cli.proto proto/
 npm run generate
 ```
 

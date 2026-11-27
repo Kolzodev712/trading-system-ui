@@ -95,7 +95,7 @@ Run `npm run dev:all` for UI + auth API together.
 ## Proto sync
 
 ```bash
-cp ../trading_system/libs/trading_core/proto/trading_cli.proto proto/
+cp ../trading_system/libs/trading_proto/proto/trading_cli.proto proto/
 npm run generate
 ```
 
@@ -118,5 +118,5 @@ Manual DEX checklist:
 | Doc | Location |
 |-----|----------|
 | TUI reference | `trading_system/docs/features/tui-grpc-reference.md` |
-| Proto source | `trading_system/libs/trading_core/proto/trading_cli.proto` |
+| Proto source | `trading_system/libs/trading_proto/proto/trading_cli.proto` |
 | DEX TUI source | `trading_system/cli/src/screens/dex_monitor/` |

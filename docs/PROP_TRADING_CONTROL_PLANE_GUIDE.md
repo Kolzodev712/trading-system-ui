@@ -8,7 +8,7 @@
 
 This repository is the next-generation **browser** operator layer. The old Rust `cli`/TUI is a separate compatibility/debug client. The browser renders the actual runner's decisions and sends operator requests through the runner API; it never evaluates a strategy, calculates exchange exposure/readiness as an authority, reads `bot.json`, or calls K-paper/Bybit directly.
 
-`trading_system`'s Candidate #2 composition app instantiates the model adapter and generic runner in **one process**. The runner owns strategy status, risk/execution/recovery state and the source `libs/trading_core/proto/trading_cli.proto`; its crate and `trading_engine` do not depend on model/research crates. This repo owns presentation, interaction state, confirmations and its auth UI/API. `k-paper` is a separate test venue behind the runner's exchange abstraction.
+`trading_system`'s Candidate #2 composition app instantiates the model adapter and generic runner in **one process**. The runner owns strategy status, risk/execution/recovery state and the source `libs/trading_proto/proto/trading_cli.proto`; its crate and `trading_engine` do not depend on model/research crates. This repo owns presentation, interaction state, confirmations and its auth UI/API. `k-paper` is a separate test venue behind the runner's exchange abstraction.
 
 ## Current path and starting points
 
