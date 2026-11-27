@@ -4,7 +4,7 @@ Browser dashboard for the [trading_system](https://github.com/Kolzodev712/tradin
 
 This UI is not exchange authority. Candidate #2 is an operational baseline, not validated alpha. The system is **not** production complete and **not** mainnet ready.
 
-Increment status and next gates: [trading_system progression](https://github.com/Kolzodev712/trading_system/blob/master/docs/PROGRESSION.md). This repo's increment notes: [docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md).
+Increment status and next gates: [trading_system progression](https://github.com/Kolzodev712/trading_system/blob/main/docs/PROGRESSION.md). This repo's increment notes: [docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md](docs/PROP_TRADING_CONTROL_PLANE_GUIDE.md).
 
 ```
 Browser (:5173)  →  Auth API (:3001) + MongoDB (:27017)
@@ -63,7 +63,11 @@ See [docs/development.md](docs/development.md) for full setup and troubleshootin
 | `npm run dev` | Vite dev server with hot reload |
 | `npm run build` | Production build to `dist/` |
 | `npm run generate` | Regenerate TypeScript from `proto/` |
-| `npm test` | Unit tests |
+| `npm test` | Unit tests (Vitest) |
+| `npm run test:paper-e2e` | Playwright paper control-plane checks |
+| `npm run lint` | ESLint |
+| `npm run proxy:up` / `proxy:down` | Envoy gRPC-Web proxy |
+| `npm run mongo:up` / `stack:up` / `stack:down` | Local Mongo / Envoy+Mongo helpers |
 | `npm run server` | Auth API (Express + MongoDB) on `:3001` |
 | `npm run dev:all` | UI dev server + auth API together |
 
