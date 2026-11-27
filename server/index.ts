@@ -4,9 +4,12 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { getDb, closeDb, type CredentialDoc } from "./db.js";
 import { seedCredentials } from "./seed.js";
+import { resolveAuthMode, resolveJwtSecret } from "./authConfig.js";
 
 const PORT = Number(process.env.AUTH_PORT ?? 3001);
-const JWT_SECRET = process.env.JWT_SECRET ?? "dev-only-change-in-production";
+const authMode = resolveAuthMode();
+const JWT_SECRET = resolveJwtSecret(authMode);
+const labMode = authMode === "lab";
 
 interface AuthPayload {
   sub: string;
@@ -18,7 +21,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, authMode, labMode });
 });
 
 app.post("/api/auth/login", async (req, res) => {
@@ -77,10 +80,12 @@ app.get("/api/auth/me", async (req, res) => {
 
 async function main() {
   const db = await getDb();
-  await seedCredentials(db);
+  await seedCredentials(db, { allowDevSeed: labMode });
 
   const server = app.listen(PORT, "127.0.0.1", () => {
-    console.log(`[auth] API listening on http://127.0.0.1:${PORT}`);
+    console.log(
+      `[auth] API listening on http://127.0.0.1:${PORT} (AUTH_MODE=${authMode})`,
+    );
   });
 
   server.on("error", (err: NodeJS.ErrnoException) => {

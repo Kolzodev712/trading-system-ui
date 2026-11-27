@@ -156,6 +156,30 @@ export function resolveRunnerMode(
   return strategyCount > 0 ? "strategies" : "levels";
 }
 
+/** Source availability fields are "ok" | "unavailable" | empty (unset). */
+export function formatSourceAvailability(
+  label: string,
+  value: string | undefined,
+): string | null {
+  const v = (value || "").trim().toLowerCase();
+  if (!v) return null;
+  if (v === "ok") return null;
+  if (v === "unavailable") return `${label} unavailable`;
+  return `${label}: ${v}`;
+}
+
+export function formatExposureHalt(
+  reason: string | undefined,
+  blockCode: string | undefined,
+): string | null {
+  const r = (reason || "").trim();
+  const c = (blockCode || "").trim();
+  if (!r && !c) return null;
+  if (r && c) return `Exposure halt: ${r} (${c})`;
+  if (r) return `Exposure halt: ${r}`;
+  return `Exposure halt (${c})`;
+}
+
 export function executionPausedNote(
   tradingEnabled: boolean,
   executionMode: string | undefined,

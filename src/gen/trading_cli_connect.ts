@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetStrategyConfigRequest, GetStrategyConfigResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, OperatorCommandRequest, OperatorCommandResponse, RequestRestartRequest, RequestRestartResponse, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse, UpdateStrategyCapRequest, UpdateStrategyCapResponse, UpdateStrategyConfigRequest, UpdateStrategyConfigResponse } from "./trading_cli_pb.js";
+import { CancelDexPoolOrdersRequest, CancelDexPoolOrdersResponse, CreateLevelRequest, CreateLevelResponse, DeleteLevelRequest, DeleteLevelResponse, GetLevelRequest, GetLevelResponse, GetLevelsRequest, GetLevelsResponse, GetMonitoringDataRequest, GetMonitoringDataResponse, GetRiskSnapshotRequest, GetRiskSnapshotResponse, GetStrategyConfigRequest, GetStrategyConfigResponse, GetTradingStatusRequest, GetTradingStatusResponse, MonitoringDataUpdate, OperatorCommandRequest, OperatorCommandResponse, RequestRestartRequest, RequestRestartResponse, SetTradingEnabledRequest, SetTradingEnabledResponse, StreamMonitoringDataRequest, ToggleDexQuoteRequest, ToggleDexQuoteResponse, ToggleDexStrategyRequest, ToggleDexStrategyResponse, ToggleLevelRequest, ToggleLevelResponse, ToggleStrategyRequest, ToggleStrategyResponse, UpdateLevelRequest, UpdateLevelResponse, UpdateStrategyCapRequest, UpdateStrategyCapResponse, UpdateStrategyConfigRequest, UpdateStrategyConfigResponse } from "./trading_cli_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -183,6 +183,15 @@ export const TradingCliService = {
       I: StreamMonitoringDataRequest,
       O: MonitoringDataUpdate,
       kind: MethodKind.ServerStreaming,
+    },
+    /**
+     * @generated from rpc trading_cli.TradingCliService.GetRiskSnapshot
+     */
+    getRiskSnapshot: {
+      name: "GetRiskSnapshot",
+      I: GetRiskSnapshotRequest,
+      O: GetRiskSnapshotResponse,
+      kind: MethodKind.Unary,
     },
     /**
      * Prop-trading operator commands (not aliases of SetTradingEnabled).

@@ -12,7 +12,11 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    include: [
+      "src/**/*.test.ts",
+      "src/**/*.test.tsx",
+      "server/**/*.test.ts",
+    ],
     environmentMatchGlobs: [
       ["src/**/*.test.tsx", "happy-dom"],
     ],

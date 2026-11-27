@@ -23,7 +23,13 @@ export function EconomicPnl() {
       <span className="text-muted-foreground">U</span>
       <PnlText value={data.unrealizedPnl} />
       <span className="text-muted-foreground">D</span>
-      <PnlText value={data.dailyPnl} />
+      {(data.ledgerSource || "").toLowerCase() === "unavailable" ? (
+        <span data-testid="daily-pnl-unavailable" title="ledger unavailable">
+          —
+        </span>
+      ) : (
+        <PnlText value={data.dailyPnl} />
+      )}
       <span className="text-muted-foreground">fee</span>
       <span>{data.feesPaid || "—"}</span>
       <span className="text-muted-foreground">fund</span>

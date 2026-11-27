@@ -56,6 +56,19 @@ describe("operator status surfaces", () => {
     );
   });
 
+  it("surfaces exposure halt and unavailable sources without inventing zeros", () => {
+    useTradingStore.setState({ connected: true });
+    const snap = liveBybit();
+    snap.exposureHaltReason = "daily loss";
+    snap.lastBlockReasonCode = "DAILY_LOSS";
+    snap.orderbookSource = "unavailable";
+    snap.ledgerSource = "unavailable";
+    useTradingStore.getState().applyStreamUpdate(snap);
+    render(<VenueModeBanner />);
+    expect(screen.getByTestId("exposure-halt").textContent).toMatch(/daily loss/);
+    expect(screen.getAllByTestId("source-unavailable").length).toBeGreaterThanOrEqual(1);
+  });
+
   it("shows the observed Shadow order count and flags a nonzero count", () => {
     useTradingStore.setState({ connected: true });
     useTradingStore.getState().applyStreamUpdate(liveBybit());

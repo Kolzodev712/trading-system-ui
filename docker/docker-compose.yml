@@ -5,12 +5,16 @@ services:
     profiles: ["auth"]
     image: mongo:7
     ports:
-      - "${MONGO_HOST_PORT:-27017}:27017"
+      # Loopback-only publish — not reachable from other hosts on the LAN
+      - "127.0.0.1:${MONGO_HOST_PORT:-27017}:27017"
     volumes:
       - trading_ui_mongo:/data/db
 
   grpc-web-proxy:
     image: envoyproxy/envoy:v1.31-latest
+    # Host networking: Envoy must reach the runner gRPC listener on the host
+    # (127.0.0.1:50051). Bridge mode would require a non-loopback upstream or
+    # extra host-gateway wiring; see docker/envoy.yaml.
     network_mode: host
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml:ro

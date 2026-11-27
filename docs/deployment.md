@@ -55,12 +55,35 @@ Build-time (Vite):
 
 If the UI and proxy share a domain, you can proxy `/grpc` through nginx to Envoy and keep `VITE_GRPC_WEB_URL=/grpc`.
 
+## Authentication layers
+
+Three separate mechanisms protect different paths. Do not confuse them.
+
+| Layer | Purpose | Configuration |
+|-------|---------|----------------|
+| **Browser login** | JWT session for the static UI and `/api` routes | `AUTH_MODE`, `JWT_SECRET`, MongoDB `credentials` collection |
+| **Envoy operator token** | Injects `x-operator-token` on gRPC-Web requests from the browser proxy | `TRADING_OPERATOR_TOKEN_FILE` → `docker/envoy.yaml` Lua filter |
+| **Runner auth** | Authorizes mutating trading RPCs on the runner | Trading system runner / operator token policy (not this UI repo) |
+
+### `AUTH_MODE` (Express login API)
+
+| Mode | Behavior |
+|------|----------|
+| `lab` | May auto-seed `admin` / `admin` when the credentials collection is empty; allows the demonstration `JWT_SECRET` default. **Local demos only.** |
+| `secure` | Does **not** seed users; requires a strong, non-default `JWT_SECRET` or the auth server refuses to start. |
+
+When `AUTH_MODE` is **unset**: the server uses `lab` only if `NODE_ENV` is not `production`; otherwise it behaves as `secure`.
+
+**Non-lab deployments are unsupported** without secure configuration: set `AUTH_MODE=secure`, provide a unique `JWT_SECRET`, provision credentials in MongoDB (no default administrator), configure Envoy operator tokens and runner auth, and tighten CORS/TLS. Shipping with `AUTH_MODE=lab` or the demo JWT secret is not a supported production posture.
+
+Legacy env vars `LAB_MODE` and `AUTH_ALLOW_DEV_DEFAULTS` still force laboratory behavior when `AUTH_MODE` is unset.
+
 ## Security notes
 
 - The runner gRPC port (`50051`) should **not** be exposed to the public internet without TLS and auth
 - Restrict Envoy and the runner to a private network or VPN where possible
-- This UI has a MongoDB-backed Express login API and seeds `admin/admin` for local development. Change those credentials and the JWT secret before any non-local deployment.
-- Browser login alone does **not** authorize direct gRPC/Envoy calls. Protect mutating runner RPCs at the runner/proxy boundary before capital-bearing operation; see the [prop-trading control-plane guide](PROP_TRADING_CONTROL_PLANE_GUIDE.md).
+- Docker Compose publishes Mongo on **loopback only** (`127.0.0.1`). Envoy uses `network_mode: host` so it can reach the runner on `127.0.0.1:50051`; gRPC-Web and Envoy admin listen on `127.0.0.1` in `docker/envoy.yaml`
+- Browser login (JWT) alone does **not** authorize mutating runner RPCs. Protect capital-bearing operation at the runner/proxy boundary; see the [prop-trading control-plane guide](PROP_TRADING_CONTROL_PLANE_GUIDE.md).
 
 ## Health checks
 

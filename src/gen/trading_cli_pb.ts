@@ -181,6 +181,20 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
    */
   operatorId = "";
 
+  /**
+   * empty when new exposure is allowed
+   *
+   * @generated from field: string exposure_halt_reason = 9;
+   */
+  exposureHaltReason = "";
+
+  /**
+   * stable ReasonCode; empty if none
+   *
+   * @generated from field: string last_block_reason_code = 10;
+   */
+  lastBlockReasonCode = "";
+
   constructor(data?: PartialMessage<GetTradingStatusResponse>) {
     super();
     proto3.util.initPartial(data, this);
@@ -197,6 +211,8 @@ export class GetTradingStatusResponse extends Message<GetTradingStatusResponse> 
     { no: 6, name: "flatten_latched", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 7, name: "global_toggle_semantics", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 8, name: "operator_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "exposure_halt_reason", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "last_block_reason_code", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTradingStatusResponse {
@@ -2122,6 +2138,47 @@ export class MonitoringData extends Message<MonitoringData> {
    */
   operatorId = "";
 
+  /**
+   * empty when new exposure is allowed
+   *
+   * @generated from field: string exposure_halt_reason = 29;
+   */
+  exposureHaltReason = "";
+
+  /**
+   * stable ReasonCode; empty if none
+   *
+   * @generated from field: string last_block_reason_code = 30;
+   */
+  lastBlockReasonCode = "";
+
+  /**
+   * Source availability: "ok" or "unavailable". Empty means the field was not set.
+   *
+   * @generated from field: string orderbook_source = 31;
+   */
+  orderbookSource = "";
+
+  /**
+   * @generated from field: string ledger_source = 32;
+   */
+  ledgerSource = "";
+
+  /**
+   * @generated from field: string indicators_source = 33;
+   */
+  indicatorsSource = "";
+
+  /**
+   * @generated from field: string trades_source = 34;
+   */
+  tradesSource = "";
+
+  /**
+   * @generated from field: bool working_orders_unfiltered = 35;
+   */
+  workingOrdersUnfiltered = false;
+
   constructor(data?: PartialMessage<MonitoringData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -2158,6 +2215,13 @@ export class MonitoringData extends Message<MonitoringData> {
     { no: 26, name: "funding_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 27, name: "ledger_equity", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 28, name: "operator_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 29, name: "exposure_halt_reason", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 30, name: "last_block_reason_code", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 31, name: "orderbook_source", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 32, name: "ledger_source", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 33, name: "indicators_source", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 34, name: "trades_source", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 35, name: "working_orders_unfiltered", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MonitoringData {
@@ -2174,6 +2238,207 @@ export class MonitoringData extends Message<MonitoringData> {
 
   static equals(a: MonitoringData | PlainMessage<MonitoringData> | undefined, b: MonitoringData | PlainMessage<MonitoringData> | undefined): boolean {
     return proto3.util.equals(MonitoringData, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.GetRiskSnapshotRequest
+ */
+export class GetRiskSnapshotRequest extends Message<GetRiskSnapshotRequest> {
+  /**
+   * e.g. BTC/USDT; empty is unbound and must not pick another pair
+   *
+   * @generated from field: string instrument = 1;
+   */
+  instrument = "";
+
+  constructor(data?: PartialMessage<GetRiskSnapshotRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.GetRiskSnapshotRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "instrument", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRiskSnapshotRequest {
+    return new GetRiskSnapshotRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRiskSnapshotRequest {
+    return new GetRiskSnapshotRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRiskSnapshotRequest {
+    return new GetRiskSnapshotRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetRiskSnapshotRequest | PlainMessage<GetRiskSnapshotRequest> | undefined, b: GetRiskSnapshotRequest | PlainMessage<GetRiskSnapshotRequest> | undefined): boolean {
+    return proto3.util.equals(GetRiskSnapshotRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.GetRiskSnapshotResponse
+ */
+export class GetRiskSnapshotResponse extends Message<GetRiskSnapshotResponse> {
+  /**
+   * @generated from field: trading_cli.RiskSnapshot snapshot = 1;
+   */
+  snapshot?: RiskSnapshot;
+
+  constructor(data?: PartialMessage<GetRiskSnapshotResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.GetRiskSnapshotResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "snapshot", kind: "message", T: RiskSnapshot },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRiskSnapshotResponse {
+    return new GetRiskSnapshotResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRiskSnapshotResponse {
+    return new GetRiskSnapshotResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRiskSnapshotResponse {
+    return new GetRiskSnapshotResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetRiskSnapshotResponse | PlainMessage<GetRiskSnapshotResponse> | undefined, b: GetRiskSnapshotResponse | PlainMessage<GetRiskSnapshotResponse> | undefined): boolean {
+    return proto3.util.equals(GetRiskSnapshotResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message trading_cli.RiskSnapshot
+ */
+export class RiskSnapshot extends Message<RiskSnapshot> {
+  /**
+   * @generated from field: bool available = 1;
+   */
+  available = false;
+
+  /**
+   * @generated from field: string unavailable_reason = 2;
+   */
+  unavailableReason = "";
+
+  /**
+   * @generated from field: int64 observed_at_unix_ms = 3;
+   */
+  observedAtUnixMs = protoInt64.zero;
+
+  /**
+   * @generated from field: string total_max_position = 4;
+   */
+  totalMaxPosition = "";
+
+  /**
+   * @generated from field: string max_total_orders = 5;
+   */
+  maxTotalOrders = "";
+
+  /**
+   * @generated from field: string max_notional = 6;
+   */
+  maxNotional = "";
+
+  /**
+   * @generated from field: string max_order_qty = 7;
+   */
+  maxOrderQty = "";
+
+  /**
+   * @generated from field: string daily_loss_limit_all_pairs = 8;
+   */
+  dailyLossLimitAllPairs = "";
+
+  /**
+   * @generated from field: string position_qty = 9;
+   */
+  positionQty = "";
+
+  /**
+   * @generated from field: string working_qty = 10;
+   */
+  workingQty = "";
+
+  /**
+   * @generated from field: string reserved_qty = 11;
+   */
+  reservedQty = "";
+
+  /**
+   * @generated from field: string daily_pnl = 12;
+   */
+  dailyPnl = "";
+
+  /**
+   * "ledger" | "unavailable"
+   *
+   * @generated from field: string daily_pnl_source = 13;
+   */
+  dailyPnlSource = "";
+
+  /**
+   * v1 always "unknown"
+   *
+   * @generated from field: string headroom = 14;
+   */
+  headroom = "";
+
+  /**
+   * @generated from field: string instrument = 15;
+   */
+  instrument = "";
+
+  constructor(data?: PartialMessage<RiskSnapshot>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "trading_cli.RiskSnapshot";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "available", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 2, name: "unavailable_reason", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "observed_at_unix_ms", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 4, name: "total_max_position", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "max_total_orders", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "max_notional", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "max_order_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "daily_loss_limit_all_pairs", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "position_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "working_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "reserved_qty", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 12, name: "daily_pnl", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "daily_pnl_source", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 14, name: "headroom", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "instrument", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RiskSnapshot {
+    return new RiskSnapshot().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RiskSnapshot {
+    return new RiskSnapshot().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RiskSnapshot {
+    return new RiskSnapshot().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RiskSnapshot | PlainMessage<RiskSnapshot> | undefined, b: RiskSnapshot | PlainMessage<RiskSnapshot> | undefined): boolean {
+    return proto3.util.equals(RiskSnapshot, a, b);
   }
 }
 

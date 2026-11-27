@@ -42,6 +42,22 @@ Open **http://127.0.0.1:5173** → Sign in (`admin` / `admin`) → Connect runne
 
 See [docs/development.md](docs/development.md) for full setup and troubleshooting.
 
+## Connect to the public lab vs standalone dev
+
+| Mode | What you do |
+| --- | --- |
+| **Showcase lab** | Start [trading-system-showcase/lab](../trading-system-showcase/lab/README.md) (`make demo`). Open **http://127.0.0.1:5173**, sign in (`admin` / `admin` in lab only), connect runner at default `/grpc`. Trading stays disabled until you enable it in the UI. |
+| **Standalone dev** | Runner on `:50051`, `npm run proxy:up`, then `npm run dev:all` (this repo). Same gRPC contract; you supply Mongo if you want auth. |
+
+**Proto sync:** API types come from [`proto/trading_cli.proto`](proto/trading_cli.proto). After backend proto changes, regenerate and verify:
+
+```bash
+npm run generate
+./scripts/check-proto-sync.sh
+```
+
+**`AUTH_MODE`:** `lab` (default in local dev) allows demo JWT defaults and may seed `admin`/`admin`; **`secure`** requires a strong `JWT_SECRET` and does not auto-seed. UI login is **not** exchange authority and **not** the runner operator token (`TRADING_OPERATOR_TOKEN` at Envoy for mutating non-Paper RPCs). See [docs/deployment.md](docs/deployment.md).
+
 ## Documentation
 
 | Doc | Description |
@@ -80,7 +96,8 @@ Copy [`.env.example`](.env.example) to `.env`:
 | `VITE_GRPC_WEB_URL` | `/grpc` | Browser gRPC-Web base URL |
 | `GRPC_WEB_PROXY` | `http://127.0.0.1:8081` | Vite proxy target |
 | `MONGODB_URI` | `mongodb://127.0.0.1:27017/trading_ui` | Auth credentials DB |
-| `JWT_SECRET` | (dev default) | JWT signing secret — change in production |
+| `AUTH_MODE` | `lab` (local) / `secure` (prod) | Browser login API posture — see `docs/deployment.md` |
+| `JWT_SECRET` | (dev default in `lab` only) | JWT signing secret — required non-default in `secure` |
 | `AUTH_PORT` | `3001` | Auth API listen port |
 
 ## Proto contract
