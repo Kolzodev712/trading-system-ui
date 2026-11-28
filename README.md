@@ -46,7 +46,7 @@ See [docs/development.md](docs/development.md) for full setup and troubleshootin
 
 | Mode | What you do |
 | --- | --- |
-| **Showcase lab** | Start [trading-system-showcase/lab](../trading-system-showcase/lab/README.md) (`make demo`). Open **http://127.0.0.1:5173**, sign in (`admin` / `admin` in lab only), connect runner at default `/grpc`. Trading stays disabled until you enable it in the UI. |
+| **Showcase lab** | Start [trading-system-showcase/lab](https://github.com/Kolzodev712/trading-system-showcase/tree/main/lab) (`make demo`). Open **http://127.0.0.1:5173**, sign in (`admin` / `admin` in lab only), connect runner at default `/grpc`. Trading stays disabled until you enable it in the UI. |
 | **Standalone dev** | Runner on `:50051`, `npm run proxy:up`, then `npm run dev:all` (this repo). Same gRPC contract; you supply Mongo if you want auth. |
 
 **Proto sync:** API types come from [`proto/trading_cli.proto`](proto/trading_cli.proto). After backend proto changes, regenerate and verify:
@@ -107,6 +107,16 @@ The API is defined in [`proto/trading_cli.proto`](proto/trading_cli.proto), copi
 ```bash
 npm run generate
 ```
+
+## Limitations
+
+- Not production complete; not mainnet ready.
+- Browser login is not runner/exchange authorization.
+- Requires a compatible `trading_system` revision (proto sync).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Related: [trading_system](https://github.com/Kolzodev712/trading_system), [k-paper](https://github.com/Kolzodev712/k-paper), [showcase lab](https://github.com/Kolzodev712/trading-system-showcase/tree/main/lab).
 
 ## License
 
