@@ -116,7 +116,7 @@ npm run generate
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Related: [trading_system](https://github.com/Kolzodev712/trading_system), [k-paper](https://github.com/Kolzodev712/k-paper), [showcase lab](https://github.com/Kolzodev712/trading-system-showcase/tree/main/lab).
+See [CONTRIBUTING.md](CONTRIBUTING.md). Browse [good first issues](https://github.com/Kolzodev712/trading-system-ui/labels/good%20first%20issue) and the ecosystem [ROADMAP](https://github.com/Kolzodev712/trading-system-showcase/blob/main/ROADMAP.md). Related: [trading_system](https://github.com/Kolzodev712/trading_system), [k-paper](https://github.com/Kolzodev712/k-paper), [showcase lab](https://github.com/Kolzodev712/trading-system-showcase/tree/main/lab). Security: [SECURITY.md](SECURITY.md). Code of conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## License
 

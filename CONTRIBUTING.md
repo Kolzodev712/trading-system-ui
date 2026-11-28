@@ -36,8 +36,9 @@ Include related issue, summary, verification commands, and protocol compatibilit
 
 ## Reporting problems
 
-- Issues: GitHub Issues.
-- Security: [SECURITY.md](SECURITY.md).
+- Issues: GitHub Issues. Open contributions: https://github.com/Kolzodev712/trading-system-ui/labels/good%20first%20issue
+- Security: [SECURITY.md](SECURITY.md) — GitHub private vulnerability reporting.
+- Conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## License
 
